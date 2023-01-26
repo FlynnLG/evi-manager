@@ -5,6 +5,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 
 
+
 export default function App() {
   const onLoginButtonPress = () => {
     console.log("Logging in!")
@@ -17,7 +18,7 @@ export default function App() {
   const [inputPass, setPass] = useState('');
   return (
     <View style={{position: 'absolute', justifyContent: 'center',}}>
-    <Text style={{position: 'absolute', marginTop: 250, marginLeft: 30}}>Evi Login</Text>
+    <Text style={{position: 'absolute', marginTop: 250, marginLeft: 30, fontSize: 22, fontWeight: 'bold'}}>Evi Login</Text>
       <View style={styles.container}>
         <TextInput 
         placeholder="Username" 
