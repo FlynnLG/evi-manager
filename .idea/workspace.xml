@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a702a681-ffc8-4e48-98ce-9b416c310704" name="Changes" comment="Remove old project files to start with a new fresh repository">
+      <change afterPath="$PROJECT_DIR$/evimanager/.bundle/config" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/.eslintrc.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/.node-version" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/.prettierrc.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/.watchmanconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/App.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/Gemfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/Gemfile.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/__tests__/App-test.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/debug.keystore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/proguard-rules.pro" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/debug/AndroidManifest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/debug/java/com/evimanager/ReactNativeFlipper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/custom/OFL.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/fonts/Poppins-Black.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/fonts/Poppins-BlackItalic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/fonts/Poppins-Bold.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/fonts/Poppins-BoldItalic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/fonts/Poppins-ExtraBold.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/fonts/Poppins-ExtraBoldItalic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/fonts/Poppins-ExtraLight.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/fonts/Poppins-ExtraLightItalic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/fonts/Poppins-Italic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/fonts/Poppins-Light.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/fonts/Poppins-LightItalic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/fonts/Poppins-Medium.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/fonts/Poppins-MediumItalic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/fonts/Poppins-Regular.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/fonts/Poppins-SemiBold.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/fonts/Poppins-SemiBoldItalic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/fonts/Poppins-Thin.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/assets/fonts/Poppins-ThinItalic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/java/com/evimanager/MainActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/java/com/evimanager/MainApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/res/drawable/rn_edit_text_material.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/res/mipmap-hdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/res/mipmap-mdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/main/res/values/styles.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/app/src/release/java/com/evimanager/ReactNativeFlipper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/gradle.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/link-assets-manifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/android/settings.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/app.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/adaptive-icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/favicon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/OFL.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/Poppins-Black.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/Poppins-BlackItalic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/Poppins-Bold.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/Poppins-BoldItalic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/Poppins-ExtraBold.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/Poppins-ExtraBoldItalic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/Poppins-ExtraLight.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/Poppins-ExtraLightItalic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/Poppins-Italic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/Poppins-Light.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/Poppins-LightItalic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/Poppins-Medium.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/Poppins-MediumItalic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/Poppins-Regular.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/Poppins-SemiBold.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/Poppins-SemiBoldItalic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/Poppins-Thin.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/fonts/Poppins-ThinItalic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/icons/emoji.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/icons/lightmode/nointernet.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/icons/lightmode/reload.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/images/background.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/images/darktimeline.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/images/loginButton.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/images/whitetimeline.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/assets/splash.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/babel.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/backend/backgroundworker.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/backend/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/backend/notification.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/components/appStorage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/components/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/components/lessoncard.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/components/tabs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/constants/assets.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/constants/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/constants/theme.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/ios/.xcode.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/ios/Podfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/ios/Podfile.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/ios/evimanager.xcodeproj/project.pbxproj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/ios/evimanager.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/ios/evimanager.xcodeproj/xcshareddata/xcschemes/evimanager.xcscheme" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/ios/evimanager.xcworkspace/contents.xcworkspacedata" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/ios/evimanager.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/ios/evimanager/AppDelegate.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/ios/evimanager/AppDelegate.mm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/ios/evimanager/Images.xcassets/AppIcon.appiconset/Contents.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/ios/evimanager/Images.xcassets/Contents.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/ios/evimanager/Info.plist" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/ios/evimanager/LaunchScreen.storyboard" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/ios/evimanager/main.m" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/ios/evimanagerTests/Info.plist" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/ios/evimanagerTests/evimanagerTests.m" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/ios/link-assets-manifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/metro.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/react-native.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/screens/AppStart.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/screens/Credits.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/screens/Home.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/screens/Loading.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/screens/Login.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/screens/SettingsScreen.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/tsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evimanager/yarn.lock" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2NeXglnSKRe5yEPMDl6GXIahiIF" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "javascript.nodejs.core.library.configured.version": "16.14.2",
+    "javascript.nodejs.core.library.typings.version": "16.18.23",
+    "last_opened_file_path": "/Users/Lennard/Desktop/Intelli IDEA Workspace/evi-manager",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "inlay.hints",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="DjangoTestsConfigurationType">
+      <module name="evi-manager" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="TARGET" value="" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="evi-manager" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="evi-manager" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="PyBehaveRunConfigurationType" factoryName="Behave">
+      <module name="evi-manager" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="ADDITIONAL_ARGS" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="evi-manager" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Python.FlaskServer">
+      <module name="evi-manager" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <module name="evi-manager" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a702a681-ffc8-4e48-98ce-9b416c310704" name="Changes" comment="" />
+      <created>1680025636458</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1680025636458</updated>
+      <workItem from="1680025637736" duration="562000" />
+      <workItem from="1680026320138" duration="3044000" />
+      <workItem from="1680030079551" duration="3377000" />
+      <workItem from="1680114468923" duration="6952000" />
+      <workItem from="1680168775423" duration="19689000" />
+      <workItem from="1680198471006" duration="7310000" />
+      <workItem from="1680264330563" duration="84000" />
+      <workItem from="1680264458002" duration="962000" />
+      <workItem from="1680270598232" duration="15750000" />
+      <workItem from="1680356269986" duration="5316000" />
+      <workItem from="1680362742916" duration="603000" />
+      <workItem from="1680436431482" duration="1150000" />
+      <workItem from="1680463123382" duration="9000" />
+      <workItem from="1680521364318" duration="7093000" />
+      <workItem from="1680605080436" duration="1092000" />
+      <workItem from="1680698995559" duration="336000" />
+      <workItem from="1680700253555" duration="421000" />
+      <workItem from="1681930023633" duration="944000" />
+      <workItem from="1681931932201" duration="305000" />
+    </task>
+    <task id="LOCAL-00001" summary="Remove old project files to start with a new fresh repository">
+      <created>1681930256776</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1681930256776</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Remove old project files to start with a new fresh repository" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove old project files to start with a new fresh repository" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
