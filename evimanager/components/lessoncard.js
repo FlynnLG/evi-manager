@@ -1,20 +1,9 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {
-  View,
-  Image,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Button,
-} from 'react-native';
-import SlidingUpPanel from 'rn-sliding-up-panel';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
-import moment from 'moment';
 
-import {FONTS, assets, THEME} from '../constants';
+import {FONTS, THEME} from '../constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-noLessonContent = '<Image/> Freistunde';
 
 export const LessonCard = ({
   dayOfWeekShort,
@@ -38,8 +27,7 @@ export const LessonCard = ({
   const [modalTeacher, setModalTeacher] = useState('');
   const [modalRoom, setModalRoom] = useState('');
   const [modalTime, setModalTime] = useState('');
-  // TODO: Define Kursnumber in Modal
-
+  // TODO: Define course number (e.g. EN12) in Modal
 
   function weekendCard() {
     return (
@@ -629,9 +617,6 @@ const styles = StyleSheet.create({
  </TouchableOpacity>
  </View>
  */
-
-
-
 
 /*
  <View style={styles.weekendHolidayContainer}>

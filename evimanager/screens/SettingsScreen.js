@@ -1,19 +1,10 @@
 import React from 'react';
-import {Settings, Text, View, TouchableOpacity, StyleSheet} from 'react-native';
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 import {THEME, FONTS} from '../constants';
 import SecureStorage from 'react-native-secure-storage';
 import appStorage from '../components/appStorage';
-
-async function switchTheme(selectedTheme) {
-  await AsyncStorage.setItem('@loacaldata:settings/theme', selectedTheme);
-}
-
-async function setPushNotification(arg) {
-  await AsyncStorage.setItem('@loacaldata:settings/push', arg);
-}
 
 async function userLogout(nav) {
   await SecureStorage.removeItem('localdata.usercredentials').then(async () => {

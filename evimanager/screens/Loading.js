@@ -3,12 +3,9 @@ import {Text, View, Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import {THEME, FONTS} from '../constants';
-//import { ytm } from '../backend/crawler';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as axios from 'axios';
 import * as cheerio from 'cheerio';
-//import Moment from 'react-moment';
 import moment from 'moment';
 import SecureStorage from 'react-native-secure-storage';
 import appStorage from '../components/appStorage';
@@ -360,14 +357,46 @@ const ytm = async nav => {
                                 // Get cycle (Turnus) of current year
                                 let cycle = [];
                                 let y = 2;
-                                while (await $(`body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(1)`).length && await $(`body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(2)`).length && await $(`body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(3)`).length) {
-                                  if (await $(`body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(1)`).text() && await $(`body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(2)`).text() && await $(`body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(3)`).text()) {
-                                    let cycleNum = await $(`body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(1)`).text();
-                                    let cycleStart = await $(`body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(2)`).text();
-                                    let cycleEnd = await $(`body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(3)`).text();
-                                    cycle.push([cycleNum, cycleStart, cycleEnd]);
+                                while (
+                                  (await $(
+                                    `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(1)`,
+                                  ).length) &&
+                                  (await $(
+                                    `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(2)`,
+                                  ).length) &&
+                                  (await $(
+                                    `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(3)`,
+                                  ).length)
+                                ) {
+                                  if (
+                                    (await $(
+                                      `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(1)`,
+                                    ).text()) &&
+                                    (await $(
+                                      `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(2)`,
+                                    ).text()) &&
+                                    (await $(
+                                      `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(3)`,
+                                    ).text())
+                                  ) {
+                                    let cycleNum = await $(
+                                      `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(1)`,
+                                    ).text();
+                                    let cycleStart = await $(
+                                      `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(2)`,
+                                    ).text();
+                                    let cycleEnd = await $(
+                                      `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(3)`,
+                                    ).text();
+                                    cycle.push([
+                                      cycleNum,
+                                      cycleStart,
+                                      cycleEnd,
+                                    ]);
                                   } else {
-                                    console.log('Error while parsing cycle to string. #Error_2358');
+                                    console.log(
+                                      'Error while parsing cycle to string. #Error_2358',
+                                    );
                                   }
                                   y += 1;
                                 }
@@ -809,7 +838,6 @@ const ytm = async nav => {
               );
               console.log('Wrong username or password');
               appStorage.set('crawler_data', '');
-              return;
             }
           }
         },
@@ -826,7 +854,7 @@ const Loading = () => {
 
   useEffect(() => {
     ytm(navigation).catch(console.error);
-  }, []);
+  });
 
   return (
     <View

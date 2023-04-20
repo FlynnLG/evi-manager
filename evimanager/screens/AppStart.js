@@ -5,9 +5,7 @@ import SecureStorage from 'react-native-secure-storage';
 import {THEME, FONTS} from '../constants';
 
 async function determineRoute(nav) {
-  const credentials = await SecureStorage.getItem(
-    'localdata.usercredentials',
-  );
+  const credentials = await SecureStorage.getItem('localdata.usercredentials');
   if (credentials) {
     console.log('Key found, redirecting...');
     nav.navigate('Loading');
@@ -23,7 +21,7 @@ const AppStart = () => {
 
   useEffect(() => {
     determineRoute(navigation).catch(console.error);
-  }, []);
+  });
 
   return (
     <View

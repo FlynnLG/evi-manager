@@ -1,10 +1,7 @@
 import React from 'react';
-import {Settings, Text, View, TouchableOpacity} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Text, View, TouchableOpacity} from 'react-native';
 
-import {THEME, FONTS} from '../constants';
-
+import {THEME} from '../constants';
 
 const CreditsScreen = ({}) => {
   console.info('Site: CREDITS');

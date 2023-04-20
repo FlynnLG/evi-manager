@@ -3,8 +3,6 @@ import {
   Text,
   View,
   TextInput,
-  Button,
-  StyleSheet,
   Image,
   Dimensions,
   TouchableOpacity,
@@ -15,7 +13,6 @@ import {THEME, FONTS, assets} from '../constants';
 import SecureStorage from 'react-native-secure-storage';
 
 const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
 
 async function handelLogin(navigation, username, password) {
   console.log(username + ';' + password);

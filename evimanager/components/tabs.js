@@ -1,5 +1,4 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -9,7 +8,7 @@ import Loading from '../screens/Loading';
 import Home from '../screens/Home';
 import SettingsScreen from '../screens/SettingsScreen';
 import CreditsScreen from '../screens/Credits';
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
 const HomeNav = createStackNavigator();
 
