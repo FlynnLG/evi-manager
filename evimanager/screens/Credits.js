@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, TouchableOpacity} from 'react-native';
+import {Text, View, TouchableOpacity, ScrollView} from 'react-native';
 
 import {THEME} from '../constants';
 
@@ -14,9 +14,11 @@ const CreditsScreen = ({}) => {
         backgroundColor: THEME.background,
         height: 1000,
       }}>
-      <TouchableOpacity>
-        <Text>Credits</Text>
-      </TouchableOpacity>
+        <ScrollView>
+          <Text>Message Board</Text>
+
+          <Text>Keine weiteren Nachrichten...</Text>
+        </ScrollView>
     </View>
   );
 };
