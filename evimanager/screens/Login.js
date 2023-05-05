@@ -10,14 +10,14 @@ import {
 import {useNavigation} from '@react-navigation/native';
 
 import {THEME, FONTS, assets} from '../constants';
-import SecureStorage from 'react-native-secure-storage';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 const windowWidth = Dimensions.get('window').width;
 
 async function handelLogin(navigation, username, password) {
   console.log(username + ';' + password);
   console.log('Navigation to LOADING!');
-  await SecureStorage.setItem(
+  await EncryptedStorage.setItem(
     'localdata.usercredentials',
     username + ';' + password,
   ).then(navigation.navigate('Loading'));

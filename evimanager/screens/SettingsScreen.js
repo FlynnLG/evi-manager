@@ -3,11 +3,11 @@ import {Text, View, TouchableOpacity, StyleSheet, Touchable} from 'react-native'
 import {useNavigation} from '@react-navigation/native';
 
 import {THEME, FONTS} from '../constants';
-import SecureStorage from 'react-native-secure-storage';
+import EncryptedStorage from 'react-native-encrypted-storage';
 import appStorage from '../components/appStorage';
 
 async function userLogout(nav) {
-  await SecureStorage.removeItem('localdata.usercredentials').then(async () => {
+  await EncryptedStorage.removeItem('localdata.usercredentials').then(async () => {
     appStorage.set('crawler_data', '');
     console.log('DEBUG | Logout');
     nav.navigate('Login');

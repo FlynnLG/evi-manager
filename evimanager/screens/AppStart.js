@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
 import {Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import SecureStorage from 'react-native-secure-storage';
+import EncryptedStorage from 'react-native-encrypted-storage';
 import {THEME, FONTS} from '../constants';
 
 async function determineRoute(nav) {
-  const credentials = await SecureStorage.getItem('localdata.usercredentials');
+  const credentials = await EncryptedStorage.getItem('localdata.usercredentials');
   if (credentials) {
     console.log('Key found, redirecting...');
     nav.navigate('Loading');

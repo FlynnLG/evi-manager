@@ -7,18 +7,18 @@ import {THEME, FONTS} from '../constants';
 import * as axios from 'axios';
 import * as cheerio from 'cheerio';
 import moment from 'moment';
-import SecureStorage from 'react-native-secure-storage';
+import EncryptedStorage from 'react-native-encrypted-storage';
 import appStorage from '../components/appStorage';
 
 const ytm = async nav => {
   try {
     appStorage.set('crawler_data', '');
 
-    const credentials = await SecureStorage.getItem(
+    const credentials = await EncryptedStorage.getItem(
       'localdata.usercredentials',
     );
     if (!credentials || credentials === ';') {
-      await SecureStorage.removeItem('localdata.usercredentials').then(
+      await EncryptedStorage.removeItem('localdata.usercredentials').then(
         async () => {
           console.error('Login-Daten konnten nicht geladen werden');
           nav.navigate('Login');
@@ -30,7 +30,7 @@ const ytm = async nav => {
     const name = credentialsSplit[0];
     const pass = credentialsSplit[1];
     if (!name || !pass) {
-      await SecureStorage.removeItem('localdata.usercredentials').then(
+      await EncryptedStorage.removeItem('localdata.usercredentials').then(
         async () => {
           console.error('Login-Daten konnten nicht geladen werden');
           nav.navigate('Login');
@@ -825,7 +825,7 @@ const ytm = async nav => {
                   {
                     text: 'OK',
                     onPress: async () => {
-                      await SecureStorage.removeItem(
+                      await EncryptedStorage.removeItem(
                         'localdata.usercredentials',
                       ).then(async () => {
                         nav.navigate('Login');
