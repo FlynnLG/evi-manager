@@ -2,6 +2,7 @@
 
 buildscript {
     ext {
+        //classpath 'com.android.tools.build:gradle:7.5.1'
         buildToolsVersion = "33.0.0"
         minSdkVersion = 21
         compileSdkVersion = 33
