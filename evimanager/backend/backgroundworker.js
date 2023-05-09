@@ -1,8 +1,9 @@
-//TODO: That the Background worker works: https://github.com/Rapsssito/react-native-background-actions/blob/master/INSTALL.md
-
-import BackgroundTask from 'react-native-background-actions';
+// TODO: Use other background manager package -> For example react-native-background-actions
+/*
+import BackgroundTask from 'react-native-background-task';
 
 BackgroundTask.define(() => {
   console.log('Background worker starting');
   BackgroundTask.finish();
 });
+ */
