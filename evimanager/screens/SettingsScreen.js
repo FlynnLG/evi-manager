@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, TouchableOpacity, StyleSheet, Touchable} from 'react-native';
+import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import {THEME, FONTS} from '../constants';
@@ -7,11 +7,13 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import appStorage from '../components/appStorage';
 
 async function userLogout(nav) {
-  await EncryptedStorage.removeItem('localdata.usercredentials').then(async () => {
-    appStorage.set('crawler_data', '');
-    console.log('DEBUG | Logout');
-    nav.navigate('Login');
-  });
+  await EncryptedStorage.removeItem('localdata.usercredentials').then(
+    async () => {
+      appStorage.set('crawler_data', '');
+      console.log('DEBUG | Logout');
+      nav.navigate('Login');
+    },
+  );
 }
 
 const SettingsScreen = ({}) => {
@@ -26,14 +28,12 @@ const SettingsScreen = ({}) => {
         height: 1000,
         alignItems: 'center',
       }}>
-      <TouchableOpacity
-       style={styles.lightModeButton}>
+      <TouchableOpacity style={styles.lightModeButton}>
         <Text>LightMode</Text>
-       </TouchableOpacity>
-       <TouchableOpacity
-       style={styles.darkModeButton}>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.darkModeButton}>
         <Text>DarkMode</Text>
-       </TouchableOpacity>
+      </TouchableOpacity>
 
       <Text style={styles.header}>Settings</Text>
       <TouchableOpacity
