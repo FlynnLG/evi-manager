@@ -15,3 +15,4 @@ Here are features and future ideas listed. Implemented features are marked with 
 - [ ] Widgets
 - [ ] School schedule
 - [ ] Bulletin board
+- [ ] Birthdaylist?
