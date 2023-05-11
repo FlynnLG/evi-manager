@@ -1,7 +1,7 @@
 
 <h1 align="center">
   <br>
-  <a href="http://github.com/FlynnLG/evi-manager/releases"><img src="https://github.com/FlynnLG/evi-manager/assets/62892734/f51af02c-6efa-45c7-98e3-297f1d760de1" alt="EVI-Manager" width="200"></a>
+  <a href="http://github.com/FlynnLG/evi-manager/releases"><img src="https://github.com/FlynnLG/evi-manager/assets/62892734/4d09788d-8a72-4c9c-b8a3-6d0e1008f8e3" alt="EVI-Manager" width="200" ></a>
   <br>
   EVI-Manager
   <br>
@@ -10,17 +10,36 @@
 <h4 align="center">A school project app to see timetables, substitution schedules, messages and more built with <a href="https://reactnative.dev" target="_blank">React Native</a>.</h4>
 
 <p align="center">
-  <a href="https://badge.fury.io/js/electron-markdownify">
-    <img src="https://badge.fury.io/js/electron-markdownify.svg"
-         alt="Gitter">
+
+  <a href="https://github.com/FlynnLG/evi-manager/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/FlynnLG/evi-manager.svg?style=flat-square"
+	 alt="Contributors">
   </a>
-  <a href="https://gitter.im/amitmerchant1990/electron-markdownify"><img src="https://badges.gitter.im/amitmerchant1990/electron-markdownify.svg"></a>
-  <a href="https://saythanks.io/to/bullredeyes@gmail.com">
-      <img src="https://img.shields.io/badge/SayThanks.io-%E2%98%BC-1EAEDB.svg">
+	
+  <a href="https://github.com/FlynnLG/evi-manager/stargazers">
+    <img src="https://img.shields.io/github/stars/FlynnLG/evi-manager.svg"
+	 alt="Stars">
   </a>
-  <a href="https://www.paypal.me/AmitMerchant">
-    <img src="https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&amp;style=flat">
+	
+  <a href="https://github.com/FlynnLG/evi-manager/issues">
+    <img src="https://img.shields.io/github/issues/FlynnLG/evi-manager.svg"
+	 alt="Issues">
   </a>
+	
+  <a href="https://github.com/FlynnLG/evi-manager">
+    <img src="https://img.shields.io/badge/version-1.0.0_ALPHA-green.svg"
+	 alt="Current Version">
+  </a>
+	
+  <a href="http://makeapullrequest.com">
+    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"
+	 alt="PRs Welcome">
+  </a>
+	
+	
+	
+ 
+ 
 </p>
 
 <p align="center">
