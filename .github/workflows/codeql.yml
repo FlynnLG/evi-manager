@@ -71,6 +71,7 @@ jobs:
         npm install
         npx react-native build-ios
         npx react-native build-android
+      working-directory: evimanager
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
