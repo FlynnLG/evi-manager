@@ -70,7 +70,6 @@ jobs:
         echo "Run, Build Application using script"
         npm install node watchman
         npm install
-        npx react-native build-ios
         npx react-native build-android
       working-directory: evimanager
 
