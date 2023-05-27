@@ -1,7 +1,7 @@
 
 <h1 align="center">
   <br>
-  <a href="http://github.com/FlynnLG/evi-manager/releases"><img src="https://github.com/FlynnLG/evi-manager/assets/62892734/4d09788d-8a72-4c9c-b8a3-6d0e1008f8e3" alt="EVI-Manager" width="200" ></a>
+  <a href="http://github.com/FlynnLG/evi-manager/releases"><img src="https://github.com/FlynnLG/evi-manager/assets/62892734/33552426-cea2-419b-b956-86bd43a9ce14" alt="EVI-Manager" width="200" ></a>
   <br>
   EVI-Manager
   <br>
