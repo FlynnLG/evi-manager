@@ -59,6 +59,14 @@
 * Costum themes and lesson colors
 * Very slow
 
+### aviable colorpaletts
+Systemdark
+<img src="./.github/content/sysDarkColorpalett.svg">
+Systemlight
+<img src="./.github/content/sysLightColorpalett.svg">
+Nightly
+<img src="./.github/content/nightlyColorpalett.svg">
+
 ## How To Use
 Make sure to follow [this guide](https://reactnative.dev/docs/environment-setup) for environment setup!
 
@@ -111,7 +119,6 @@ This software uses the following open source packages:
 [Apache License 2.0](http://www.apache.org/licenses/)
 
 ---
-
 ### Credits
 > GitHub [@flynnlg](https://github.com/flynnlg) &nbsp;&middot;&nbsp;
 > GitHub [@octodino](https://github.com/octodino) &nbsp;&middot;&nbsp;

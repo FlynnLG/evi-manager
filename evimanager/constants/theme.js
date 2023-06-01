@@ -11,12 +11,21 @@ export const SYSTEMDARK = {
 
 export const SYSTEMLIGHT = {
   fontColor: '#262626',
-  background: THEME.fontColor,
+  background: '#ffffff',
   lightGrey: '#D9D9D9',
-  darkGrey: '#D9D9D9',
-  red: '#FF3B30',
+  darkGrey: '#AAAAAA',
+  red: '#FF493F',
   green: '#69E77C',
 };
+
+export const NIGHTLY = {
+  fontColor: '#C3C3C3',
+  background: '#271747',
+  lightGrey: '#4D39CB',
+  darkGrey: '#1D1B8D',
+  red: '#FF337D',
+  green: '#52FEBC',
+}
 
 export const FONTS = {
   bold: 'Poppins-Bold',
