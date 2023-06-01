@@ -17,4 +17,4 @@ Here are features and future ideas listed. Implemented features are marked with 
 - [ ] Bulletin board
 - [ ] Birthdaylist?
 
--> ../lessoncard.js make the icon fitting the parent container
+-> ../lessoncard.js make the icon fitting the parent container and pls check if everything is working @flynnLG

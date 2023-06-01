@@ -2,9 +2,9 @@ import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 
-import {FONTS, THEME} from '../constants';
+import {FONTS, THEME, getUserLessonTheme} from '../constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Icon from 'react-native-vector-icons/Ionicons';
+//import Icon from 'react-native-vector-icons/Ionicons'; not used
 
 export const LessonCard = ({
   dayOfWeekShort,
@@ -127,7 +127,7 @@ export const LessonCard = ({
     if (number === 1) {
       return (
         <TouchableOpacity
-          style={styles.frame}
+          style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -146,7 +146,7 @@ export const LessonCard = ({
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={styles.circleText}>
+              style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
               {blocks[0]}
             </Text>
           </View>
@@ -155,7 +155,7 @@ export const LessonCard = ({
     } else if (number === 2) {
       return (
         <TouchableOpacity
-          style={styles.frame}
+          style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -174,7 +174,7 @@ export const LessonCard = ({
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={styles.circleText}>
+              style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
               {blocks[1]}
             </Text>
           </View>
@@ -183,7 +183,7 @@ export const LessonCard = ({
     } else if (number === 3) {
       return (
         <TouchableOpacity
-          style={styles.frame}
+          style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -202,7 +202,7 @@ export const LessonCard = ({
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={styles.circleText}>
+              style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
               {blocks[2]}
             </Text>
           </View>
@@ -211,7 +211,7 @@ export const LessonCard = ({
     } else if (number === 4) {
       return (
         <TouchableOpacity
-          style={styles.frame}
+          style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -230,7 +230,7 @@ export const LessonCard = ({
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={styles.circleText}>
+              style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
               {blocks[3]}
             </Text>
           </View>
@@ -239,7 +239,7 @@ export const LessonCard = ({
     } else if (number === 5) {
       return (
         <TouchableOpacity
-          style={styles.frame}
+          style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -258,7 +258,7 @@ export const LessonCard = ({
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={styles.circleText}>
+              style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
               {blocks[4]}
             </Text>
           </View>
@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
     width: 45,
     height: 80,
     borderStyle: 'solid',
-    borderColor: THEME.fontColor,
+    /*borderColor: getUserLessonTheme(),*/
     borderWidth: 2,
     borderRadius: 8,
     marginEnd: 15,
@@ -510,7 +510,7 @@ const styles = StyleSheet.create({
 /*
  <View style={styles.rowContainer}>
  <TouchableOpacity
- style={styles.frame}
+ style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
  onPress={() => {
  openSettingsModal(
  dayOfWeek,
@@ -528,14 +528,14 @@ const styles = StyleSheet.create({
  <Text
  numberOfLines={1}
  adjustsFontSizeToFit
- style={styles.circleText}>
+ style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
  {block1}
  </Text>
  </View>
  </TouchableOpacity>
 
  <TouchableOpacity
- style={styles.frame}
+ style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
  onPress={() => {
  openSettingsModal(
  dayOfWeek,
@@ -553,13 +553,13 @@ const styles = StyleSheet.create({
  <Text
  numberOfLines={1}
  adjustsFontSizeToFit
- style={styles.circleText}>
+ style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
  {block2}
  </Text>
  </View>
  </TouchableOpacity>
  <TouchableOpacity
- style={styles.frame}
+ style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
  onPress={() => {
  openSettingsModal(
  dayOfWeek,
@@ -577,13 +577,13 @@ const styles = StyleSheet.create({
  <Text
  numberOfLines={1}
  adjustsFontSizeToFit
- style={styles.circleText}>
+ style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
  {block3}
  </Text>
  </View>
  </TouchableOpacity>
  <TouchableOpacity
- style={styles.frame}
+ style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
  onPress={() => {
  openSettingsModal(
  dayOfWeek,
@@ -601,13 +601,13 @@ const styles = StyleSheet.create({
  <Text
  numberOfLines={1}
  adjustsFontSizeToFit
- style={styles.circleText}>
+ style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
  {block4}
  </Text>
  </View>
  </TouchableOpacity>
  <TouchableOpacity
- style={styles.frame}
+ style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
  onPress={() => {
  openSettingsModal(
  dayOfWeek,
@@ -625,7 +625,7 @@ const styles = StyleSheet.create({
  <Text
  numberOfLines={1}
  adjustsFontSizeToFit
- style={styles.circleText}>
+ style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
  {block5}
  </Text>
  </View>
