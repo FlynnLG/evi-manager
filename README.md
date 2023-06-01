@@ -51,7 +51,7 @@
   <a href="#license">License</a>
 </p>
 
-![screenshot](https://raw.githubusercontent.com/amitmerchant1990/electron-markdownify/master/app/img/markdownify.gif)
+![screenshot]()
 
 ## Key Features
 
@@ -113,7 +113,7 @@ This software uses the following open source packages:
 
 ---
 
-### Credits
+# Credits
 > GitHub [@flynnlg](https://github.com/flynnlg) &nbsp;&middot;&nbsp;
-> GitHub [@octodino](https://github.com/octodino) &nbsp;&middot;&nbsp;
+> GitHub [@octodino](https://github.com/octodino)
 > Idea and impulse by Hanna Eisernack
