@@ -113,7 +113,7 @@ This software uses the following open source packages:
 
 ---
 
-# Credits
+### Credits
 > GitHub [@flynnlg](https://github.com/flynnlg) &nbsp;&middot;&nbsp;
-> GitHub [@octodino](https://github.com/octodino)
+> GitHub [@octodino](https://github.com/octodino) &nbsp;&middot;&nbsp;
 > Idea and impulse by Hanna Eisernack
