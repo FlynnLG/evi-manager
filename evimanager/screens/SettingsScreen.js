@@ -16,6 +16,10 @@ async function userLogout(nav) {
   );
 }
 
+const changeTheme = async(button) => {
+  await EncryptedStorage.setItem('localdata:settings/theme', button)
+}
+
 const SettingsScreen = ({}) => {
   console.info('Site: SETTINGS');
   const nav = useNavigation();
@@ -28,14 +32,14 @@ const SettingsScreen = ({}) => {
         height: 1000,
         alignItems: 'center',
       }}>
-      <TouchableOpacity style={styles.lightModeButton}>
-        <Text>LightMode</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.darkModeButton}>
-        <Text>DarkMode</Text>
-      </TouchableOpacity>
-
       <Text style={styles.header}>Settings</Text>
+
+
+      <Button onPress={changeTheme("SYSLIGHT")}>SYSLIGHT</Button>
+      <Button onPress={changeTheme("SYSDARK")}>SYSDARK</Button>
+      <Button onPress={changeTheme("NIGHTLY")}>NIGHTLY</Button>
+
+      
       <TouchableOpacity
         style={styles.testButton}
         onPress={() => {
