@@ -4,6 +4,7 @@ import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 
 import {FONTS, THEME} from '../constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export const LessonCard = ({
   dayOfWeekShort,
@@ -73,6 +74,15 @@ export const LessonCard = ({
         rooms[i] = 'Kein Raum angegeben';
       }
     }
+    function isVisible(i){
+      //Look if there are any block informations?
+      if(!blockInfos[i]){
+        blockInfos[i] = 'Keine weiteren Informationen zu dem Block'
+        return('#ffffff00')
+      }else{
+        return(THEME.red)
+      }
+    }
     let block1;
     let block2;
     let block3;
@@ -130,6 +140,7 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
+          <Ionicons name='exclamationcircle' size={15} color={isVisible(0)}/>
           <Text style={styles.block}>1</Text>
           <View style={styles.circle}>
             <Text
@@ -157,6 +168,7 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
+          <Ionicons name='exclamationcircle' size={15} color={isVisible(1)}/>
           <Text style={styles.block}>2</Text>
           <View style={styles.circle}>
             <Text
@@ -184,6 +196,7 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
+          <Ionicons name='exclamationcircle' size={15} color={isVisible(2)}/>
           <Text style={styles.block}>3</Text>
           <View style={styles.circle}>
             <Text
@@ -211,6 +224,7 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
+          <Ionicons name='exclamationcircle' size={15} color={isVisible(3)}/>
           <Text style={styles.block}>4</Text>
           <View style={styles.circle}>
             <Text
@@ -238,6 +252,7 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
+          <Ionicons name='exclamationcircle' size={15} color={isVisible(4)}/>
           <Text style={styles.block}>5</Text>
           <View style={styles.circle}>
             <Text
