@@ -9,7 +9,7 @@ export const SYSTEMDARK = {
 
 export const SYSTEMLIGHT = {
   fontColor: '#262626',
-  background: '#FFFFFF',
+  background: THEME.fontColor,
   lightGrey: '#D9D9D9',
   darkGrey: '#D9D9D9',
   red: '#FF3B30',

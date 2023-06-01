@@ -40,7 +40,7 @@ export const LessonCard = ({
         </View>
         <View style={styles.weekendHolidayContainer}>
           <View style={styles.weekendHolidayContentInfoContainer}>
-            <Ionicons name="cafe" size={20} color={'#ffffff'} />
+            <Ionicons name="cafe" size={20} color={THEME.fontColor} />
             <Text style={styles.weekendHolidayContentInfoText}>Wochenende</Text>
           </View>
         </View>
@@ -59,7 +59,7 @@ export const LessonCard = ({
         </View>
         <View style={styles.weekendHolidayContainer}>
           <View style={styles.weekendHolidayContentInfoContainer}>
-            <Ionicons name="calendar" size={20} color={'#ffffff'} />
+            <Ionicons name="calendar" size={20} color={THEME.fontColor} />
             <Text style={styles.weekendHolidayContentInfoText}>Ferien</Text>
           </View>
         </View>
@@ -312,19 +312,19 @@ export const LessonCard = ({
             </Text>
           </View>
           <View style={styles.modalContentInfoContainer}>
-            <Ionicons name="school-outline" size={20} color={'#ffffff'} />
+            <Ionicons name="school-outline" size={20} color={THEME.fontColor} />
             <Text style={styles.modalContentInfoText}>{modalLesson}</Text>
           </View>
           <View style={styles.modalContentInfoContainer}>
-            <Ionicons name="person-outline" size={20} color={'#ffffff'} />
+            <Ionicons name="person-outline" size={20} color={THEME.fontColor} />
             <Text style={styles.modalContentInfoText}>{modalTeacher}</Text>
           </View>
           <View style={styles.modalContentInfoContainer}>
-            <Ionicons name="location-outline" size={20} color={'#ffffff'} />
+            <Ionicons name="location-outline" size={20} color={THEME.fontColor} />
             <Text style={styles.modalContentInfoText}>{modalRoom}</Text>
           </View>
           <View style={styles.modalContentInfoContainer}>
-            <Ionicons name="time-outline" size={20} color={'#ffffff'} />
+            <Ionicons name="time-outline" size={20} color={THEME.fontColor} />
             <Text style={styles.modalContentInfoText}>{modalTime}</Text>
           </View>
         </View>
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
     width: 45,
     height: 80,
     borderStyle: 'solid',
-    borderColor: '#ffffff',
+    borderColor: THEME.fontColor,
     borderWidth: 2,
     borderRadius: 8,
     marginEnd: 15,
@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
   },
   circleText: {
     fontFamily: FONTS.medium,
-    color: '#ffffff',
+    color: THEME.fontColor,
     fontSize: 16,
   },
   block: {
@@ -398,7 +398,7 @@ const styles = StyleSheet.create({
   },
   date: {
     fontFamily: FONTS.regular,
-    color: '#ffffff',
+    color: THEME.fontColor,
     fontSize: 15,
     marginLeft: 10,
     marginTop: 7,
@@ -445,7 +445,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   modalContentBlockInfoBoxText: {
-    color: '#ffffff',
+    color: THEME.fontColor,
     fontSize: 17,
     fontFamily: FONTS.regular,
     marginLeft: 10,
@@ -459,7 +459,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   modalContentInfoText: {
-    color: '#ffffff',
+    color: THEME.fontColor,
     fontSize: 17,
     fontFamily: FONTS.regular,
     marginLeft: 20,
@@ -485,7 +485,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   weekendHolidayContentInfoText: {
-    color: '#ffffff',
+    color: THEME.fontColor,
     fontSize: 15,
     fontFamily: FONTS.regular,
     marginLeft: 20,
@@ -621,7 +621,7 @@ const styles = StyleSheet.create({
 /*
  <View style={styles.weekendHolidayContainer}>
  <View style={styles.weekendHolidayContentInfoContainer}>
- <Ionicons name="cafe" size={20} color={'#ffffff'} />
+ <Ionicons name="cafe" size={20} color={THEME.fontColor} />
  <Text style={styles.weekendHolidayContentInfoText}>Wochenende</Text>
  </View>
  </View>
@@ -630,7 +630,7 @@ const styles = StyleSheet.create({
 /*
  <View style={styles.weekendHolidayContainer}>
  <View style={styles.weekendHolidayContentInfoContainer}>
- <Ionicons name="calendar" size={20} color={'#ffffff'} />
+ <Ionicons name="calendar" size={20} color={THEME.fontColor} />
  <Text style={styles.weekendHolidayContentInfoText}>Ferien</Text>
  </View>
  </View>
