@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
     width: 45,
     height: 80,
     borderStyle: 'solid',
-    /*borderColor: getUserLessonTheme(),*/
+    /*borderColor: '#636363',*/
     borderWidth: 2,
     borderRadius: 8,
     marginEnd: 15,
@@ -392,7 +392,7 @@ const styles = StyleSheet.create({
     height: 37,
     borderRadius: 50,
     marginTop: -3,
-    backgroundColor: '#636363',
+    /*backgroundColor: '#636363',*/
     alignSelf: 'center',
     display: 'flex',
     alignItems: 'center',
