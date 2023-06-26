@@ -885,4 +885,4 @@ const Loading = () => {
   );
 };
 
-export default Loading;
+export default { newMessageSender, newMessagesCounter, Loading}

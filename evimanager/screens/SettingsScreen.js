@@ -39,6 +39,8 @@ const SettingsScreen = ({}) => {
       <Button onPress={changeTheme("SYSDARK")}>SYSDARK</Button>
       <Button onPress={changeTheme("NIGHTLY")}>NIGHTLY</Button>
 
+      <Text>Comming soon: Custom Subjectcolors!</Text>
+
       
       <TouchableOpacity
         style={styles.testButton}

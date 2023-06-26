@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, View, TouchableOpacity, ScrollView} from 'react-native';
+import {newMessageSender, newMessagesCounter} from './Loading'
 
 import {THEME} from '../constants';
 
@@ -17,7 +18,8 @@ const CreditsScreen = ({}) => {
         <ScrollView>
           <Text>Message Board</Text>
 
-          <Text>Keine weiteren Nachrichten...</Text>
+          <Text>Du hast ${newMessagesCounter} neue Nachrichten</Text>
+          <Text>Die letzte wurde von ${newMessageSender} gesendet!</Text>
         </ScrollView>
     </View>
   );
