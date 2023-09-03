@@ -103,13 +103,184 @@ function Home() {
         lcData[i].push(blocksArrayRoom);
         lcData[i].push(blocksArrayTeacher);
         // Vertretung........
-        lcData[i].push([
-          'Keine Stundeninfos gefunden',
-          'Keine Stundeninfos gefunden',
-          'Keine Stundeninfos gefunden',
-          'Keine Stundeninfos gefunden',
-          'Keine Stundeninfos gefunden',
-        ]);
+        let teacherSubstitutionSchedule1 = [];
+        let teacherSubstitutionSchedule2 = [];
+        let teacherSubstitutionSchedule3 = [];
+        let teacherSubstitutionSchedule4 = [];
+        let teacherSubstitutionSchedule5 = [];
+        if (date === moment().format('DD.MM.YYYY')) {
+          for (
+            let e = 0;
+            e <
+            json.teacherSubstitutionSchedule.todaySubstitutionSchedule.schedule
+              .length;
+            e++
+          ) {
+            if (
+              json.teacherSubstitutionSchedule.todaySubstitutionSchedule
+                .schedule[e][0] === '2'
+            ) {
+              teacherSubstitutionSchedule1 =
+                json.teacherSubstitutionSchedule.todaySubstitutionSchedule.schedule[
+                  e
+                ].slice(3);
+            } else if (
+              json.teacherSubstitutionSchedule.todaySubstitutionSchedule
+                .schedule[e][0] === '4'
+            ) {
+              teacherSubstitutionSchedule2 =
+                json.teacherSubstitutionSchedule.todaySubstitutionSchedule.schedule[
+                  e
+                ].slice(3);
+            } else if (
+              json.teacherSubstitutionSchedule.todaySubstitutionSchedule
+                .schedule[e][0] === '6'
+            ) {
+              teacherSubstitutionSchedule3 =
+                json.teacherSubstitutionSchedule.todaySubstitutionSchedule.schedule[
+                  e
+                ].slice(3);
+            } else if (
+              json.teacherSubstitutionSchedule.todaySubstitutionSchedule
+                .schedule[e][0] === '8'
+            ) {
+              teacherSubstitutionSchedule4 =
+                json.teacherSubstitutionSchedule.todaySubstitutionSchedule.schedule[
+                  e
+                ].slice(3);
+            } else if (
+              json.teacherSubstitutionSchedule.todaySubstitutionSchedule
+                .schedule[e][0] === '10'
+            ) {
+              teacherSubstitutionSchedule5 =
+                json.teacherSubstitutionSchedule.todaySubstitutionSchedule.schedule[
+                  e
+                ].slice(3);
+            }
+          }
+          if (teacherSubstitutionSchedule1.length === 0) {
+            teacherSubstitutionSchedule1 = [
+              'Keine Stundeninfos gefunden test1',
+            ];
+          }
+          if (teacherSubstitutionSchedule2.length === 0) {
+            teacherSubstitutionSchedule2 = [
+              'Keine Stundeninfos gefunden test2',
+            ];
+          }
+          if (teacherSubstitutionSchedule3.length === 0) {
+            teacherSubstitutionSchedule3 = [
+              'Keine Stundeninfos gefunden test3',
+            ];
+          }
+          if (teacherSubstitutionSchedule4.length === 0) {
+            teacherSubstitutionSchedule4 = [
+              'Keine Stundeninfos gefunden test4',
+            ];
+          }
+          if (teacherSubstitutionSchedule5.length === 0) {
+            teacherSubstitutionSchedule5 = [
+              'Keine Stundeninfos gefunden test5',
+            ];
+          }
+          lcData[i].push([
+            teacherSubstitutionSchedule1,
+            teacherSubstitutionSchedule2,
+            teacherSubstitutionSchedule3,
+            teacherSubstitutionSchedule4,
+            teacherSubstitutionSchedule5,
+          ]);
+        } else if (date === moment().add(1, 'days').format('DD.MM.YYYY')) {
+          for (
+            let e = 0;
+            e <
+            json.teacherSubstitutionSchedule.tomorrowSubstitutionSchedule
+              .schedule.length;
+            e++
+          ) {
+            if (
+              json.teacherSubstitutionSchedule.tomorrowSubstitutionSchedule
+                .schedule[e][0] === '2'
+            ) {
+              teacherSubstitutionSchedule1 =
+                json.teacherSubstitutionSchedule.tomorrowSubstitutionSchedule.schedule[
+                  e
+                ].slice(3);
+            } else if (
+              json.teacherSubstitutionSchedule.tomorrowSubstitutionSchedule
+                .schedule[e][0] === '4'
+            ) {
+              teacherSubstitutionSchedule2 =
+                json.teacherSubstitutionSchedule.tomorrowSubstitutionSchedule.schedule[
+                  e
+                ].slice(3);
+            } else if (
+              json.teacherSubstitutionSchedule.tomorrowSubstitutionSchedule
+                .schedule[e][0] === '6'
+            ) {
+              teacherSubstitutionSchedule3 =
+                json.teacherSubstitutionSchedule.tomorrowSubstitutionSchedule.schedule[
+                  e
+                ].slice(3);
+            } else if (
+              json.teacherSubstitutionSchedule.tomorrowSubstitutionSchedule
+                .schedule[e][0] === '8'
+            ) {
+              teacherSubstitutionSchedule4 =
+                json.teacherSubstitutionSchedule.tomorrowSubstitutionSchedule.schedule[
+                  e
+                ].slice(3);
+            } else if (
+              json.teacherSubstitutionSchedule.tomorrowSubstitutionSchedule
+                .schedule[e][0] === '10'
+            ) {
+              teacherSubstitutionSchedule5 =
+                json.teacherSubstitutionSchedule.tomorrowSubstitutionSchedule.schedule[
+                  e
+                ].slice(3);
+            }
+          }
+          if (teacherSubstitutionSchedule1.length === 0) {
+            teacherSubstitutionSchedule1 = [
+              'Keine Stundeninfos gefunden test1',
+            ];
+          }
+          if (teacherSubstitutionSchedule2.length === 0) {
+            teacherSubstitutionSchedule2 = [
+              'Keine Stundeninfos gefunden test2',
+            ];
+          }
+          if (teacherSubstitutionSchedule3.length === 0) {
+            teacherSubstitutionSchedule3 = [
+              'Keine Stundeninfos gefunden test3',
+            ];
+          }
+          if (teacherSubstitutionSchedule4.length === 0) {
+            teacherSubstitutionSchedule4 = [
+              'Keine Stundeninfos gefunden test4',
+            ];
+          }
+          if (teacherSubstitutionSchedule5.length === 0) {
+            teacherSubstitutionSchedule5 = [
+              'Keine Stundeninfos gefunden test5',
+            ];
+          }
+          lcData[i].push([
+            teacherSubstitutionSchedule1,
+            teacherSubstitutionSchedule2,
+            teacherSubstitutionSchedule3,
+            teacherSubstitutionSchedule4,
+            teacherSubstitutionSchedule5,
+          ]);
+        } else {
+          lcData[i].push([
+            ['Keine Stundeninfos gefunden test1'],
+            ['Keine Stundeninfos gefunden test2'],
+            ['Keine Stundeninfos gefunden test3'],
+            ['Keine Stundeninfos gefunden test4'],
+            ['Keine Stundeninfos gefunden test5'],
+          ]);
+        }
       } else {
         // Wochenende
         lcData[i].push(
