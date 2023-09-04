@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     height: 1.3,
     width: 3800,
-    backgroundColor: THEME.darkGrey
+    backgroundColor: THEME.secondary
   },
 });
 

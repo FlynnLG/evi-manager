@@ -62,7 +62,7 @@ const Login = () => {
         onChangeText={newText => setName(newText)}
         style={{
           marginTop: 30,
-          backgroundColor: THEME.darkGrey,
+          backgroundColor: THEME.secondary,
           borderRadius: 11,
           height: 50,
           padding: 10,
@@ -79,7 +79,7 @@ const Login = () => {
         style={{
           marginTop: 35,
           marginBottom: 5,
-          backgroundColor: THEME.darkGrey,
+          backgroundColor: THEME.secondary,
           borderRadius: 11,
           height: 50,
           padding: 10,

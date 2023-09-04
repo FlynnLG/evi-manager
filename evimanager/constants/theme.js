@@ -1,20 +1,20 @@
 export const SYSTEMDARK = {
-  fontColor: '#ededed',
-  background: '#000000',
-  lightGrey: '#1c1c1e',
-  darkGrey: '#171717',
+  fontColor: '#f9f9f9',
+  background: '#121414',
+  primary: '#1f1f25',
+  secondary: '#272727',
   red: '#ff3b30',
-  green: '#248a3d',
+  green: '#05a028',
   scheme: 'dark',
 };
 
 export const SYSTEMLIGHT = {
   fontColor: '#000000',
   background: '#e9e8ed',
-  lightGrey: '#ffffff',
-  darkGrey: '#f9f9fa',
+  primary: '#ffffff',
+  secondary: '#f9f9fa',
   red: '#ff3b30',
-  green: '#34c759',
+  green: '#42ff71',
   scheme: 'light',
 };
 

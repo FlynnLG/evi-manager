@@ -82,7 +82,7 @@ const openColorModal = () => {
 
 const styles = StyleSheet.create({
     subjectsBtn: {
-        backgroundColor: THEME.lightGrey,
+        backgroundColor: THEME.primary,
         //borderColor: '#B8B8B8',
         borderWidth: 1,
         paddingTop: 22,

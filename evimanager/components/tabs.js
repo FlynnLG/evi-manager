@@ -70,7 +70,7 @@ export const HomeTabs = () => {
     <BottomSheetModalProvider>
       <HomeTab.Navigator
         screenOptions={({route}) => ({
-          tabBarStyle: {position: 'absolute', backgroundColor: THEME.darkGrey},
+          tabBarStyle: {position: 'absolute', backgroundColor: THEME.secondary},
           tabBarActiveTintColor: '#007aff',
           headerShown: false,
           tabBarShowLabel: true,
@@ -106,7 +106,7 @@ export const SettingsTabs = () => {
   return (
     <SettingsTab.Navigator
       screenOptions={({route}) => ({
-        tabBarStyle: {position: 'absolute', backgroundColor: THEME.darkGrey},
+        tabBarStyle: {position: 'absolute', backgroundColor: THEME.secondary},
         tabBarActiveTintColor: '#007aff',
         headerShown: false,
         tabBarShowLabel: true,
@@ -141,7 +141,7 @@ export const CreditsTabs = () => {
   return (
     <CreditsTab.Navigator
       screenOptions={({route}) => ({
-        tabBarStyle: {position: 'absolute', backgroundColor: THEME.darkGrey},
+        tabBarStyle: {position: 'absolute', backgroundColor: THEME.secondary},
         tabBarActiveTintColor: '#007aff',
         headerShown: false,
         tabBarShowLabel: true,

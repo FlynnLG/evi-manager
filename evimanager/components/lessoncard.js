@@ -101,7 +101,7 @@ export const LessonCard = ({
   let accentShadowColor = '#ffffff00'
   let accentElevation = 0
   let accentPaddingTop = 11.4
-  let dayAccent = THEME.darkGrey
+  let dayAccent = THEME.secondary
   if(accent == true){
     accentBorderColor = THEME.green
     accentWidth = 385
@@ -156,7 +156,7 @@ export const LessonCard = ({
 
   function isVisible(i){
     //Look if there are any block informations?
-    if(blockInfos[i] == 'Keine Stundeninfos gefunden'){
+    if(typeof tableData[0][1] === 'undefined'){
       return("#ffffff00")
     }else{
       return(THEME.red)
@@ -233,7 +233,7 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Icon name='alert' size={15} color={() => isVisible(0)}/>
+          <Icon name='alert-circle' size={15} color={() => isVisible(0)}/>
           <Text style={styles.block}>1</Text>
           <View style={styles.circle}>
             <Text
@@ -261,7 +261,7 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Icon name='alert-outline' size={15} color={isVisible(1)}/>
+          <Icon name='alert-circle' size={15} color={isVisible(1)}/>
           <Text style={styles.block}>2</Text>
           <View style={styles.circle}>
             <Text
@@ -289,7 +289,7 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Icon name='alert' size={15} color={isVisible(2)}/>
+          <Icon name='alert-circle' size={15} color={isVisible(2)}/>
           <Text style={styles.block}>3</Text>
           <View style={styles.circle}>
             <Text
@@ -317,7 +317,7 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Icon name='alert-outline' size={15} color={isVisible(3)}/>
+          <Icon name='alert-circle' size={15} color={isVisible(3)}/>
           <Text style={styles.block}>4</Text>
           <View style={styles.circle}>
             <Text
@@ -345,7 +345,7 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Icon name='alert-outline' size={15} color={isVisible(4)}/>
+          <Icon name='alert-circle' size={15} color={isVisible(4)}/>
           <Text style={styles.block}>5</Text>
           <View style={styles.circle}>
             <Text
@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
     //height: 140,
     margin: 10.4,
     alignSelf: 'center',
-    backgroundColor: THEME.lightGrey,
+    backgroundColor: THEME.primary,
     borderRadius: 10,
     borderWidth: 0,
     //borderColor: '#737475', EDIT THIS VARIABLE WITH "accentBorderColor"
@@ -483,7 +483,7 @@ const styles = StyleSheet.create({
     height: 90,
     margin: 10.4,
     alignSelf: 'center',
-    backgroundColor: THEME.lightGrey,
+    backgroundColor: THEME.primary,
     borderRadius: 10,
     //borderWidth: 1,
     borderColor: '#737475',
@@ -502,7 +502,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderColor: '#636363',
     borderWidth: 2,
-    borderRadius: 30,
+    borderRadius: 8,
     marginEnd: 15,
   },
   circle: {
@@ -510,7 +510,7 @@ const styles = StyleSheet.create({
     height: 37,
     borderRadius: 50,
     marginTop: -3,
-    /*backgroundColor: '#636363',*/
+    backgroundColor: '#636363',
     alignSelf: 'center',
     display: 'flex',
     alignItems: 'center',
@@ -570,7 +570,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   modalContentBlockInfoBox: {
-    backgroundColor: THEME.lightGrey,
+    backgroundColor: THEME.primary,
     borderRadius: 10,
     marginTop: 10,
     width: 385,
@@ -579,7 +579,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   modalContentBlockInfoBoxEmpty: {
-    backgroundColor: THEME.lightGrey,
+    backgroundColor: THEME.primary,
     borderRadius: 3,
     marginTop: 10,
     width: 385,
@@ -617,7 +617,7 @@ const styles = StyleSheet.create({
     //borderWidth: 1,
     borderTopColor: '#737475',
     alignSelf: 'center',
-    backgroundColor: THEME.lightGrey,
+    backgroundColor: THEME.primary,
   },
   weekendHolidayContentInfoContainer: {
     display: 'flex',
@@ -637,7 +637,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     justifyContent: 'center',
-    backgroundColor: THEME.lightGrey,
+    backgroundColor: THEME.primary,
   },
   head: {
     height: 44,
