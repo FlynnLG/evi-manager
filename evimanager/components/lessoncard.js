@@ -90,7 +90,7 @@ export const LessonCard = ({
     'Raum',
     'Info',
   ]);
-  const [tableData, setTableData] = useState([['', '', '', '']]);
+  const [tableData, setTableData] = useState([['undefined', 'undefined', 'undefined', 'undefined']]);
 
   // TODO: Define course number (e.g. EN12) in Modal!
   // TODO: Define course number (e.g. EN12) in Modal
@@ -154,9 +154,9 @@ export const LessonCard = ({
     );
   }
 
-  function isVisible(i){
+  function isVisible(){
     //Look if there are any block informations?
-    if(typeof tableData[0][1] === 'undefined'){
+    if(typeof tableData[0][1] === 'undefined' || typeof tableData[0][1] === ''){
       return("#ffffff00")
     }else{
       return(THEME.red)
@@ -233,7 +233,7 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Icon name='alert-circle' size={15} color={() => isVisible(0)}/>
+          <Icon name='alert-circle' size={15} color={isVisible()}/>
           <Text style={styles.block}>1</Text>
           <View style={styles.circle}>
             <Text
@@ -261,7 +261,7 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Icon name='alert-circle' size={15} color={isVisible(1)}/>
+          <Icon name='alert-circle' size={15} color={isVisible()}/>
           <Text style={styles.block}>2</Text>
           <View style={styles.circle}>
             <Text
@@ -289,7 +289,7 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Icon name='alert-circle' size={15} color={isVisible(2)}/>
+          <Icon name='alert-circle' size={15} color={isVisible()}/>
           <Text style={styles.block}>3</Text>
           <View style={styles.circle}>
             <Text
@@ -317,7 +317,7 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Icon name='alert-circle' size={15} color={isVisible(3)}/>
+          <Icon name='alert-circle' size={15} color={isVisible()}/>
           <Text style={styles.block}>4</Text>
           <View style={styles.circle}>
             <Text
@@ -345,7 +345,7 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Icon name='alert-circle' size={15} color={isVisible(4)}/>
+          <Icon name='alert-circle' size={15} color={isVisible()}/>
           <Text style={styles.block}>5</Text>
           <View style={styles.circle}>
             <Text
@@ -502,14 +502,14 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderColor: '#636363',
     borderWidth: 2,
-    borderRadius: 8,
+    borderRadius: 50,
     marginEnd: 15,
   },
   circle: {
-    width: 37,
-    height: 37,
+    width: 39,
+    height: 39,
     borderRadius: 50,
-    marginTop: -3,
+    marginTop: -5,
     backgroundColor: '#636363',
     alignSelf: 'center',
     display: 'flex',
