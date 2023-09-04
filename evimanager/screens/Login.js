@@ -15,7 +15,6 @@ import AsyncStorage from 'react-native-encrypted-storage';
 const windowWidth = Dimensions.get('window').width;
 
 async function handelLogin(navigation, username, password) {
-  console.log(username + ';' + password);
   console.log('Navigation to LOADING!');
   await AsyncStorage.setItem(
     'localdata.usercredentials',

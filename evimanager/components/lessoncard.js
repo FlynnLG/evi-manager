@@ -1,6 +1,13 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
+import {Table, Row, Rows} from 'react-native-reanimated-table';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FONTS, THEME} from '../constants';
@@ -66,17 +73,26 @@ export const LessonCard = ({
 }) => {
   // ref
   const bottomSheetModalRef = useRef(null);
-
   // variables
   const snapPoints = useMemo(() => ['50%'], []);
 
   const [modalDayOfWeek, setModalDayOfWeek] = useState('');
   const [modalBlock, setModalBlock] = useState('');
-  const [modalBlockInfo, setModalBlockInfo] = useState('');
+  // const [modalBlockInfo, setModalBlockInfo] = useState('');
   const [modalLesson, setModalLesson] = useState('');
   const [modalTeacher, setModalTeacher] = useState('');
   const [modalRoom, setModalRoom] = useState('');
   const [modalTime, setModalTime] = useState('');
+
+  const [tableHead, setTableHead] = useState([
+    'Lehrer',
+    'Vert.-Lehrer',
+    'Raum',
+    'Info',
+  ]);
+  const [tableData, setTableData] = useState([['', '', '', '']]);
+
+  // TODO: Define course number (e.g. EN12) in Modal!
   // TODO: Define course number (e.g. EN12) in Modal
 
   let accentBorderColor = '#ffffff00'
@@ -344,6 +360,35 @@ export const LessonCard = ({
     }
   }
 
+  function getModalBlockInfo(tableDataCheck) {
+    if (typeof tableDataCheck[0][1] === 'undefined') {
+      return (
+        <View style={styles.modalContentBlockInfoBoxEmpty}>
+          <Text style={styles.modalContentBlockInfoBoxText}>
+            Keine Stundeninfos gefunden!
+          </Text>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.modalContentBlockInfoBox}>
+          <ScrollView>
+            <View style={styles.container}>
+              <Table borderStyle={{borderWidth: 2, borderColor: 'darkgray'}}>
+                <Row
+                  data={tableHead}
+                  style={styles.head}
+                  textStyle={styles.headText}
+                />
+                <Rows data={tableDataCheck} textStyle={styles.text} />
+              </Table>
+            </View>
+          </ScrollView>
+        </View>
+      );
+    }
+  }
+
   const openSettingsModal = (
     day,
     block,
@@ -355,7 +400,7 @@ export const LessonCard = ({
   ) => {
     setModalDayOfWeek(day);
     setModalBlock(block);
-    setModalBlockInfo(blockInfo);
+    setTableData([blockInfo]);
     setModalLesson(lesson);
     setModalTeacher(teacher);
     setModalRoom(room);
@@ -398,11 +443,7 @@ export const LessonCard = ({
           <Text style={styles.modalContentText}>
             {modalDayOfWeek}, {modalBlock}
           </Text>
-          <View style={styles.modalContentBlockInfoBox}>
-            <Text style={styles.modalContentBlockInfoBoxText}>
-              {modalBlockInfo}
-            </Text>
-          </View>
+          {getModalBlockInfo(tableData)}
           <View style={styles.modalContentInfoContainer}>
             <Icon name="school-outline" size={20} color={THEME.fontColor} />
             <Text style={styles.modalContentInfoText}>{modalLesson}</Text>
@@ -461,7 +502,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderColor: '#636363',
     borderWidth: 2,
-    borderRadius: 28,
+    borderRadius: 30,
     marginEnd: 15,
   },
   circle: {
@@ -533,7 +574,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10,
     width: 385,
-    height: 40,
+    height: 150,
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  modalContentBlockInfoBoxEmpty: {
+    backgroundColor: THEME.lightGrey,
+    borderRadius: 3,
+    marginTop: 10,
+    width: 385,
+    height: 35,
     justifyContent: 'center',
     alignSelf: 'center',
   },
@@ -549,7 +599,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     width: 360,
     marginTop: 20,
-    marginLeft: 15,
+    marginLeft: 25,
   },
   modalContentInfoText: {
     color: THEME.fontColor,
@@ -582,6 +632,27 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: FONTS.regular,
     marginLeft: 20,
+  },
+  container: {
+    flex: 1,
+    padding: 10,
+    justifyContent: 'center',
+    backgroundColor: THEME.lightGrey,
+  },
+  head: {
+    height: 44,
+    backgroundColor: '#696868',
+  },
+  headText: {
+    fontSize: 14,
+    fontFamily: FONTS.medium,
+    textAlign: 'center',
+    color: 'white',
+  },
+  text: {
+    fontSize: 15,
+    fontFamily: FONTS.regular,
+    textAlign: 'center',
   },
 });
 
