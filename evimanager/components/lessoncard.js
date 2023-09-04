@@ -2,11 +2,60 @@ import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 
-import {FONTS, THEME, getUserLessonTheme} from '../constants';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {FONTS, THEME} from '../constants';
+//import Ionicons
+import Icon from 'react-native-vector-icons/Ionicons';
 //import Icon from 'react-native-vector-icons/Ionicons'; not used
 
+async function getUserLessonTheme(lesson){
+  console.log(lesson)
+  const strorageRes = await AsyncStorage.getItem(
+    `localdata.lessonColors.${lesson}`,
+  );
+  if(strorageRes == undefined){
+    console.error("User didn't specify custom lesson colors using default!")
+    const defaultLessonColors = {
+      german: "#009933",
+      english: "#ff1a1a",
+      math: "#1aa3ff",
+      history: "#e6e6e6",
+      religion: "#b366ff",
+      geo: "#99994d",
+      physik: "#ff8533",
+      sport: "#d9ffb3",
+      pb: "#804000",
+      art: "#6666ff",
+      ds: "#6666ff",
+      music: "#6666ff",
+      luck: "#00ff80",
+      other: "#669999",
+    }
+    //Safe the default values
+    await AsyncStorage.setItem('localdata.lessonColors.DE', defaultLessonColors.german)
+    await AsyncStorage.setItem('localdata.lessonColors.EN', defaultLessonColors.english)
+    await AsyncStorage.setItem('localdata.lessonColors.MA', defaultLessonColors.math)
+    await AsyncStorage.setItem('localdata.lessonColors.GE', defaultLessonColors.history)
+    await AsyncStorage.setItem('localdata.lessonColors.RE', defaultLessonColors.religion)
+    await AsyncStorage.setItem('localdata.lessonColors.geo', defaultLessonColors.geo)
+    await AsyncStorage.setItem('localdata.lessonColors.physik', defaultLessonColors.physik)
+    await AsyncStorage.setItem('localdata.lessonColors.sport', defaultLessonColors.sport)
+    await AsyncStorage.setItem('localdata.lessonColors.pb', defaultLessonColors.pb)
+    await AsyncStorage.setItem('localdata.lessonColors.art', defaultLessonColors.art)
+    await AsyncStorage.setItem('localdata.lessonColors.ds', defaultLessonColors.ds)
+    await AsyncStorage.setItem('localdata.lessonColors.music', defaultLessonColors.music)
+    await AsyncStorage.setItem('localdata.lessonColors.luck', defaultLessonColors.luck)
+    await AsyncStorage.setItem('localdata.lessonColors.other', defaultLessonColors.other)
+    //return default value for the first run
+    return(defaultLessonColors.other)
+  }else{
+    //When it isn't "other" than get thing
+    return(strorageRes)
+  }
+}
+
 export const LessonCard = ({
+  accent,
   dayOfWeekShort,
   date,
   blocks,
@@ -30,18 +79,39 @@ export const LessonCard = ({
   const [modalTime, setModalTime] = useState('');
   // TODO: Define course number (e.g. EN12) in Modal
 
+  let accentBorderColor = '#ffffff00'
+  let accentWidth = 360
+  let accentHeight = 140
+  let accentShadowColor = '#ffffff00'
+  let accentElevation = 0
+  let accentPaddingTop = 11.4
+  let dayAccent = THEME.darkGrey
+  if(accent == true){
+    accentBorderColor = THEME.green
+    accentWidth = 385
+    accentHeight = 155
+    if(THEME.scheme == 'dark'){
+      accentShadowColor = '#747475'
+    }else{
+      accentShadowColor = '#000000'
+    }
+    accentElevation = 10
+    accentPaddingTop = 6
+    dayAccent = THEME.green
+  }
+
   function weekendCard() {
     return (
       <View style={styles.smallLessonCard}>
         <View style={styles.dateContainer}>
-          <View style={styles.dayOfTheWeekCircle}>
+          <View style={[styles.dayOfTheWeekCircle, {backgroundColor: dayAccent,}]}>
             <Text style={styles.dayOfTheWeekText}>{dayOfWeekShort}</Text>
           </View>
           <Text style={styles.date}>{date}</Text>
         </View>
         <View style={styles.weekendHolidayContainer}>
           <View style={styles.weekendHolidayContentInfoContainer}>
-            <Ionicons name="cafe" size={20} color={THEME.fontColor} />
+            <Icon name="cafe" size={20} color={THEME.fontColor} />
             <Text style={styles.weekendHolidayContentInfoText}>Wochenende</Text>
           </View>
         </View>
@@ -53,14 +123,14 @@ export const LessonCard = ({
     return (
       <View style={styles.smallLessonCard}>
         <View style={styles.dateContainer}>
-          <View style={styles.dayOfTheWeekCircle}>
+          <View style={[styles.dayOfTheWeekCircle, {backgroundColor: dayAccent,}]}>
             <Text style={styles.dayOfTheWeekText}>{dayOfWeekShort}</Text>
           </View>
           <Text style={styles.date}>{date}</Text>
         </View>
         <View style={styles.weekendHolidayContainer}>
           <View style={styles.weekendHolidayContentInfoContainer}>
-            <Ionicons name="calendar" size={20} color={THEME.fontColor} />
+            <Icon name="calendar" size={20} color={THEME.fontColor} />
             <Text style={styles.weekendHolidayContentInfoText}>Ferien</Text>
           </View>
         </View>
@@ -68,19 +138,19 @@ export const LessonCard = ({
     );
   }
 
+  function isVisible(i){
+    //Look if there are any block informations?
+    if(blockInfos[i] == 'Keine Stundeninfos gefunden'){
+      return("#ffffff00")
+    }else{
+      return(THEME.red)
+    }
+  }
+
   function lessonCard() {
     for (let i = 0; i < rooms.length; i++) {
       if (!rooms[i]) {
         rooms[i] = 'Kein Raum angegeben';
-      }
-    }
-    function isVisible(i){
-      //Look if there are any block informations?
-      if(!blockInfos[i]){
-        blockInfos[i] = 'Keine weiteren Informationen zu dem Block'
-        return('#ffffff00')
-      }else{
-        return(THEME.red)
       }
     }
     let block1;
@@ -105,9 +175,16 @@ export const LessonCard = ({
     }
 
     return (
-      <View style={styles.lessonCard}>
+      <View style={[styles.lessonCard, 
+      {borderColor: accentBorderColor, 
+      width: accentWidth, 
+      height: accentHeight, 
+      shadowColor: accentShadowColor, 
+      elevation: accentElevation,
+      marginBottom: accentPaddingTop,
+      }]}>
         <View style={styles.dateContainer}>
-          <View style={styles.dayOfTheWeekCircle}>
+          <View style={[styles.dayOfTheWeekCircle, {backgroundColor: dayAccent,}]}>
             <Text style={styles.dayOfTheWeekText}>{dayOfWeekShort}</Text>
           </View>
           <Text style={styles.date}>{date}</Text>
@@ -127,7 +204,7 @@ export const LessonCard = ({
     if (number === 1) {
       return (
         <TouchableOpacity
-          style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
+          style={[styles.frame, {borderColor: () => getUserLessonTheme(blocks[0])}]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -140,13 +217,13 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Ionicons name='exclamationcircle' size={15} color={isVisible(0)}/>
+          <Icon name='alert' size={15} color={() => isVisible(0)}/>
           <Text style={styles.block}>1</Text>
           <View style={styles.circle}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
+              style={[styles.circleText, {backgroundColor: () =>getUserLessonTheme(blocks[0])}]}>
               {blocks[0]}
             </Text>
           </View>
@@ -155,7 +232,7 @@ export const LessonCard = ({
     } else if (number === 2) {
       return (
         <TouchableOpacity
-          style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
+          style={[styles.frame, {borderColor: () => getUserLessonTheme(blocks[1])}]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -168,13 +245,13 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Ionicons name='exclamationcircle' size={15} color={isVisible(1)}/>
+          <Icon name='alert-outline' size={15} color={isVisible(1)}/>
           <Text style={styles.block}>2</Text>
           <View style={styles.circle}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
+              style={[styles.circleText, {backgroundColor: () =>getUserLessonTheme(blocks[1])}]}>
               {blocks[1]}
             </Text>
           </View>
@@ -183,7 +260,7 @@ export const LessonCard = ({
     } else if (number === 3) {
       return (
         <TouchableOpacity
-          style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
+          style={[styles.frame, {borderColor: () =>getUserLessonTheme(blocks[2])}]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -196,13 +273,13 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Ionicons name='exclamationcircle' size={15} color={isVisible(2)}/>
+          <Icon name='alert' size={15} color={isVisible(2)}/>
           <Text style={styles.block}>3</Text>
           <View style={styles.circle}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
+              style={[styles.circleText, {backgroundColor: () =>getUserLessonTheme(blocks[2])}]}>
               {blocks[2]}
             </Text>
           </View>
@@ -211,7 +288,7 @@ export const LessonCard = ({
     } else if (number === 4) {
       return (
         <TouchableOpacity
-          style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
+          style={[styles.frame, {borderColor: () => getUserLessonTheme(blocks[3])}]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -224,13 +301,13 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Ionicons name='exclamationcircle' size={15} color={isVisible(3)}/>
+          <Icon name='alert-outline' size={15} color={isVisible(3)}/>
           <Text style={styles.block}>4</Text>
           <View style={styles.circle}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
+              style={[styles.circleText, {backgroundColor: () => getUserLessonTheme(blocks[3])}]}>
               {blocks[3]}
             </Text>
           </View>
@@ -239,7 +316,7 @@ export const LessonCard = ({
     } else if (number === 5) {
       return (
         <TouchableOpacity
-          style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
+          style={[styles.frame, {borderColor: () => getUserLessonTheme(blocks[4])}]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -252,13 +329,13 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Ionicons name='exclamationcircle' size={15} color={isVisible(4)}/>
+          <Icon name='alert-outline' size={15} color={isVisible(4)}/>
           <Text style={styles.block}>5</Text>
           <View style={styles.circle}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
+              style={[styles.circleText, {backgroundColor: () => getUserLessonTheme(blocks[4])}]}>
               {blocks[4]}
             </Text>
           </View>
@@ -327,19 +404,19 @@ export const LessonCard = ({
             </Text>
           </View>
           <View style={styles.modalContentInfoContainer}>
-            <Ionicons name="school-outline" size={20} color={THEME.fontColor} />
+            <Icon name="school-outline" size={20} color={THEME.fontColor} />
             <Text style={styles.modalContentInfoText}>{modalLesson}</Text>
           </View>
           <View style={styles.modalContentInfoContainer}>
-            <Ionicons name="person-outline" size={20} color={THEME.fontColor} />
+            <Icon name="person-outline" size={20} color={THEME.fontColor} />
             <Text style={styles.modalContentInfoText}>{modalTeacher}</Text>
           </View>
           <View style={styles.modalContentInfoContainer}>
-            <Ionicons name="location-outline" size={20} color={THEME.fontColor} />
+            <Icon name="location-outline" size={20} color={THEME.fontColor} />
             <Text style={styles.modalContentInfoText}>{modalRoom}</Text>
           </View>
           <View style={styles.modalContentInfoContainer}>
-            <Ionicons name="time-outline" size={20} color={THEME.fontColor} />
+            <Icon name="time-outline" size={20} color={THEME.fontColor} />
             <Text style={styles.modalContentInfoText}>{modalTime}</Text>
           </View>
         </View>
@@ -351,23 +428,23 @@ export const LessonCard = ({
 
 const styles = StyleSheet.create({
   lessonCard: {
-    width: 370,
-    height: 140,
+    //width: 370,  EDIT THESE WITH THE VARIABELS "accentWidth" and "accentHeight"
+    //height: 140,
     margin: 10.4,
     alignSelf: 'center',
     backgroundColor: THEME.lightGrey,
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#737475',
+    borderWidth: 0,
+    //borderColor: '#737475', EDIT THIS VARIABLE WITH "accentBorderColor"
   },
   smallLessonCard: {
-    width: 370,
+    width: 360,
     height: 90,
     margin: 10.4,
     alignSelf: 'center',
     backgroundColor: THEME.lightGrey,
     borderRadius: 10,
-    borderWidth: 1,
+    //borderWidth: 1,
     borderColor: '#737475',
   },
   rowContainer: {
@@ -382,9 +459,9 @@ const styles = StyleSheet.create({
     width: 45,
     height: 80,
     borderStyle: 'solid',
-    /*borderColor: '#636363',*/
+    borderColor: '#636363',
     borderWidth: 2,
-    borderRadius: 8,
+    borderRadius: 28,
     marginEnd: 15,
   },
   circle: {
@@ -409,14 +486,15 @@ const styles = StyleSheet.create({
     color: THEME.fontColor,
     fontSize: 18,
     textAlign: 'center',
-    marginTop: 7,
+    alignItems: 'center',
+    marginTop: -7,
   },
   date: {
     fontFamily: FONTS.regular,
     color: THEME.fontColor,
     fontSize: 15,
     marginLeft: 10,
-    marginTop: 7,
+    marginTop: 6,
   },
   dayOfTheWeekCircle: {
     width: 25,
@@ -452,7 +530,7 @@ const styles = StyleSheet.create({
   },
   modalContentBlockInfoBox: {
     backgroundColor: THEME.lightGrey,
-    borderRadius: 3,
+    borderRadius: 10,
     marginTop: 10,
     width: 385,
     height: 40,
@@ -483,11 +561,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: 370,
+    width: 360,
     height: 45,
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#737475',
+    //borderWidth: 1,
+    borderTopColor: '#737475',
     alignSelf: 'center',
     backgroundColor: THEME.lightGrey,
   },
@@ -636,7 +714,7 @@ const styles = StyleSheet.create({
 /*
  <View style={styles.weekendHolidayContainer}>
  <View style={styles.weekendHolidayContentInfoContainer}>
- <Ionicons name="cafe" size={20} color={THEME.fontColor} />
+ <Icon name="cafe" size={20} color={THEME.fontColor} />
  <Text style={styles.weekendHolidayContentInfoText}>Wochenende</Text>
  </View>
  </View>
@@ -645,7 +723,7 @@ const styles = StyleSheet.create({
 /*
  <View style={styles.weekendHolidayContainer}>
  <View style={styles.weekendHolidayContentInfoContainer}>
- <Ionicons name="calendar" size={20} color={THEME.fontColor} />
+ <Icon name="calendar" size={20} color={THEME.fontColor} />
  <Text style={styles.weekendHolidayContentInfoText}>Ferien</Text>
  </View>
  </View>

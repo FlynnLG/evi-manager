@@ -18,3 +18,8 @@ Here are features and future ideas listed. Implemented features are marked with 
 - [ ] Birthdaylist?
 
 -> ../lessoncard.js make the icon fitting the parent container and pls check if everything is working @flynnLG
+
+
+Mehr Farbe
+Highlighting den heutigen Tag
+21.3 nich durchgängig anzeigen nach 17 Uhr neuer Tag

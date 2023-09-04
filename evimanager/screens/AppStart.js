@@ -1,19 +1,27 @@
 import React, {useEffect} from 'react';
 import {Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import EncryptedStorage from 'react-native-encrypted-storage';
+import AsyncStorage from 'react-native-encrypted-storage';
+import appStorage from '../components/appStorage';
 import {THEME, FONTS} from '../constants';
 
 async function determineRoute(nav) {
-  const credentials = await EncryptedStorage.getItem(
-    'localdata.usercredentials',
-  );
-  if (credentials) {
-    console.log('Key found, redirecting...');
-    nav.navigate('Loading');
-  } else {
-    console.log('No Keys found, login...');
-    nav.navigate('Login');
+  if(appStorage.getString('?restart') === true){
+    appStorage.set('?restart', false)
+    //Quick reload
+    nav.navigate('Settings');
+  }
+  else{
+    const credentials = await AsyncStorage.getItem(
+      'localdata.usercredentials',
+    );
+    if (credentials) {
+      console.log('Key found, redirecting...');
+      nav.navigate('Loading');
+    } else {
+      console.log('No Keys found, login...');
+      nav.navigate('Login');
+    }
   }
 }
 
