@@ -160,31 +160,25 @@ const ytm = async nav => {
                     }
 
                     // Get subjects of user
-                    let subjects = [];
+                    let subjects = new Set();
                     for (let e = 0; e <= 4; e++) {
                       for (let i = 0; i <= 4; i++) {
                         for (let u = 0; u < scheduleCycle1[e][i].length; u++) {
-                          if (!scheduleCycle1[e][i][u][0]) {
-                            void 0;
-                          } else if (
-                            subjects.includes(scheduleCycle1[e][i][u][0]) ===
-                            false
-                          ) {
-                            subjects.push(scheduleCycle1[e][i][u][0]);
+                          const subject = scheduleCycle1[e][i][u][0];
+                          if (subject && !subjects.has(subject)) {
+                            subjects.add(subject);
                           }
                         }
                         for (let r = 0; r < scheduleCycle2[e][i].length; r++) {
-                          if (!scheduleCycle2[e][i][r][0]) {
-                            void 0;
-                          } else if (
-                            subjects.includes(scheduleCycle2[e][i][r][0]) ===
-                            false
-                          ) {
-                            subjects.push(scheduleCycle2[e][i][r][0]);
+                          const subject = scheduleCycle2[e][i][r][0];
+                          if (subject && !subjects.has(subject)) {
+                            subjects.add(subject);
                           }
                         }
                       }
                     }
+                    subjects = Array.from(subjects); // Convert set back to an array if needed
+
                     await axios.default
                       .get('https://gymnasium-neuruppin.de/index.php?oid=18')
                       .then(async response => {
