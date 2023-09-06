@@ -244,6 +244,7 @@ const ytm = async nav => {
                               );
                             }
                           }
+
                           await axios.default
                             .get(
                               'https://gymnasium-neuruppin.de/index.php?oid=19&id=95',
@@ -258,30 +259,43 @@ const ytm = async nav => {
                                 let y = 2;
 
                                 // Define a reusable selector function with async/await
-                                const selectElementText = async (selector, index) => {
-                                  const element = await $(selector).eq(index).get(0);
-                                  return element ? $(element).text().trim() : '';
+                                const selectElementText = async (
+                                  selector,
+                                  index,
+                                ) => {
+                                  const element = await $(selector)
+                                    .eq(index)
+                                    .get(0);
+                                  return element
+                                    ? $(element).text().trim()
+                                    : '';
                                 };
 
                                 (async () => {
                                   while (y < 5) {
                                     const cycleNum = await selectElementText(
                                       `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(1)`,
-                                      0
+                                      0,
                                     );
                                     const cycleStart = await selectElementText(
                                       `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(2)`,
-                                      0
+                                      0,
                                     );
                                     const cycleEnd = await selectElementText(
                                       `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(3)`,
-                                      0
+                                      0,
                                     );
-                                      //console.log(cycleNum, cycleStart, cycleEnd)
+                                    //console.log(cycleNum, cycleStart, cycleEnd)
                                     if (cycleNum && cycleStart && cycleEnd) {
-                                      cycle.push([cycleNum, cycleStart, cycleEnd]);
+                                      cycle.push([
+                                        cycleNum,
+                                        cycleStart,
+                                        cycleEnd,
+                                      ]);
                                     } else {
-                                      console.log('Error while parsing cycle to string. #Error_2358');
+                                      console.log(
+                                        'Error while parsing cycle to string. #Error_2358',
+                                      );
                                       break;
                                     }
 
@@ -345,128 +359,93 @@ const ytm = async nav => {
                                           'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(5) > tbody > tr > td > span > b',
                                         ).length
                                       ) {
-                                        if (
-                                          (
-                                            await $(
-                                              'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(5) > tbody > tr > td > span > b',
-                                            ).text()
-                                          ).replace(/^\D+/g, '') ===
-                                          moment().format('DD.MM.YY')
-                                        ) {
+                                        const tssElement = await $(
+                                          'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(5) > tbody > tr > td > span > b',
+                                        );
+                                        const tssText = tssElement.text();
+                                        const tssDate = tssText.replace(
+                                          /^\D+/g,
+                                          '',
+                                        );
+                                        const todayDate =
+                                          moment().format('DD.MM.YY');
+                                        const tomorrowDate = moment()
+                                          .add(1, 'days')
+                                          .format('DD.MM.YY');
+
+                                        if (tssDate === todayDate) {
                                           checkIfFirstTSSIsTodayOrTomorrow = true; // If true=today, if false=tomorrow
                                           todaySubstitutionScheduleDate =
-                                            moment()
-                                              .format('DD.MM.YY')
-                                              .toString();
+                                            todayDate;
                                           todaySubstitutionScheduleExist = true;
-                                        } else if (
-                                          (
-                                            await $(
-                                              'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(5) > tbody > tr > td > span > b',
-                                            ).text()
-                                          ).replace(/^\D+/g, '') ===
-                                          moment()
-                                            .add(1, 'days')
-                                            .format('DD.MM.YY')
-                                        ) {
+                                        } else if (tssDate === tomorrowDate) {
                                           checkIfFirstTSSIsTodayOrTomorrow = false; // If true=today, if false=tomorrow
                                           tomorrowSubstitutionScheduleDate =
-                                            moment()
-                                              .add(1, 'days')
-                                              .format('DD.MM.YY')
-                                              .toString();
+                                            tomorrowDate;
                                           tomorrowSubstitutionScheduleExist = true;
                                         }
                                         let i = 2;
-                                        while (
-                                          await $(
-                                            `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(2)`,
-                                          ).length
-                                        ) {
+                                        const substitutionScheduleSelector =
+                                          'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr';
+
+                                        const $substitutionScheduleRows =
+                                          await $(substitutionScheduleSelector);
+                                        const numRows =
+                                          $substitutionScheduleRows.length;
+
+                                        for (let i = 2; i < numRows; i++) {
+                                          const $row =
+                                            $substitutionScheduleRows.eq(i);
+                                          const $classCell =
+                                            $row.find('td:nth-child(2)');
+                                          const classText = $classCell
+                                            .text()
+                                            .replace(/\s/g, '');
+
                                           if (
-                                            (
-                                              await $(
-                                                `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(2)`,
-                                              ).text()
-                                            ).replace(/\s/g, '') ===
-                                              currentClass ||
-                                            (
-                                              await $(
-                                                `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(2)`,
-                                              ).text()
-                                            ).replace(/\s/g, '') ===
+                                            classText === currentClass ||
+                                            classText ===
                                               parseInt(
                                                 currentClass.match(/\d+/)[0],
                                               ).toString()
                                           ) {
-                                            let checkSubject = (
-                                              await $(
-                                                `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(3)`,
-                                              ).text()
-                                            ).replace(/\s+/, '');
-                                            if (
-                                              (
-                                                await $(
-                                                  `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(3)`,
-                                                ).text()
-                                              )
-                                                .replace(/\s+/, '')
-                                                .startsWith('[') === true
-                                            ) {
-                                              checkSubject = (
-                                                await $(
-                                                  `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(3)`,
-                                                ).text()
-                                              )
-                                                .replace(/\s+/, '')
-                                                .split(':');
-                                              checkSubject =
-                                                checkSubject[1].toString();
-                                            }
+                                            const checkSubjectCell =
+                                              $row.find('td:nth-child(3)');
+                                            const checkSubjectText =
+                                              checkSubjectCell
+                                                .text()
+                                                .replace(/\s+/g, '');
+
                                             if (
                                               subjects.includes(
-                                                checkSubject.toString(),
+                                                checkSubjectText,
                                               )
                                             ) {
-                                              let hour = (
-                                                await $(
-                                                  `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(1)`,
-                                                ).text()
-                                              ).replace(/\s+/, '');
-                                              let whatClass = (
-                                                await $(
-                                                  `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(2)`,
-                                                ).text()
-                                              ).replace(/\s+/, '');
-                                              let subject = (
-                                                await $(
-                                                  `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(3)`,
-                                                ).text()
-                                              ).replace(/\s+/, '');
-                                              let teacher = (
-                                                await $(
-                                                  `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(4)`,
-                                                ).text()
-                                              ).replace(/\s+/, '');
-                                              let substitution = (
-                                                await $(
-                                                  `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(5)`,
-                                                ).text()
-                                              )
-                                                .replace(/\s+/, '')
+                                              const hour = $row
+                                                .find('td:nth-child(1)')
+                                                .text()
+                                                .replace(/\s+/g, '');
+                                              const whatClass = classText;
+                                              const subject = checkSubjectText;
+                                              const teacher = $row
+                                                .find('td:nth-child(4)')
+                                                .text()
+                                                .replace(/\s+/g, '');
+                                              const substitution = $row
+                                                .find('td:nth-child(5)')
+                                                .text()
+                                                .replace(/\s+/g, '')
                                                 .replace(/Neu/g, '');
-                                              let room = (
-                                                await $(
-                                                  `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(6)`,
-                                                ).text()
-                                              )
-                                                .replace(/\s+/, '')
+                                              const room = $row
+                                                .find('td:nth-child(6)')
+                                                .text()
+                                                .replace(/\s+/g, '')
                                                 .replace(/---/g, '');
-                                              let note = (
-                                                await $(
-                                                  `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(7)`,
-                                                ).text()
-                                              ).replace(/\s+/, '');
+                                              const note = $row
+                                                .find('td:nth-child(7)')
+                                                .text()
+                                                .replace(/\s+/g, '');
+
                                               if (
                                                 checkIfFirstTSSIsTodayOrTomorrow ===
                                                 true
@@ -502,7 +481,6 @@ const ytm = async nav => {
                                               }
                                             }
                                           }
-                                          i++;
                                         }
                                       }
                                       console.log('Got schedule');
