@@ -3,7 +3,7 @@ import {Text, View, TouchableOpacity, StyleSheet, ScrollView, FlatList} from 're
 import {useNavigation} from '@react-navigation/native';
 import RNRestart from 'react-native-restart';
 
-import {THEME, FONTS, getStorage} from '../constants';
+import {THEME, FONTS} from '../constants';
 import appStorage from '../components/appStorage';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -21,8 +21,7 @@ async function userLogout(nav) {
 
 async function switchTheme(theme){
     appStorage.set('@localdata:settings/theme', theme)
-    getStorage();
-    await appStorage.set('?restart', true)
+    appStorage.set('?restart', 'true')
     RNRestart.restart()
 }
 
@@ -72,10 +71,10 @@ const SettingsScreen = ({}) => {
       <View>
       
         <TouchableOpacity style={styles.btnLightmode}>
-          <Icon name="sunny" size={25} color="#000" onPress={() => switchTheme('SYSTEMLIGHT')}/>
+          <Icon name="sunny" size={25} color="#121414" onPress={() => switchTheme('SYSTEMLIGHT')}/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btnDarkmode} onPress={() => switchTheme('SYSTEMDARK')}>
-        <Icon name="moon" size={25} color="#fff"/>
+        <Icon name="moon" size={25} color="#e9e8ed"/>
         </TouchableOpacity>
       </View>
       <View style={styles.line}></View>
@@ -85,7 +84,7 @@ const SettingsScreen = ({}) => {
           data={possibleSubjects}
           renderItem={({item}) => <FächerfarbenBtn subject={item.subjectShort}/>}
           numColumns={5}
-          key={4}
+          key={3}
         />
       </View>
 
@@ -113,15 +112,15 @@ const styles = StyleSheet.create({
     fontSize: 19,
   },
   btnDarkmode: {
-    backgroundColor: '#000',
-    borderColor: '#fff',
+    backgroundColor: '#121414',
+    borderColor: '#e9e8ed',
     borderWidth: 1,
     padding: 20,
     borderRadius: 50,
   },
   btnLightmode: {
-    backgroundColor: '#fff',
-    borderColor: '#000',
+    backgroundColor: '#e9e8ed',
+    borderColor: '#121414',
     borderWidth: 1,
     padding: 20,
     borderRadius: 50,

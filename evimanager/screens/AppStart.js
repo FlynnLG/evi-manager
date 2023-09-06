@@ -6,10 +6,11 @@ import appStorage from '../components/appStorage';
 import {THEME, FONTS} from '../constants';
 
 async function determineRoute(nav) {
-  if(appStorage.getString('?restart') === true){
-    appStorage.set('?restart', false)
+  console.log(appStorage.getString('?restart'))
+  if(appStorage.getString('?restart') === 'true'){
+    appStorage.set('?restart', '')
     //Quick reload
-    nav.navigate('Settings');
+    nav.navigate('SettingsNav');
   }
   else{
     const credentials = await AsyncStorage.getItem(

@@ -9,57 +9,10 @@ import {
 import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 import {Table, Row, Rows} from 'react-native-reanimated-table';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FONTS, THEME} from '../constants';
 //import Ionicons
 import Icon from 'react-native-vector-icons/Ionicons';
 //import Icon from 'react-native-vector-icons/Ionicons'; not used
-
-async function getUserLessonTheme(lesson){
-  console.log(lesson)
-  const strorageRes = await AsyncStorage.getItem(
-    `localdata.lessonColors.${lesson}`,
-  );
-  if(strorageRes == undefined){
-    console.error("User didn't specify custom lesson colors using default!")
-    const defaultLessonColors = {
-      german: "#009933",
-      english: "#ff1a1a",
-      math: "#1aa3ff",
-      history: "#e6e6e6",
-      religion: "#b366ff",
-      geo: "#99994d",
-      physik: "#ff8533",
-      sport: "#d9ffb3",
-      pb: "#804000",
-      art: "#6666ff",
-      ds: "#6666ff",
-      music: "#6666ff",
-      luck: "#00ff80",
-      other: "#669999",
-    }
-    //Safe the default values
-    await AsyncStorage.setItem('localdata.lessonColors.DE', defaultLessonColors.german)
-    await AsyncStorage.setItem('localdata.lessonColors.EN', defaultLessonColors.english)
-    await AsyncStorage.setItem('localdata.lessonColors.MA', defaultLessonColors.math)
-    await AsyncStorage.setItem('localdata.lessonColors.GE', defaultLessonColors.history)
-    await AsyncStorage.setItem('localdata.lessonColors.RE', defaultLessonColors.religion)
-    await AsyncStorage.setItem('localdata.lessonColors.geo', defaultLessonColors.geo)
-    await AsyncStorage.setItem('localdata.lessonColors.physik', defaultLessonColors.physik)
-    await AsyncStorage.setItem('localdata.lessonColors.sport', defaultLessonColors.sport)
-    await AsyncStorage.setItem('localdata.lessonColors.pb', defaultLessonColors.pb)
-    await AsyncStorage.setItem('localdata.lessonColors.art', defaultLessonColors.art)
-    await AsyncStorage.setItem('localdata.lessonColors.ds', defaultLessonColors.ds)
-    await AsyncStorage.setItem('localdata.lessonColors.music', defaultLessonColors.music)
-    await AsyncStorage.setItem('localdata.lessonColors.luck', defaultLessonColors.luck)
-    await AsyncStorage.setItem('localdata.lessonColors.other', defaultLessonColors.other)
-    //return default value for the first run
-    return(defaultLessonColors.other)
-  }else{
-    //When it isn't "other" than get thing
-    return(strorageRes)
-  }
-}
 
 export const LessonCard = ({
   accent,
@@ -101,7 +54,7 @@ export const LessonCard = ({
   let accentShadowColor = '#ffffff00'
   let accentElevation = 0
   let accentPaddingTop = 11.4
-  let dayAccent = THEME.secondary
+  let dayAccent = THEME.background
   if(accent == true){
     accentBorderColor = THEME.green
     accentWidth = 385
@@ -114,6 +67,22 @@ export const LessonCard = ({
     accentElevation = 10
     accentPaddingTop = 6
     dayAccent = THEME.green
+  }
+
+  function getBackgroundColor(subject){
+    
+    switch (subject) {
+      case 'MA':
+        console.log('You have a Math class.');
+        break;
+      case 'BIO':
+        return('#000')
+      case 'History':
+        console.log('You have a History class.');
+        break;
+      default:
+        console.log('Subject not recognized.');
+    }
   }
 
   function weekendCard() {
@@ -154,7 +123,7 @@ export const LessonCard = ({
     );
   }
 
-  function isVisible(){
+  function isVisible(i){
     //Look if there are any block informations?
     if(typeof tableData[0][1] === 'undefined' || typeof tableData[0][1] === ''){
       return("#ffffff00")
@@ -347,11 +316,11 @@ export const LessonCard = ({
           }}>
           <Icon name='alert-circle' size={15} color={isVisible()}/>
           <Text style={styles.block}>5</Text>
-          <View style={styles.circle}>
+          <View style={[styles.circle, {backgroundColor: getBackgroundColor(blocks[4])}]}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={[styles.circleText, {backgroundColor: () => getUserLessonTheme(blocks[4])}]}>
+              style={[styles.circleText]}>
               {blocks[4]}
             </Text>
           </View>
@@ -510,7 +479,7 @@ const styles = StyleSheet.create({
     height: 39,
     borderRadius: 50,
     marginTop: -5,
-    backgroundColor: '#636363',
+    backgroundColor: THEME.background, //TODO
     alignSelf: 'center',
     display: 'flex',
     alignItems: 'center',
@@ -538,12 +507,11 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   dayOfTheWeekCircle: {
-    width: 25,
-    height: 25,
+    width: 30,
+    height: 30,
     borderRadius: 50,
     marginTop: 5,
     marginLeft: 5,
-    backgroundColor: '#636363',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

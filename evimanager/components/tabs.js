@@ -119,7 +119,7 @@ export const SettingsTabs = () => {
             iconName = focused ? 'cog' : 'cog-outline';
           } else if (route.name === 'Credits') {
             iconName = focused
-              ? 'battery-outline'
+              ? 'information-circle'
               : 'information-circle-outline';
           }
 

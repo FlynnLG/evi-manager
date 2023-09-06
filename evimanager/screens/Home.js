@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, View, Dimensions, ScrollView, StatusBar, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import RNRestart from 'react-native-restart';
 
 import {THEME, FONTS} from '../constants';
 
@@ -10,9 +11,6 @@ import moment from 'moment/moment';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
-async function refresh(navigation) {
-  navigation.navigate('Loading')
-}
 
 function dateManager() {
   const date = new Date(new Date().getTime());
@@ -335,7 +333,7 @@ function Home() {
               paddingLeft: windowWidth - 105,
             }}>
             <TouchableOpacity
-              onPress={() => refresh(navigation)}>
+              onPress={() => RNRestart.restart()}>
               <View style={{paddingLeft: 20,}}><Icon name='reload-circle' color="#3d3737" size={30}/></View>
             </TouchableOpacity>
           </Text>
