@@ -199,6 +199,7 @@ const ytm = async nav => {
                           let html = response.data;
                           let $ = cheerio.load(html);
 
+                          console.log("Checking for new messages")
                           // Check if user has new messages
                           let newMessagesCounter = parseInt(
                             (
@@ -227,14 +228,14 @@ const ytm = async nav => {
                                 // TODO: Send push notification to user with the following => "Du hast (newMessagesCounter-jsonNewMessages) neue Nachricht/en erhalten. Die letzte Nachricht wurde von
                                 // newMessageSender gesendet.
                                 const messageCountDiff = newMessagesCounter - jsonNewMessages;
-                            const messageText = `Du hast ${
-                              messageCountDiff > 1 ? messageCountDiff : 1
-                            } neue Nachricht${messageCountDiff !== 1 ? 'en' : ''} erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`;
+                                const messageText = `Du hast ${
+                                  messageCountDiff > 1 ? messageCountDiff : 1
+                                } neue Nachricht${messageCountDiff !== 1 ? 'en' : ''} erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`;
 
-                            console.log(messageText);
-                            Alert.alert('DEBUG', messageText, [{ text: 'OK', style: 'cancel' }], { cancelable: false });
-                          }
-                        }
+                                console.log(messageText);
+                                Alert.alert('Neue Nachricht!', messageText, [{ text: 'OK', style: 'cancel' }], { cancelable: false });
+                              }
+                            }
                           await axios.default
                             .get(
                               'https://gymnasium-neuruppin.de/index.php?oid=19&id=95',
@@ -243,7 +244,7 @@ const ytm = async nav => {
                               if (response.status === 200) {
                                 let html = response.data;
                                 let $ = cheerio.load(html);
-
+                                console.log("Try to get schedule")
                                 // Get cycle (Turnus) of current year
                                 let cycle = [];
                                 let y = 2;
@@ -507,6 +508,7 @@ const ytm = async nav => {
                                           i++;
                                         }
                                       }
+                                      console.log("Got schedule")
 
                                       // Check if second TSS on homepage is for tomorrow
                                       const selector =
