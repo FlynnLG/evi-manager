@@ -199,7 +199,7 @@ const ytm = async nav => {
                           let html = response.data;
                           let $ = cheerio.load(html);
 
-                          console.log("Checking for new messages")
+                          console.log('Checking for new messages');
                           // Check if user has new messages
                           let newMessagesCounter = parseInt(
                             (
@@ -225,17 +225,25 @@ const ytm = async nav => {
                               let jsonNewMessages = parseInt(
                                 newMessages.homepageMessages.newMessagesCounter.toString(),
                               );
-                                // TODO: Send push notification to user with the following => "Du hast (newMessagesCounter-jsonNewMessages) neue Nachricht/en erhalten. Die letzte Nachricht wurde von
-                                // newMessageSender gesendet.
-                                const messageCountDiff = newMessagesCounter - jsonNewMessages;
-                                const messageText = `Du hast ${
-                                  messageCountDiff > 1 ? messageCountDiff : 1
-                                } neue Nachricht${messageCountDiff !== 1 ? 'en' : ''} erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`;
+                              // TODO: Send push notification to user with the following => "Du hast (newMessagesCounter-jsonNewMessages) neue Nachricht/en erhalten. Die letzte Nachricht wurde von
+                              // newMessageSender gesendet.
+                              const messageCountDiff =
+                                newMessagesCounter - jsonNewMessages;
+                              const messageText = `Du hast ${
+                                messageCountDiff > 1 ? messageCountDiff : 1
+                              } neue Nachricht${
+                                messageCountDiff !== 1 ? 'en' : ''
+                              } erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`;
 
-                                console.log(messageText);
-                                Alert.alert('Neue Nachricht!', messageText, [{ text: 'OK', style: 'cancel' }], { cancelable: false });
-                              }
+                              console.log(messageText);
+                              Alert.alert(
+                                'Neue Nachricht!',
+                                messageText,
+                                [{text: 'OK', style: 'cancel'}],
+                                {cancelable: false},
+                              );
                             }
+                          }
                           await axios.default
                             .get(
                               'https://gymnasium-neuruppin.de/index.php?oid=19&id=95',
@@ -244,53 +252,42 @@ const ytm = async nav => {
                               if (response.status === 200) {
                                 let html = response.data;
                                 let $ = cheerio.load(html);
-                                console.log("Try to get schedule")
+                                console.log('Try to get schedule');
                                 // Get cycle (Turnus) of current year
-                                let cycle = [];
+                                const cycle = [];
                                 let y = 2;
-                                while (
-                                  (await $(
-                                    `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(1)`,
-                                  ).length) &&
-                                  (await $(
-                                    `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(2)`,
-                                  ).length) &&
-                                  (await $(
-                                    `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(3)`,
-                                  ).length)
-                                ) {
-                                  if (
-                                    (await $(
+
+                                // Define a reusable selector function with async/await
+                                const selectElementText = async (selector, index) => {
+                                  const element = await $(selector).eq(index).get(0);
+                                  return element ? $(element).text().trim() : '';
+                                };
+
+                                (async () => {
+                                  while (y < 5) {
+                                    const cycleNum = await selectElementText(
                                       `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(1)`,
-                                    ).text()) &&
-                                    (await $(
-                                      `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(2)`,
-                                    ).text()) &&
-                                    (await $(
-                                      `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(3)`,
-                                    ).text())
-                                  ) {
-                                    let cycleNum = await $(
-                                      `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(1)`,
-                                    ).text();
-                                    let cycleStart = await $(
-                                      `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(2)`,
-                                    ).text();
-                                    let cycleEnd = await $(
-                                      `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(3)`,
-                                    ).text();
-                                    cycle.push([
-                                      cycleNum,
-                                      cycleStart,
-                                      cycleEnd,
-                                    ]);
-                                  } else {
-                                    console.log(
-                                      'Error while parsing cycle to string. #Error_2358',
+                                      0
                                     );
+                                    const cycleStart = await selectElementText(
+                                      `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(2)`,
+                                      0
+                                    );
+                                    const cycleEnd = await selectElementText(
+                                      `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(3)`,
+                                      0
+                                    );
+                                      //console.log(cycleNum, cycleStart, cycleEnd)
+                                    if (cycleNum && cycleStart && cycleEnd) {
+                                      cycle.push([cycleNum, cycleStart, cycleEnd]);
+                                    } else {
+                                      console.log('Error while parsing cycle to string. #Error_2358');
+                                      break;
+                                    }
+
+                                    y += 1;
                                   }
-                                  y += 1;
-                                }
+                                })();
 
                                 /*
                                                                 // TODO => Translate to cheerio
@@ -508,7 +505,7 @@ const ytm = async nav => {
                                           i++;
                                         }
                                       }
-                                      console.log("Got schedule")
+                                      console.log('Got schedule');
 
                                       // Check if second TSS on homepage is for tomorrow
                                       const selector =
@@ -674,7 +671,7 @@ const ytm = async nav => {
                                     }
                                   });
                               }
-                            });
+                            }); //Closing Bracket for the '.then(async response => {' in line 197
                         }
                       });
                   }
