@@ -594,128 +594,40 @@ const ytm = async nav => {
                                       }
 
                                       // Check if second TSS on homepage is for tomorrow
-                                      if (
-                                        await $(
-                                          'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(10) > tbody > tr > td > span > b',
-                                        ).length
-                                      ) {
-                                        if (
-                                          (
-                                            await $(
-                                              'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(10) > tbody > tr > td > span > b',
-                                            ).text()
-                                          ).replace(/^\D+/g, '') ===
-                                          moment()
-                                            .add(1, 'days')
-                                            .format('DD.MM.YY')
-                                        ) {
-                                          tomorrowSubstitutionScheduleDate =
-                                            moment()
-                                              .add(1, 'days')
-                                              .format('DD.MM.YY')
-                                              .toString();
+                                      const selector = 'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1)';
+
+                                      const $bElements = await $(`${selector} > table:nth-child(10) > tbody > tr > td > span > b`);
+                                      const bElementsLength = $bElements.length;
+
+                                      if (bElementsLength) {
+                                        const textValue = $bElements.text().replace(/^\D+/g, '');
+                                        const expectedDate = moment().add(1, 'days').format('DD.MM.YY');
+
+                                        if (textValue === expectedDate) {
+                                          tomorrowSubstitutionScheduleDate = expectedDate;
                                           tomorrowSubstitutionScheduleExist = true;
                                           let i = 2;
-                                          while (
-                                            await $(
-                                              `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(2)`,
-                                            ).length
-                                          ) {
-                                            if (
-                                              (
-                                                await $(
-                                                  `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(2)`,
-                                                ).text()
-                                              ).replace(/\s/g, '') ===
-                                                currentClass ||
-                                              (
-                                                await $(
-                                                  `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(2)`,
-                                                ).text()
-                                              ).replace(/\s/g, '') ===
-                                                parseInt(
-                                                  currentClass.match(/\d+/)[0],
-                                                ).toString()
-                                            ) {
-                                              let checkSubject = (
-                                                await $(
-                                                  `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(3)`,
-                                                ).text()
-                                              ).replace(/\s+/, '');
-                                              if (
-                                                (
-                                                  await $(
-                                                    `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(3)`,
-                                                  ).text()
-                                                )
-                                                  .replace(/\s+/, '')
-                                                  .startsWith('[') === true
-                                              ) {
-                                                checkSubject = (
-                                                  await $(
-                                                    `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(3)`,
-                                                  ).text()
-                                                )
-                                                  .replace(/\s+/, '')
-                                                  .split(':');
-                                                checkSubject =
-                                                  checkSubject[1].toString();
-                                              }
-                                              if (
-                                                subjects.includes(
-                                                  checkSubject.toString(),
-                                                )
-                                              ) {
-                                                let hour = (
-                                                  await $(
-                                                    `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(1)`,
-                                                  ).text()
-                                                ).replace(/\s+/, '');
-                                                let whatClass = (
-                                                  await $(
-                                                    `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(2)`,
-                                                  ).text()
-                                                ).replace(/\s+/, '');
-                                                let subject = (
-                                                  await $(
-                                                    `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(3)`,
-                                                  ).text()
-                                                ).replace(/\s+/, '');
-                                                let teacher = (
-                                                  await $(
-                                                    `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(4)`,
-                                                  ).text()
-                                                ).replace(/\s+/, '');
-                                                let substitution = (
-                                                  await $(
-                                                    `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(5)`,
-                                                  ).text()
-                                                )
-                                                  .replace(/\s+/, '')
-                                                  .replace(/Neu/g, '');
-                                                let room = (
-                                                  await $(
-                                                    `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(6)`,
-                                                  ).text()
-                                                )
-                                                  .replace(/\s+/, '')
-                                                  .replace(/---/g, '');
-                                                let note = (
-                                                  await $(
-                                                    `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(7)`,
-                                                  ).text()
-                                                ).replace(/\s+/, '');
-                                                tomorrowSubstitutionSchedule.push(
-                                                  [
-                                                    hour,
-                                                    whatClass,
-                                                    subject,
-                                                    teacher,
-                                                    substitution,
-                                                    room,
-                                                    note,
-                                                  ],
-                                                );
+
+                                          const $tdElements = await $(`${selector} > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(2)`);
+                                          
+                                          if ($tdElements.length) {
+                                            console.log("Logging")
+                                            const textValue = $tdElements.text().replace(/\s/g, '');
+
+                                            if (textValue === currentClass || textValue === parseInt(currentClass.match(/\d+/)[0]).toString()) {
+                                              const $subjectElement = await $(`${selector} > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(3)`);
+                                              const checkSubject = $subjectElement.text().replace(/\s+/, '');
+
+                                              if (checkSubject.startsWith('[') === true && subjects.includes(checkSubject.toString())) {
+                                                const hour = $(`${selector} > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(1)`).text().replace(/\s+/, '');
+                                                const whatClass = textValue;
+                                                const subject = checkSubject.split(':')[1].toString();
+                                                const teacher = $(`${selector} > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(4)`).text().replace(/\s+/, '');
+                                                const substitution = $substitutionElement.text().replace(/\s+/, '').replace(/Neu/g, '');
+                                                const room = $roomElement.text().replace(/\s+/, '').replace(/---/g, '');
+                                                const note = $noteElement.text().replace(/\s+/, '');
+
+                                                tomorrowSubstitutionSchedule.push([hour, whatClass, subject, teacher, substitution, room, note]);
                                               }
                                             }
                                             i++;
