@@ -12,6 +12,7 @@ import {Table, Row, Rows} from 'react-native-reanimated-table';
 import {FONTS, THEME} from '../constants';
 //import Ionicons
 import Icon from 'react-native-vector-icons/Ionicons';
+import appStorage from './appStorage';
 //import Icon from 'react-native-vector-icons/Ionicons'; not used
 
 export const LessonCard = ({
@@ -70,7 +71,8 @@ export const LessonCard = ({
   }
 
   function getBackgroundColor(subject){
-    
+    const subjectColorsString = appStorage.getString('custom/subjectcolor')
+    //const subjectColors = subjectColorsString.split(" ");
     switch (subject) {
       case 'MA':
         console.log('You have a Math class.');
