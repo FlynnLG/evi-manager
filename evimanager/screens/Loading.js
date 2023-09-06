@@ -14,9 +14,7 @@ const ytm = async nav => {
   try {
     appStorage.set('crawler_data', '');
 
-    const credentials = await AsyncStorage.getItem(
-      'localdata.usercredentials',
-    );
+    const credentials = await AsyncStorage.getItem('localdata.usercredentials');
     if (!credentials || credentials === ';') {
       await AsyncStorage.removeItem('localdata.usercredentials').then(
         async () => {
@@ -111,46 +109,61 @@ const ytm = async nav => {
                     }
 
                     async function getScheduleSubjectInHour(column, line) {
-                      if (typeof column !== 'number' || typeof line !== 'number') {
-                        console.log('Error while loading schedule. #Error_9284');
+                      if (
+                        typeof column !== 'number' ||
+                        typeof line !== 'number'
+                      ) {
+                        console.log(
+                          'Error while loading schedule. #Error_9284',
+                        );
                         return;
                       }
-                    
+
                       const selector = `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > center > table > tbody > tr:nth-child(${line}) > td:nth-child(${column})`;
                       const htmlContent = await $(selector).html();
-                    
+
                       if (!htmlContent) {
                         return;
                       }
-                    
-                      const subjectLines = htmlContent.split(/<br\s*\/?>/i).filter(line => line.trim() !== '');
-                    
+
+                      const subjectLines = htmlContent
+                        .split(/<br\s*\/?>/i)
+                        .filter(line => line.trim() !== '');
+
                       for (const subjectLine of subjectLines) {
                         let pushElement = '';
                         let turnusCycle = '';
-                    
+
                         if (subjectLine.startsWith('[')) {
                           const [turnus, subjectInfo] = subjectLine.split(':');
                           turnusCycle = parseInt(turnus.match(/\d+/)[0]);
                           pushElement = subjectInfo.split('/');
-                    
+
                           if (turnusCycle === 1 || turnusCycle === 2) {
-                            scheduleCycle1[parseInt(column) - 2][(parseInt(line) - 3) / 4].push([
+                            scheduleCycle1[parseInt(column) - 2][
+                              (parseInt(line) - 3) / 4
+                            ].push([
                               pushElement[0],
                               pushElement[1],
                               pushElement[2],
                             ]);
                           } else {
-                            console.log('Error while putting subjects into schedule-1/2. #Error_6384');
+                            console.log(
+                              'Error while putting subjects into schedule-1/2. #Error_6384',
+                            );
                           }
                         } else if (!subjectLine.startsWith('/')) {
                           pushElement = subjectLine.split('/');
-                          scheduleCycle1[parseInt(column) - 2][(parseInt(line) - 3) / 4].push([
+                          scheduleCycle1[parseInt(column) - 2][
+                            (parseInt(line) - 3) / 4
+                          ].push([
                             pushElement[0],
                             pushElement[1],
                             pushElement[2],
                           ]);
-                          scheduleCycle2[parseInt(column) - 2][(parseInt(line) - 3) / 4].push([
+                          scheduleCycle2[parseInt(column) - 2][
+                            (parseInt(line) - 3) / 4
+                          ].push([
                             pushElement[0],
                             pushElement[1],
                             pushElement[2],
@@ -594,40 +607,98 @@ const ytm = async nav => {
                                       }
 
                                       // Check if second TSS on homepage is for tomorrow
-                                      const selector = 'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1)';
+                                      const selector =
+                                        'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1)';
 
-                                      const $bElements = await $(`${selector} > table:nth-child(10) > tbody > tr > td > span > b`);
+                                      const $bElements = await $(
+                                        `${selector} > table:nth-child(10) > tbody > tr > td > span > b`,
+                                      );
                                       const bElementsLength = $bElements.length;
 
                                       if (bElementsLength) {
-                                        const textValue = $bElements.text().replace(/^\D+/g, '');
-                                        const expectedDate = moment().add(1, 'days').format('DD.MM.YY');
+                                        const textValue = $bElements
+                                          .text()
+                                          .replace(/^\D+/g, '');
+                                        const expectedDate = moment()
+                                          .add(1, 'days')
+                                          .format('DD.MM.YY');
 
                                         if (textValue === expectedDate) {
-                                          tomorrowSubstitutionScheduleDate = expectedDate;
+                                          tomorrowSubstitutionScheduleDate =
+                                            expectedDate;
                                           tomorrowSubstitutionScheduleExist = true;
                                           let i = 2;
 
-                                          const $tdElements = await $(`${selector} > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(2)`);
-                                          
+                                          const $tdElements = await $(
+                                            `${selector} > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(2)`,
+                                          );
+
                                           if ($tdElements.length) {
-                                            console.log("Logging")
-                                            const textValue = $tdElements.text().replace(/\s/g, '');
+                                            console.log('Logging');
+                                            const textValue = $tdElements
+                                              .text()
+                                              .replace(/\s/g, '');
 
-                                            if (textValue === currentClass || textValue === parseInt(currentClass.match(/\d+/)[0]).toString()) {
-                                              const $subjectElement = await $(`${selector} > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(3)`);
-                                              const checkSubject = $subjectElement.text().replace(/\s+/, '');
+                                            if (
+                                              textValue === currentClass ||
+                                              textValue ===
+                                                parseInt(
+                                                  currentClass.match(/\d+/)[0],
+                                                ).toString()
+                                            ) {
+                                              const $subjectElement = await $(
+                                                `${selector} > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(3)`,
+                                              );
+                                              const checkSubject =
+                                                $subjectElement
+                                                  .text()
+                                                  .replace(/\s+/, '');
 
-                                              if (checkSubject.startsWith('[') === true && subjects.includes(checkSubject.toString())) {
-                                                const hour = $(`${selector} > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(1)`).text().replace(/\s+/, '');
+                                              if (
+                                                checkSubject.startsWith('[') ===
+                                                  true &&
+                                                subjects.includes(
+                                                  checkSubject.toString(),
+                                                )
+                                              ) {
+                                                const hour = $(
+                                                  `${selector} > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(1)`,
+                                                )
+                                                  .text()
+                                                  .replace(/\s+/, '');
                                                 const whatClass = textValue;
-                                                const subject = checkSubject.split(':')[1].toString();
-                                                const teacher = $(`${selector} > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(4)`).text().replace(/\s+/, '');
-                                                const substitution = $substitutionElement.text().replace(/\s+/, '').replace(/Neu/g, '');
-                                                const room = $roomElement.text().replace(/\s+/, '').replace(/---/g, '');
-                                                const note = $noteElement.text().replace(/\s+/, '');
+                                                const subject = checkSubject
+                                                  .split(':')[1]
+                                                  .toString();
+                                                const teacher = $(
+                                                  `${selector} > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(4)`,
+                                                )
+                                                  .text()
+                                                  .replace(/\s+/, '');
+                                                const substitution =
+                                                  $substitutionElement
+                                                    .text()
+                                                    .replace(/\s+/, '')
+                                                    .replace(/Neu/g, '');
+                                                const room = $roomElement
+                                                  .text()
+                                                  .replace(/\s+/, '')
+                                                  .replace(/---/g, '');
+                                                const note = $noteElement
+                                                  .text()
+                                                  .replace(/\s+/, '');
 
-                                                tomorrowSubstitutionSchedule.push([hour, whatClass, subject, teacher, substitution, room, note]);
+                                                tomorrowSubstitutionSchedule.push(
+                                                  [
+                                                    hour,
+                                                    whatClass,
+                                                    subject,
+                                                    teacher,
+                                                    substitution,
+                                                    room,
+                                                    note,
+                                                  ],
+                                                );
                                               }
                                             }
                                             i++;
