@@ -97,84 +97,65 @@ const ytm = async nav => {
                       [[], [], [], [], []],
                       [[], [], [], [], []],
                     ];
-                    for (let t = 2; t <= 6; t++) {
-                      let h = 3;
-                      while (h <= 19) {
+                    const startT = 2;
+                    const endT = 6;
+                    const stepT = 1;
+                    const startH = 3;
+                    const endH = 19;
+                    const stepH = 4;
+
+                    for (let t = startT; t <= endT; t += stepT) {
+                      for (let h = startH; h <= endH; h += stepH) {
                         await getScheduleSubjectInHour(t, h);
-                        h += 4;
                       }
                     }
 
                     async function getScheduleSubjectInHour(column, line) {
-                      let pushElement = '';
-                      let turnusCycle = 0;
-                      if (
-                        typeof column === 'number' &&
-                        typeof line === 'number'
-                      ) {
-                        let getSSIH = (
-                          await $(
-                            `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > center > table > tbody > tr:nth-child(${line}) > td:nth-child(${column})`,
-                          ).html()
-                        ).split(/<br\s*\/?>/i);
-                        if (!getSSIH[-1]) {
-                          getSSIH.pop();
-                        }
-                        let numberOfSubjectsInLine = getSSIH.length;
-                        for (let r = 0; r < numberOfSubjectsInLine; r++) {
-                          pushElement = '';
-                          turnusCycle = '';
-                          if (getSSIH[r].startsWith('[') === true) {
-                            pushElement = getSSIH[r].toString().split(':');
-                            turnusCycle = parseInt(
-                              pushElement[0].match(/\d+/)[0],
-                            );
-                            pushElement = pushElement[1].split('/');
-                            if (turnusCycle === 1) {
-                              scheduleCycle1[parseInt(column) - 2][
-                                (parseInt(line) - 3) / 4
-                              ].push([
-                                pushElement[0],
-                                pushElement[1],
-                                pushElement[2],
-                              ]);
-                            } else if (turnusCycle === 2) {
-                              scheduleCycle2[parseInt(column) - 2][
-                                (parseInt(line) - 3) / 4
-                              ].push([
-                                pushElement[0],
-                                pushElement[1],
-                                pushElement[2],
-                              ]);
-                            } else {
-                              console.log(
-                                'Error while putting subjects into schedule-1/2. #Error_6384',
-                              );
-                            }
-                          } else if (getSSIH[r].startsWith('/')) {
-                            void 0;
+                      if (typeof column !== 'number' || typeof line !== 'number') {
+                        console.log('Error while loading schedule. #Error_9284');
+                        return;
+                      }
+                    
+                      const selector = `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > center > table > tbody > tr:nth-child(${line}) > td:nth-child(${column})`;
+                      const htmlContent = await $(selector).html();
+                    
+                      if (!htmlContent) {
+                        return;
+                      }
+                    
+                      const subjectLines = htmlContent.split(/<br\s*\/?>/i).filter(line => line.trim() !== '');
+                    
+                      for (const subjectLine of subjectLines) {
+                        let pushElement = '';
+                        let turnusCycle = '';
+                    
+                        if (subjectLine.startsWith('[')) {
+                          const [turnus, subjectInfo] = subjectLine.split(':');
+                          turnusCycle = parseInt(turnus.match(/\d+/)[0]);
+                          pushElement = subjectInfo.split('/');
+                    
+                          if (turnusCycle === 1 || turnusCycle === 2) {
+                            scheduleCycle1[parseInt(column) - 2][(parseInt(line) - 3) / 4].push([
+                              pushElement[0],
+                              pushElement[1],
+                              pushElement[2],
+                            ]);
                           } else {
-                            pushElement = getSSIH[r].split('/');
-                            scheduleCycle1[parseInt(column) - 2][
-                              (parseInt(line) - 3) / 4
-                            ].push([
-                              pushElement[0],
-                              pushElement[1],
-                              pushElement[2],
-                            ]);
-                            scheduleCycle2[parseInt(column) - 2][
-                              (parseInt(line) - 3) / 4
-                            ].push([
-                              pushElement[0],
-                              pushElement[1],
-                              pushElement[2],
-                            ]);
+                            console.log('Error while putting subjects into schedule-1/2. #Error_6384');
                           }
+                        } else if (!subjectLine.startsWith('/')) {
+                          pushElement = subjectLine.split('/');
+                          scheduleCycle1[parseInt(column) - 2][(parseInt(line) - 3) / 4].push([
+                            pushElement[0],
+                            pushElement[1],
+                            pushElement[2],
+                          ]);
+                          scheduleCycle2[parseInt(column) - 2][(parseInt(line) - 3) / 4].push([
+                            pushElement[0],
+                            pushElement[1],
+                            pushElement[2],
+                          ]);
                         }
-                      } else {
-                        console.log(
-                          'Error while loading schedule. #Error_9284',
-                        );
                       }
                     }
 
