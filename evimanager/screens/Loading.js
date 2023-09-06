@@ -224,115 +224,17 @@ const ytm = async nav => {
                               let jsonNewMessages = parseInt(
                                 newMessages.homepageMessages.newMessagesCounter.toString(),
                               );
-                              if (newMessagesCounter > jsonNewMessages) {
                                 // TODO: Send push notification to user with the following => "Du hast (newMessagesCounter-jsonNewMessages) neue Nachricht/en erhalten. Die letzte Nachricht wurde von
                                 // newMessageSender gesendet.
-                                if (newMessagesCounter - jsonNewMessages > 1) {
-                                  console.log(
-                                    `Du hast ${
-                                      newMessagesCounter - jsonNewMessages
-                                    } neue Nachrichten erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                  );
-                                  Alert.alert(
-                                    'DEBUG',
-                                    `Du hast ${
-                                      newMessagesCounter - jsonNewMessages
-                                    } neue Nachrichten erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                    [
-                                      {
-                                        text: 'OK',
-                                        style: 'cancel',
-                                      },
-                                    ],
-                                    {cancelable: false},
-                                  );
-                                } else if (
-                                  newMessagesCounter - jsonNewMessages ===
-                                  1
-                                ) {
-                                  console.log(
-                                    `Du hast 1 neue Nachricht erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                  );
-                                  Alert.alert(
-                                    'DEBUG',
-                                    `Du hast 1 neue Nachricht erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                    [
-                                      {
-                                        text: 'OK',
-                                        style: 'cancel',
-                                      },
-                                    ],
-                                    {cancelable: false},
-                                  );
-                                }
-                              }
-                            } else {
-                              appStorage.set('crawler_data', '');
-                              if (newMessagesCounter > 1) {
-                                console.log(
-                                  `Du hast ${newMessagesCounter} neue Nachrichten erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                );
-                                Alert.alert(
-                                  'DEBUG',
-                                  `Du hast ${newMessagesCounter} neue Nachrichten erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                  [
-                                    {
-                                      text: 'OK',
-                                      style: 'cancel',
-                                    },
-                                  ],
-                                  {cancelable: false},
-                                );
-                              } else if (newMessagesCounter === 1) {
-                                console.log(
-                                  `Du hast 1 neue Nachricht erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                );
-                                Alert.alert(
-                                  'DEBUG',
-                                  `Du hast 1 neue Nachricht erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                  [
-                                    {
-                                      text: 'OK',
-                                      style: 'cancel',
-                                    },
-                                  ],
-                                  {cancelable: false},
-                                );
-                              }
-                            }
-                          } else {
-                            if (newMessagesCounter > 1) {
-                              console.log(
-                                `Du hast ${newMessagesCounter} neue Nachrichten erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                              );
-                              Alert.alert(
-                                'DEBUG',
-                                `Du hast ${newMessagesCounter} neue Nachrichten erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                [
-                                  {
-                                    text: 'OK',
-                                    style: 'cancel',
-                                  },
-                                ],
-                                {cancelable: false},
-                              );
-                            } else if (newMessagesCounter === 1) {
-                              console.log(
-                                `Du hast 1 neue Nachricht erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                              );
-                              Alert.alert(
-                                'DEBUG',
-                                `Du hast 1 neue Nachricht erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                [
-                                  {
-                                    text: 'OK',
-                                    style: 'cancel',
-                                  },
-                                ],
-                                {cancelable: false},
-                              );
-                            }
+                                const messageCountDiff = newMessagesCounter - jsonNewMessages;
+                            const messageText = `Du hast ${
+                              messageCountDiff > 1 ? messageCountDiff : 1
+                            } neue Nachricht${messageCountDiff !== 1 ? 'en' : ''} erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`;
+
+                            console.log(messageText);
+                            Alert.alert('DEBUG', messageText, [{ text: 'OK', style: 'cancel' }], { cancelable: false });
                           }
+                        }
                           await axios.default
                             .get(
                               'https://gymnasium-neuruppin.de/index.php?oid=19&id=95',
