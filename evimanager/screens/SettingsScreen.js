@@ -21,7 +21,6 @@ async function userLogout(nav) {
 
 async function switchTheme(theme){
     appStorage.set('@localdata:settings/theme', theme)
-    appStorage.set('?restart', 'true')
     RNRestart.restart()
 }
 

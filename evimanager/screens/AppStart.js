@@ -6,13 +6,7 @@ import appStorage from '../components/appStorage';
 import {THEME, FONTS} from '../constants';
 
 async function determineRoute(nav) {
-  console.log(appStorage.getString('?restart'))
-  if(appStorage.getString('?restart') === 'true'){
-    appStorage.set('?restart', '')
-    //Quick reload
-    nav.navigate('SettingsNav');
-  }
-  else{
+  
     const credentials = await AsyncStorage.getItem(
       'localdata.usercredentials',
     );
@@ -24,7 +18,7 @@ async function determineRoute(nav) {
       nav.navigate('Login');
     }
   }
-}
+
 
 const AppStart = () => {
   console.info('Site: APPSTART');
