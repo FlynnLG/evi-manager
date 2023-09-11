@@ -7,41 +7,25 @@ import {THEME, FONTS} from '../constants';
 import * as axios from 'axios';
 import * as cheerio from 'cheerio';
 import moment from 'moment';
-import EncryptedStorage from 'react-native-encrypted-storage';
+import * as Keychain from 'react-native-keychain';
 import appStorage from '../components/appStorage';
 
 const ytm = async nav => {
   try {
     appStorage.set('crawler_data', '');
 
-    const credentials = await EncryptedStorage.getItem(
-      'localdata.usercredentials',
-    );
-    if (!credentials || credentials === ';') {
-      await EncryptedStorage.removeItem('localdata.usercredentials').then(
-        async () => {
-          console.error('Login-Daten konnten nicht geladen werden');
-          nav.navigate('Login');
-        },
-      );
-      return;
-    }
-    const credentialsSplit = credentials.split(';');
-    const name = credentialsSplit[0];
-    const pass = credentialsSplit[1];
-    if (!name || !pass) {
-      await EncryptedStorage.removeItem('localdata.usercredentials').then(
-        async () => {
-          console.error('Login-Daten konnten nicht geladen werden');
-          nav.navigate('Login');
-        },
-      );
+    const credentials = await Keychain.getGenericPassword();
+    if (!credentials || !credentials.username || !credentials.password) {
+      await Keychain.resetGenericPassword().then(async () => {
+        console.error('Login-Daten konnten nicht geladen werden');
+        nav.navigate('Login');
+      });
       return;
     }
 
     axios.default
       .get(
-        `https://gymnasium-neuruppin.de/index.php?startlog=1&user=${name}&pass=${pass}`,
+        `https://gymnasium-neuruppin.de/index.php?startlog=1&user=${credentials.username}&pass=${credentials.password}`,
       )
       .then(
         async response => {
@@ -51,7 +35,7 @@ const ytm = async nav => {
 
             // Check if login was successful
             if (
-              await $(
+              $(
                 'body > div:nth-child(1) > div:nth-child(3) > table > tbody > tr > td > a > b',
               ).length
             ) {
@@ -64,11 +48,11 @@ const ytm = async nav => {
                     let $ = cheerio.load(html);
 
                     // Get current class of user
-                    let currentClass = (
-                      await $(
-                        'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table > tbody > tr:nth-child(2) > td:nth-child(1)',
-                      ).text()
-                    ).split('.');
+                    let currentClass = $(
+                      'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table > tbody > tr:nth-child(2) > td:nth-child(1)',
+                    )
+                      .text()
+                      .split('.');
                     currentClass = currentClass[0];
 
                     await axios.default
@@ -79,11 +63,11 @@ const ytm = async nav => {
                           let $ = cheerio.load(html);
 
                           // Get name of user
-                          let name = (
-                            await $(
-                              'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(6) > tbody > tr > td:nth-child(2) > b',
-                            ).text()
-                          ).split(', ');
+                          let name = $(
+                            'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(6) > tbody > tr > td:nth-child(2) > b',
+                          )
+                            .text()
+                            .split(', ');
                           name = name[1] + ' ' + name[0];
 
                           // Get schedule of user
@@ -101,15 +85,31 @@ const ytm = async nav => {
                             [[], [], [], [], []],
                             [[], [], [], [], []],
                           ];
-                          for (let t = 2; t <= 6; t++) {
-                            let h = 3;
-                            while (h <= 19) {
-                              await getScheduleSubjectInHour(t, h);
-                              h += 4;
-                            }
-                          }
 
-                          async function getScheduleSubjectInHour(
+                          $(
+                            'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > center > table > tbody > tr',
+                          ).each((index, element) => {
+                            if (
+                              index === 0 ||
+                              index % 2 !== 0 ||
+                              index % 4 === 0
+                            ) {
+                              return true;
+                            }
+                            const tds = $(element).find('td');
+                            for (let i = 1; i < 6; i++) {
+                              convertScheduleSubjectInHour(
+                                $(tds[i])
+                                  .html()
+                                  .split(/<br\s*\/?>/i),
+                                i + 1,
+                                index + 1,
+                              );
+                            }
+                          });
+
+                          function convertScheduleSubjectInHour(
+                            scheduleSubjectInHour,
                             column,
                             line,
                           ) {
@@ -119,11 +119,7 @@ const ytm = async nav => {
                               typeof column === 'number' &&
                               typeof line === 'number'
                             ) {
-                              let getSSIH = (
-                                await $(
-                                  `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > center > table > tbody > tr:nth-child(${line}) > td:nth-child(${column})`,
-                                ).html()
-                              ).split(/<br\s*\/?>/i);
+                              let getSSIH = scheduleSubjectInHour;
                               if (!getSSIH[-1]) {
                                 getSSIH.pop();
                               }
@@ -223,6 +219,7 @@ const ytm = async nav => {
                               }
                             }
                           }
+
                           await axios.default
                             .get(
                               'https://gymnasium-neuruppin.de/index.php?oid=18',
@@ -232,16 +229,17 @@ const ytm = async nav => {
                                 let html = response.data;
                                 let $ = cheerio.load(html);
 
+                                console.log('Checking for new messages');
                                 // Check if user has new messages
                                 let newMessagesCounter = parseInt(
-                                  (
-                                    await $(
-                                      'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table > tbody > tr > td:nth-child(2) > span:nth-child(5)',
-                                    ).text()
-                                  ).match(/\d+/)[0],
+                                  $(
+                                    'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table > tbody > tr > td:nth-child(2) > span:nth-child(5)',
+                                  )
+                                    .text()
+                                    .match(/\d+/)[0],
                                 );
                                 // When more than 1 message is sent before the script runs again, only the newest sender will be shown in push notification
-                                let newMessageSender = await $(
+                                let newMessageSender = $(
                                   'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table > tbody > tr > td:nth-child(2) > span:nth-child(3) > b:nth-child(3)',
                                 ).text();
                                 // TODO: If this script runs every 10 minutes in the background: Save newMessagesCounter, check if num is higher than before, when so send push notification to user, when num
@@ -257,114 +255,23 @@ const ytm = async nav => {
                                     let jsonNewMessages = parseInt(
                                       newMessages.homepageMessages.newMessagesCounter.toString(),
                                     );
-                                    if (newMessagesCounter > jsonNewMessages) {
-                                      // TODO: Send push notification to user with the following => "Du hast (newMessagesCounter-jsonNewMessages) neue Nachricht/en erhalten. Die letzte Nachricht wurde von
-                                      // newMessageSender gesendet.
-                                      if (
-                                        newMessagesCounter - jsonNewMessages >
-                                        1
-                                      ) {
-                                        console.log(
-                                          `Du hast ${
-                                            newMessagesCounter - jsonNewMessages
-                                          } neue Nachrichten erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                        );
-                                        Alert.alert(
-                                          'DEBUG',
-                                          `Du hast ${
-                                            newMessagesCounter - jsonNewMessages
-                                          } neue Nachrichten erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                          [
-                                            {
-                                              text: 'OK',
-                                              style: 'cancel',
-                                            },
-                                          ],
-                                          {cancelable: false},
-                                        );
-                                      } else if (
-                                        newMessagesCounter - jsonNewMessages ===
-                                        1
-                                      ) {
-                                        console.log(
-                                          `Du hast 1 neue Nachricht erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                        );
-                                        Alert.alert(
-                                          'DEBUG',
-                                          `Du hast 1 neue Nachricht erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                          [
-                                            {
-                                              text: 'OK',
-                                              style: 'cancel',
-                                            },
-                                          ],
-                                          {cancelable: false},
-                                        );
-                                      }
-                                    }
-                                  } else {
-                                    appStorage.set('crawler_data', '');
-                                    if (newMessagesCounter > 1) {
-                                      console.log(
-                                        `Du hast ${newMessagesCounter} neue Nachrichten erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                      );
-                                      Alert.alert(
-                                        'DEBUG',
-                                        `Du hast ${newMessagesCounter} neue Nachrichten erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                        [
-                                          {
-                                            text: 'OK',
-                                            style: 'cancel',
-                                          },
-                                        ],
-                                        {cancelable: false},
-                                      );
-                                    } else if (newMessagesCounter === 1) {
-                                      console.log(
-                                        `Du hast 1 neue Nachricht erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                      );
-                                      Alert.alert(
-                                        'DEBUG',
-                                        `Du hast 1 neue Nachricht erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                        [
-                                          {
-                                            text: 'OK',
-                                            style: 'cancel',
-                                          },
-                                        ],
-                                        {cancelable: false},
-                                      );
-                                    }
-                                  }
-                                } else {
-                                  if (newMessagesCounter > 1) {
-                                    console.log(
-                                      `Du hast ${newMessagesCounter} neue Nachrichten erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                    );
+                                    // TODO: Send push notification to user with the following => "Du hast (newMessagesCounter-jsonNewMessages) neue Nachricht/en erhalten. Die letzte Nachricht wurde von
+                                    // newMessageSender gesendet.
+                                    const messageCountDiff =
+                                      newMessagesCounter - jsonNewMessages;
+                                    const messageText = `Du hast ${
+                                      messageCountDiff > 1
+                                        ? messageCountDiff
+                                        : 1
+                                    } neue Nachricht${
+                                      messageCountDiff !== 1 ? 'en' : ''
+                                    } erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`;
+
+                                    console.log(messageText);
                                     Alert.alert(
-                                      'DEBUG',
-                                      `Du hast ${newMessagesCounter} neue Nachrichten erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                      [
-                                        {
-                                          text: 'OK',
-                                          style: 'cancel',
-                                        },
-                                      ],
-                                      {cancelable: false},
-                                    );
-                                  } else if (newMessagesCounter === 1) {
-                                    console.log(
-                                      `Du hast 1 neue Nachricht erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                    );
-                                    Alert.alert(
-                                      'DEBUG',
-                                      `Du hast 1 neue Nachricht erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`,
-                                      [
-                                        {
-                                          text: 'OK',
-                                          style: 'cancel',
-                                        },
-                                      ],
+                                      'Neue Nachricht!',
+                                      messageText,
+                                      [{text: 'OK', style: 'cancel'}],
                                       {cancelable: false},
                                     );
                                   }
@@ -380,79 +287,20 @@ const ytm = async nav => {
 
                                       // Get cycle (Turnus) of current year
                                       let cycle = [];
-                                      let y = 2;
-                                      while (
-                                        (await $(
-                                          `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(1)`,
-                                        ).length) &&
-                                        (await $(
-                                          `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(2)`,
-                                        ).length) &&
-                                        (await $(
-                                          `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(3)`,
-                                        ).length)
-                                      ) {
-                                        if (
-                                          (await $(
-                                            `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(1)`,
-                                          ).text()) &&
-                                          (await $(
-                                            `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(2)`,
-                                          ).text()) &&
-                                          (await $(
-                                            `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(3)`,
-                                          ).text())
-                                        ) {
-                                          let cycleNum = await $(
-                                            `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(1)`,
-                                          ).text();
-                                          let cycleStart = await $(
-                                            `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(2)`,
-                                          ).text();
-                                          let cycleEnd = await $(
-                                            `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr:nth-child(${y}) > td:nth-child(3)`,
-                                          ).text();
-                                          cycle.push([
-                                            cycleNum,
-                                            cycleStart,
-                                            cycleEnd,
-                                          ]);
-                                        } else {
-                                          console.log(
-                                            'Error while parsing cycle to string. #Error_2358',
-                                          );
+
+                                      $(
+                                        'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(2) > table > tbody > tr',
+                                      ).each((index, element) => {
+                                        if (index === 0) {
+                                          return true;
                                         }
-                                        y += 1;
-                                      }
-
-                                      /*
-                                                                      // TODO => Translate to cheerio
-                                                                      // Get cycle (Turnus) of current week
-                                                                      let currentCycle = await page.locator('//html/body/table[2]/tbody/tr/td[3]/table/tbody/tr[1]/td[1]/table/tbody/tr/td[1]/span[1]').textContent()
-                                                                      if (currentCycle.startsWith("Nächste") === true) {
-                                                                      if (parseInt(currentCycle.match(/\d+/)[0]) === 1) {
-                                                                      currentCycle = 2;
-                                                                      } else if (parseInt(currentCycle.match(/\d+/)[0]) === 2) {
-                                                                      currentCycle = 1;
-                                                                      } else {
-                                                                      currentCycle = 0;
-                                                                      console.log("Cannot get cycle of current week. #Error_6395")
-                                                                      }
-                                                                      } else if (currentCycle.startsWith("Diese") === true) {
-                                                                      if (parseInt(currentCycle.match(/\d+/)[0]) === 1) {
-                                                                      currentCycle = 1;
-                                                                      } else if (parseInt(currentCycle.match(/\d+/)[0]) === 2) {
-                                                                      currentCycle = 2;
-                                                                      } else {
-                                                                      currentCycle = 0;
-                                                                      console.log("Cannot get cycle of current week. #Error_6396")
-                                                                      }
-                                                                      } else {
-                                                                      currentCycle = 0;
-                                                                      console.log("Cannot get cycle of current week. #Error_6397")
-                                                                      }
-
-                                                                      */
+                                        const tds = $(element).find('td');
+                                        cycle.push([
+                                          $(tds[0]).text(),
+                                          $(tds[1]).text(),
+                                          $(tds[2]).text(),
+                                        ]);
+                                      });
 
                                       await axios.default
                                         .get(
@@ -478,16 +326,16 @@ const ytm = async nav => {
                                             let checkIfFirstTSSIsTodayOrTomorrow; // If true=today, if false=tomorrow
                                             // Check if TSS is on homepage for today
                                             if (
-                                              await $(
+                                              $(
                                                 'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(5) > tbody > tr > td > span > b',
                                               ).length
                                             ) {
                                               if (
-                                                (
-                                                  await $(
-                                                    'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(5) > tbody > tr > td > span > b',
-                                                  ).text()
-                                                ).replace(/^\D+/g, '') ===
+                                                $(
+                                                  'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(5) > tbody > tr > td > span > b',
+                                                )
+                                                  .text()
+                                                  .replace(/^\D+/g, '') ===
                                                 moment().format('DD.MM.YY')
                                               ) {
                                                 checkIfFirstTSSIsTodayOrTomorrow = true; // If true=today, if false=tomorrow
@@ -497,11 +345,11 @@ const ytm = async nav => {
                                                     .toString();
                                                 todaySubstitutionScheduleExist = true;
                                               } else if (
-                                                (
-                                                  await $(
-                                                    'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(5) > tbody > tr > td > span > b',
-                                                  ).text()
-                                                ).replace(/^\D+/g, '') ===
+                                                $(
+                                                  'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(5) > tbody > tr > td > span > b',
+                                                )
+                                                  .text()
+                                                  .replace(/^\D+/g, '') ===
                                                 moment()
                                                   .add(1, 'days')
                                                   .format('DD.MM.YY')
@@ -514,49 +362,40 @@ const ytm = async nav => {
                                                     .toString();
                                                 tomorrowSubstitutionScheduleExist = true;
                                               }
-                                              let i = 2;
-                                              while (
-                                                await $(
-                                                  `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(2)`,
-                                                ).length
-                                              ) {
+
+                                              $(
+                                                'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr',
+                                              ).each((index, element) => {
+                                                if (index === 0) {
+                                                  return true;
+                                                }
+                                                const tds =
+                                                  $(element).find('td');
                                                 if (
-                                                  (
-                                                    await $(
-                                                      `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(2)`,
-                                                    ).text()
-                                                  ).replace(/\s/g, '') ===
+                                                  $(tds[1])
+                                                    .text()
+                                                    .replace(/\s/g, '') ===
                                                     currentClass ||
-                                                  (
-                                                    await $(
-                                                      `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(2)`,
-                                                    ).text()
-                                                  ).replace(/\s/g, '') ===
+                                                  $(tds[1])
+                                                    .text()
+                                                    .replace(/\s/g, '') ===
                                                     parseInt(
                                                       currentClass.match(
                                                         /\d+/,
                                                       )[0],
                                                     ).toString()
                                                 ) {
-                                                  let checkSubject = (
-                                                    await $(
-                                                      `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(3)`,
-                                                    ).text()
-                                                  ).replace(/\s+/, '');
+                                                  let checkSubject = $(tds[2])
+                                                    .text()
+                                                    .replace(/\s+/, '');
                                                   if (
-                                                    (
-                                                      await $(
-                                                        `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(3)`,
-                                                      ).text()
-                                                    )
+                                                    $(tds[2])
+                                                      .text()
                                                       .replace(/\s+/, '')
                                                       .startsWith('[') === true
                                                   ) {
-                                                    checkSubject = (
-                                                      await $(
-                                                        `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(3)`,
-                                                      ).text()
-                                                    )
+                                                    checkSubject = $(tds[2])
+                                                      .text()
                                                       .replace(/\s+/, '')
                                                       .split(':');
                                                     checkSubject =
@@ -567,45 +406,29 @@ const ytm = async nav => {
                                                       checkSubject.toString(),
                                                     )
                                                   ) {
-                                                    let hour = (
-                                                      await $(
-                                                        `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(1)`,
-                                                      ).text()
-                                                    ).replace(/\s+/, '');
-                                                    let whatClass = (
-                                                      await $(
-                                                        `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(2)`,
-                                                      ).text()
-                                                    ).replace(/\s+/, '');
-                                                    let subject = (
-                                                      await $(
-                                                        `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(3)`,
-                                                      ).text()
-                                                    ).replace(/\s+/, '');
-                                                    let teacher = (
-                                                      await $(
-                                                        `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(4)`,
-                                                      ).text()
-                                                    ).replace(/\s+/, '');
-                                                    let substitution = (
-                                                      await $(
-                                                        `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(5)`,
-                                                      ).text()
-                                                    )
+                                                    let hour = $(tds[0])
+                                                      .text()
+                                                      .replace(/\s+/, '');
+                                                    let whatClass = $(tds[1])
+                                                      .text()
+                                                      .replace(/\s+/, '');
+                                                    let subject = $(tds[2])
+                                                      .text()
+                                                      .replace(/\s+/, '');
+                                                    let teacher = $(tds[3])
+                                                      .text()
+                                                      .replace(/\s+/, '');
+                                                    let substitution = $(tds[4])
+                                                      .text()
                                                       .replace(/\s+/, '')
                                                       .replace(/Neu/g, '');
-                                                    let room = (
-                                                      await $(
-                                                        `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(6)`,
-                                                      ).text()
-                                                    )
+                                                    let room = $(tds[5])
+                                                      .text()
                                                       .replace(/\s+/, '')
                                                       .replace(/---/g, '');
-                                                    let note = (
-                                                      await $(
-                                                        `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(7) > tbody > tr:nth-child(${i}) > td:nth-child(7)`,
-                                                      ).text()
-                                                    ).replace(/\s+/, '');
+                                                    let note = $(tds[6])
+                                                      .text()
+                                                      .replace(/\s+/, '');
                                                     if (
                                                       checkIfFirstTSSIsTodayOrTomorrow ===
                                                       true
@@ -643,22 +466,21 @@ const ytm = async nav => {
                                                     }
                                                   }
                                                 }
-                                                i++;
-                                              }
+                                              });
                                             }
 
                                             // Check if second TSS on homepage is for tomorrow
                                             if (
-                                              await $(
+                                              $(
                                                 'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(10) > tbody > tr > td > span > b',
                                               ).length
                                             ) {
                                               if (
-                                                (
-                                                  await $(
-                                                    'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(10) > tbody > tr > td > span > b',
-                                                  ).text()
-                                                ).replace(/^\D+/g, '') ===
+                                                $(
+                                                  'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(10) > tbody > tr > td > span > b',
+                                                )
+                                                  .text()
+                                                  .replace(/^\D+/g, '') ===
                                                 moment()
                                                   .add(1, 'days')
                                                   .format('DD.MM.YY')
@@ -669,50 +491,41 @@ const ytm = async nav => {
                                                     .format('DD.MM.YY')
                                                     .toString();
                                                 tomorrowSubstitutionScheduleExist = true;
-                                                let i = 2;
-                                                while (
-                                                  await $(
-                                                    `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(2)`,
-                                                  ).length
-                                                ) {
+
+                                                $(
+                                                  'body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr',
+                                                ).each((index, element) => {
+                                                  if (index === 0) {
+                                                    return true;
+                                                  }
+                                                  const tds =
+                                                    $(element).find('td');
                                                   if (
-                                                    (
-                                                      await $(
-                                                        `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(2)`,
-                                                      ).text()
-                                                    ).replace(/\s/g, '') ===
+                                                    $(tds[1])
+                                                      .text()
+                                                      .replace(/\s/g, '') ===
                                                       currentClass ||
-                                                    (
-                                                      await $(
-                                                        `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(2)`,
-                                                      ).text()
-                                                    ).replace(/\s/g, '') ===
+                                                    $(tds[1])
+                                                      .text()
+                                                      .replace(/\s/g, '') ===
                                                       parseInt(
                                                         currentClass.match(
                                                           /\d+/,
                                                         )[0],
                                                       ).toString()
                                                   ) {
-                                                    let checkSubject = (
-                                                      await $(
-                                                        `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(3)`,
-                                                      ).text()
-                                                    ).replace(/\s+/, '');
+                                                    let checkSubject = $(tds[2])
+                                                      .text()
+                                                      .replace(/\s+/, '');
                                                     if (
-                                                      (
-                                                        await $(
-                                                          `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(3)`,
-                                                        ).text()
-                                                      )
+                                                      $(tds[2])
+                                                        .text()
                                                         .replace(/\s+/, '')
                                                         .startsWith('[') ===
                                                       true
                                                     ) {
-                                                      checkSubject = (
-                                                        await $(
-                                                          `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(3)`,
-                                                        ).text()
-                                                      )
+                                                      checkSubject = $(tds[2])
+                                                        .text()
                                                         .replace(/\s+/, '')
                                                         .split(':');
                                                       checkSubject =
@@ -723,45 +536,31 @@ const ytm = async nav => {
                                                         checkSubject.toString(),
                                                       )
                                                     ) {
-                                                      let hour = (
-                                                        await $(
-                                                          `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(1)`,
-                                                        ).text()
-                                                      ).replace(/\s+/, '');
-                                                      let whatClass = (
-                                                        await $(
-                                                          `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(2)`,
-                                                        ).text()
-                                                      ).replace(/\s+/, '');
-                                                      let subject = (
-                                                        await $(
-                                                          `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(3)`,
-                                                        ).text()
-                                                      ).replace(/\s+/, '');
-                                                      let teacher = (
-                                                        await $(
-                                                          `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(4)`,
-                                                        ).text()
-                                                      ).replace(/\s+/, '');
-                                                      let substitution = (
-                                                        await $(
-                                                          `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(5)`,
-                                                        ).text()
+                                                      let hour = $(tds[0])
+                                                        .text()
+                                                        .replace(/\s+/, '');
+                                                      let whatClass = $(tds[1])
+                                                        .text()
+                                                        .replace(/\s+/, '');
+                                                      let subject = $(tds[2])
+                                                        .text()
+                                                        .replace(/\s+/, '');
+                                                      let teacher = $(tds[3])
+                                                        .text()
+                                                        .replace(/\s+/, '');
+                                                      let substitution = $(
+                                                        tds[4],
                                                       )
+                                                        .text()
                                                         .replace(/\s+/, '')
                                                         .replace(/Neu/g, '');
-                                                      let room = (
-                                                        await $(
-                                                          `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(6)`,
-                                                        ).text()
-                                                      )
+                                                      let room = $(tds[5])
+                                                        .text()
                                                         .replace(/\s+/, '')
                                                         .replace(/---/g, '');
-                                                      let note = (
-                                                        await $(
-                                                          `body > table:nth-child(3) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td:nth-child(1) > table:nth-child(12) > tbody > tr:nth-child(${i}) > td:nth-child(7)`,
-                                                        ).text()
-                                                      ).replace(/\s+/, '');
+                                                      let note = $(tds[6])
+                                                        .text()
+                                                        .replace(/\s+/, '');
                                                       tomorrowSubstitutionSchedule.push(
                                                         [
                                                           hour,
@@ -775,8 +574,7 @@ const ytm = async nav => {
                                                       );
                                                     }
                                                   }
-                                                  i++;
-                                                }
+                                                });
                                               }
                                             }
 
@@ -833,7 +631,7 @@ const ytm = async nav => {
                                                 );
                                               }
                                             };
-                                            await writeJSON(jsonData)
+                                            writeJSON(jsonData)
                                               //.then(console.log("When this value is printed, the JSON is created and the user can be redirected to Home.js, but make sure to put everything for the redirect request inside of then()"));
                                               .then(
                                                 console.log(
@@ -861,9 +659,7 @@ const ytm = async nav => {
                   {
                     text: 'OK',
                     onPress: async () => {
-                      await EncryptedStorage.removeItem(
-                        'localdata.usercredentials',
-                      ).then(async () => {
+                      await Keychain.resetGenericPassword().then(async () => {
                         nav.navigate('Login');
                       });
                     },

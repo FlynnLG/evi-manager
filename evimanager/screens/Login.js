@@ -10,16 +10,15 @@ import {
 import {useNavigation} from '@react-navigation/native';
 
 import {THEME, FONTS, assets} from '../constants';
-import EncryptedStorage from 'react-native-encrypted-storage';
+import * as Keychain from 'react-native-keychain';
 
 const windowWidth = Dimensions.get('window').width;
 
 async function handelLogin(navigation, username, password) {
   console.log('Navigation to LOADING!');
-  await EncryptedStorage.setItem(
-    'localdata.usercredentials',
-    username + ';' + password,
-  ).then(navigation.navigate('Loading'));
+  await Keychain.setGenericPassword(username, password).then(
+    navigation.navigate('Loading'),
+  );
 }
 
 const Login = () => {
