@@ -4,19 +4,18 @@ import {useNavigation} from '@react-navigation/native';
 import RNRestart from 'react-native-restart';
 
 import {THEME, FONTS} from '../constants';
+import * as Keychain from 'react-native-keychain';
 import appStorage from '../components/appStorage';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import { FächerfarbenBtn } from '../components/fächerfarbenBtn';
 
 async function userLogout(nav) {
-  await AsyncStorage.removeItem('localdata.usercredentials').then(
-    async () => {
-      appStorage.set('crawler_data', '');
-      console.log('DEBUG | Logout');
-      nav.navigate('Login');
-    },
-  );
+  await Keychain.resetGenericPassword().then(async () => {
+    appStorage.set('crawler_data', '');
+    console.log('DEBUG | Logout');
+    nav.navigate('Login');
+  });
 }
 
 async function switchTheme(theme){
