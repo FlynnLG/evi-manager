@@ -13,7 +13,7 @@ async function determineRoute(nav) {
     console.log('No Keys found, login...');
     nav.navigate('Login');
   }
-}
+
 
 const AppStart = () => {
   console.info('Site: APPSTART');

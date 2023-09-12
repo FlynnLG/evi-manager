@@ -1,19 +1,21 @@
 export const SYSTEMDARK = {
-  fontColor: '#B8B8B8',
-  background: '#262626',
-  lightGrey: '#3F3F3F',
-  darkGrey: '#171717',
-  red: '#FF3B30',
-  green: '#2D973D',
+  fontColor: '#f9f9f9',
+  background: '#121414',
+  primary: '#1f1f25',
+  secondary: '#272727',
+  red: '#ff3b30',
+  green: '#05a028',
+  scheme: 'dark',
 };
 
 export const SYSTEMLIGHT = {
-  fontColor: '#262626',
-  background: '#FFFFFF',
-  lightGrey: '#D9D9D9',
-  darkGrey: '#D9D9D9',
-  red: '#FF3B30',
-  green: '#69E77C',
+  fontColor: '#000000',
+  background: '#e9e8ed',
+  primary: '#ffffff',
+  secondary: '#f9f9fa',
+  red: '#ff3b30',
+  green: '#42ff71',
+  scheme: 'light',
 };
 
 export const FONTS = {
@@ -23,3 +25,7 @@ export const FONTS = {
   regular: 'Poppins-Regular',
   light: 'Poppins-Light',
 };
+
+export const COLORS = {
+  
+}

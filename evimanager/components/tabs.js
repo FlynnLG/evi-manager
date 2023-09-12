@@ -1,6 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {createStackNavigator} from '@react-navigation/stack';
 import AppStart from '../screens/AppStart';
 import Login from '../screens/Login';
@@ -9,6 +9,8 @@ import Home from '../screens/Home';
 import SettingsScreen from '../screens/SettingsScreen';
 import CreditsScreen from '../screens/Credits';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
+
+import { THEME } from '../constants';
 
 const HomeNav = createStackNavigator();
 
@@ -68,8 +70,8 @@ export const HomeTabs = () => {
     <BottomSheetModalProvider>
       <HomeTab.Navigator
         screenOptions={({route}) => ({
-          tabBarStyle: {position: 'absolute', backgroundColor: '#3F3F3F'},
-          tabBarActiveTintColor: '#1499FF',
+          tabBarStyle: {position: 'absolute', backgroundColor: THEME.secondary},
+          tabBarActiveTintColor: '#007aff',
           headerShown: false,
           tabBarShowLabel: true,
           tabBarIcon: ({focused, color, size}) => {
@@ -86,7 +88,7 @@ export const HomeTabs = () => {
             }
 
             // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
+            return <Icon name={iconName} size={size} color={color} />;
           },
         })}
         initialRouteName="Home">
@@ -104,8 +106,8 @@ export const SettingsTabs = () => {
   return (
     <SettingsTab.Navigator
       screenOptions={({route}) => ({
-        tabBarStyle: {position: 'absolute', backgroundColor: '#3F3F3F'},
-        tabBarActiveTintColor: '#1499FF',
+        tabBarStyle: {position: 'absolute', backgroundColor: THEME.secondary},
+        tabBarActiveTintColor: '#007aff',
         headerShown: false,
         tabBarShowLabel: true,
         tabBarIcon: ({focused, color, size}) => {
@@ -122,7 +124,7 @@ export const SettingsTabs = () => {
           }
 
           // You can return any component that you like here!
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return <Icon name={iconName} size={size} color={color} />;
         },
       })}
       initialRouteName="Settings">
@@ -139,8 +141,8 @@ export const CreditsTabs = () => {
   return (
     <CreditsTab.Navigator
       screenOptions={({route}) => ({
-        tabBarStyle: {position: 'absolute', backgroundColor: '#3F3F3F'},
-        tabBarActiveTintColor: '#1499FF',
+        tabBarStyle: {position: 'absolute', backgroundColor: THEME.secondary},
+        tabBarActiveTintColor: '#007aff',
         headerShown: false,
         tabBarShowLabel: true,
         tabBarIcon: ({focused, color, size}) => {
@@ -157,7 +159,7 @@ export const CreditsTabs = () => {
           }
 
           // You can return any component that you like here!
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return <Icon name={iconName} size={size} color={color} />;
         },
       })}
       initialRouteName="Credits">

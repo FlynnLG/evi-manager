@@ -1,11 +1,16 @@
 import React from 'react';
-import {Text, View, Dimensions, ScrollView, StatusBar} from 'react-native';
+import {Text, View, Dimensions, ScrollView, StatusBar, TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import RNRestart from 'react-native-restart';
 
 import {THEME, FONTS} from '../constants';
 
 import {LessonCard} from '../components/lessoncard';
 import appStorage from '../components/appStorage';
 import moment from 'moment/moment';
+
+import Icon from 'react-native-vector-icons/Ionicons';
+
 
 function dateManager() {
   const date = new Date(new Date().getTime());
@@ -57,6 +62,8 @@ function isDateWeekend(date) {
 }
 
 function Home() {
+  const navigation = useNavigation();
+
   console.info('Site: HOME');
   let json = JSON.parse(appStorage.getString('crawler_data'));
   let welcomeMessage = dateManager();
@@ -302,7 +309,7 @@ function Home() {
       }}>
       <View
         style={{
-          paddingTop: 120,
+          paddingTop: 100,
           backgroundColor: THEME.background,
           color: THEME.fontColor,
           paddingBottom: 80,
@@ -313,6 +320,7 @@ function Home() {
             fontFamily: FONTS.semiBold,
             color: THEME.fontColor,
             fontSize: 24,
+            paddingBottom: 20,
           }}>
           {welcomeMessage.toString()}
           {name}!
@@ -324,9 +332,13 @@ function Home() {
               color: THEME.fontColor,
               paddingLeft: windowWidth - 105,
             }}>
-            Aktualisieren
+            <TouchableOpacity
+              onPress={() => RNRestart.restart()}>
+              <View style={{paddingLeft: 20,}}><Icon name='reload-circle' color="#3d3737" size={30}/></View>
+            </TouchableOpacity>
           </Text>
           <LessonCard
+            accent
             dayOfWeekShort={moment().format('dddd').substring(0, 2)}
             date={moment().format('DD. MMMM YYYY')}
             blocks={lcData[0][1]}

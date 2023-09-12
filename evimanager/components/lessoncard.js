@@ -10,9 +10,13 @@ import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 import {Table, Row, Rows} from 'react-native-reanimated-table';
 
 import {FONTS, THEME} from '../constants';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+//import Ionicons
+import Icon from 'react-native-vector-icons/Ionicons';
+import appStorage from './appStorage';
+//import Icon from 'react-native-vector-icons/Ionicons'; not used
 
 export const LessonCard = ({
+  accent,
   dayOfWeekShort,
   date,
   blocks,
@@ -40,22 +44,61 @@ export const LessonCard = ({
     'Raum',
     'Info',
   ]);
-  const [tableData, setTableData] = useState([['', '', '', '']]);
+  const [tableData, setTableData] = useState([['undefined', 'undefined', 'undefined', 'undefined']]);
 
   // TODO: Define course number (e.g. EN12) in Modal!
+  // TODO: Define course number (e.g. EN12) in Modal
+
+  let accentBorderColor = '#ffffff00'
+  let accentWidth = 360
+  let accentHeight = 140
+  let accentShadowColor = '#ffffff00'
+  let accentElevation = 0
+  let accentPaddingTop = 11.4
+  let dayAccent = THEME.background
+  if(accent == true){
+    accentBorderColor = THEME.green
+    accentWidth = 385
+    accentHeight = 155
+    if(THEME.scheme == 'dark'){
+      accentShadowColor = '#747475'
+    }else{
+      accentShadowColor = '#000000'
+    }
+    accentElevation = 10
+    accentPaddingTop = 6
+    dayAccent = THEME.green
+  }
+
+  function getBackgroundColor(subject){
+    const subjectColorsString = appStorage.getString('custom/subjectcolor')
+    //const subjectColors = subjectColorsString.split(" ");
+    switch (subject) {
+      case 'MA':
+        console.log('You have a Math class.');
+        break;
+      case 'BIO':
+        return('#000')
+      case 'History':
+        console.log('You have a History class.');
+        break;
+      default:
+        console.log('Subject not recognized.');
+    }
+  }
 
   function weekendCard() {
     return (
       <View style={styles.smallLessonCard}>
         <View style={styles.dateContainer}>
-          <View style={styles.dayOfTheWeekCircle}>
+          <View style={[styles.dayOfTheWeekCircle, {backgroundColor: dayAccent,}]}>
             <Text style={styles.dayOfTheWeekText}>{dayOfWeekShort}</Text>
           </View>
           <Text style={styles.date}>{date}</Text>
         </View>
         <View style={styles.weekendHolidayContainer}>
           <View style={styles.weekendHolidayContentInfoContainer}>
-            <Ionicons name="cafe" size={20} color={'#ffffff'} />
+            <Icon name="cafe" size={20} color={THEME.fontColor} />
             <Text style={styles.weekendHolidayContentInfoText}>Wochenende</Text>
           </View>
         </View>
@@ -67,19 +110,28 @@ export const LessonCard = ({
     return (
       <View style={styles.smallLessonCard}>
         <View style={styles.dateContainer}>
-          <View style={styles.dayOfTheWeekCircle}>
+          <View style={[styles.dayOfTheWeekCircle, {backgroundColor: dayAccent,}]}>
             <Text style={styles.dayOfTheWeekText}>{dayOfWeekShort}</Text>
           </View>
           <Text style={styles.date}>{date}</Text>
         </View>
         <View style={styles.weekendHolidayContainer}>
           <View style={styles.weekendHolidayContentInfoContainer}>
-            <Ionicons name="calendar" size={20} color={'#ffffff'} />
+            <Icon name="calendar" size={20} color={THEME.fontColor} />
             <Text style={styles.weekendHolidayContentInfoText}>Ferien</Text>
           </View>
         </View>
       </View>
     );
+  }
+
+  function isVisible(i){
+    //Look if there are any block informations?
+    if(typeof tableData[0][1] === 'undefined' || typeof tableData[0][1] === ''){
+      return("#ffffff00")
+    }else{
+      return(THEME.red)
+    }
   }
 
   function lessonCard() {
@@ -110,9 +162,16 @@ export const LessonCard = ({
     }
 
     return (
-      <View style={styles.lessonCard}>
+      <View style={[styles.lessonCard, 
+      {borderColor: accentBorderColor, 
+      width: accentWidth, 
+      height: accentHeight, 
+      shadowColor: accentShadowColor, 
+      elevation: accentElevation,
+      marginBottom: accentPaddingTop,
+      }]}>
         <View style={styles.dateContainer}>
-          <View style={styles.dayOfTheWeekCircle}>
+          <View style={[styles.dayOfTheWeekCircle, {backgroundColor: dayAccent,}]}>
             <Text style={styles.dayOfTheWeekText}>{dayOfWeekShort}</Text>
           </View>
           <Text style={styles.date}>{date}</Text>
@@ -132,7 +191,7 @@ export const LessonCard = ({
     if (number === 1) {
       return (
         <TouchableOpacity
-          style={styles.frame}
+          style={[styles.frame, {borderColor: () => getUserLessonTheme(blocks[0])}]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -145,12 +204,13 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
+          <Icon name='alert-circle' size={15} color={isVisible()}/>
           <Text style={styles.block}>1</Text>
           <View style={styles.circle}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={styles.circleText}>
+              style={[styles.circleText, {backgroundColor: () =>getUserLessonTheme(blocks[0])}]}>
               {blocks[0]}
             </Text>
           </View>
@@ -159,7 +219,7 @@ export const LessonCard = ({
     } else if (number === 2) {
       return (
         <TouchableOpacity
-          style={styles.frame}
+          style={[styles.frame, {borderColor: () => getUserLessonTheme(blocks[1])}]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -172,12 +232,13 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
+          <Icon name='alert-circle' size={15} color={isVisible()}/>
           <Text style={styles.block}>2</Text>
           <View style={styles.circle}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={styles.circleText}>
+              style={[styles.circleText, {backgroundColor: () =>getUserLessonTheme(blocks[1])}]}>
               {blocks[1]}
             </Text>
           </View>
@@ -186,7 +247,7 @@ export const LessonCard = ({
     } else if (number === 3) {
       return (
         <TouchableOpacity
-          style={styles.frame}
+          style={[styles.frame, {borderColor: () =>getUserLessonTheme(blocks[2])}]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -199,12 +260,13 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
+          <Icon name='alert-circle' size={15} color={isVisible()}/>
           <Text style={styles.block}>3</Text>
           <View style={styles.circle}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={styles.circleText}>
+              style={[styles.circleText, {backgroundColor: () =>getUserLessonTheme(blocks[2])}]}>
               {blocks[2]}
             </Text>
           </View>
@@ -213,7 +275,7 @@ export const LessonCard = ({
     } else if (number === 4) {
       return (
         <TouchableOpacity
-          style={styles.frame}
+          style={[styles.frame, {borderColor: () => getUserLessonTheme(blocks[3])}]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -226,12 +288,13 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
+          <Icon name='alert-circle' size={15} color={isVisible()}/>
           <Text style={styles.block}>4</Text>
           <View style={styles.circle}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={styles.circleText}>
+              style={[styles.circleText, {backgroundColor: () => getUserLessonTheme(blocks[3])}]}>
               {blocks[3]}
             </Text>
           </View>
@@ -240,7 +303,7 @@ export const LessonCard = ({
     } else if (number === 5) {
       return (
         <TouchableOpacity
-          style={styles.frame}
+          style={[styles.frame, {borderColor: () => getUserLessonTheme(blocks[4])}]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -253,12 +316,13 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
+          <Icon name='alert-circle' size={15} color={isVisible()}/>
           <Text style={styles.block}>5</Text>
-          <View style={styles.circle}>
+          <View style={[styles.circle, {backgroundColor: getBackgroundColor(blocks[4])}]}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={styles.circleText}>
+              style={[styles.circleText]}>
               {blocks[4]}
             </Text>
           </View>
@@ -352,19 +416,19 @@ export const LessonCard = ({
           </Text>
           {getModalBlockInfo(tableData)}
           <View style={styles.modalContentInfoContainer}>
-            <Ionicons name="school-outline" size={20} color={'#ffffff'} />
+            <Icon name="school-outline" size={20} color={THEME.fontColor} />
             <Text style={styles.modalContentInfoText}>{modalLesson}</Text>
           </View>
           <View style={styles.modalContentInfoContainer}>
-            <Ionicons name="person-outline" size={20} color={'#ffffff'} />
+            <Icon name="person-outline" size={20} color={THEME.fontColor} />
             <Text style={styles.modalContentInfoText}>{modalTeacher}</Text>
           </View>
           <View style={styles.modalContentInfoContainer}>
-            <Ionicons name="location-outline" size={20} color={'#ffffff'} />
+            <Icon name="location-outline" size={20} color={THEME.fontColor} />
             <Text style={styles.modalContentInfoText}>{modalRoom}</Text>
           </View>
           <View style={styles.modalContentInfoContainer}>
-            <Ionicons name="time-outline" size={20} color={'#ffffff'} />
+            <Icon name="time-outline" size={20} color={THEME.fontColor} />
             <Text style={styles.modalContentInfoText}>{modalTime}</Text>
           </View>
         </View>
@@ -376,23 +440,23 @@ export const LessonCard = ({
 
 const styles = StyleSheet.create({
   lessonCard: {
-    width: 370,
-    height: 140,
+    //width: 370,  EDIT THESE WITH THE VARIABELS "accentWidth" and "accentHeight"
+    //height: 140,
     margin: 10.4,
     alignSelf: 'center',
-    backgroundColor: THEME.lightGrey,
+    backgroundColor: THEME.primary,
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#737475',
+    borderWidth: 0,
+    //borderColor: '#737475', EDIT THIS VARIABLE WITH "accentBorderColor"
   },
   smallLessonCard: {
-    width: 370,
+    width: 360,
     height: 90,
     margin: 10.4,
     alignSelf: 'center',
-    backgroundColor: THEME.lightGrey,
+    backgroundColor: THEME.primary,
     borderRadius: 10,
-    borderWidth: 1,
+    //borderWidth: 1,
     borderColor: '#737475',
   },
   rowContainer: {
@@ -407,17 +471,17 @@ const styles = StyleSheet.create({
     width: 45,
     height: 80,
     borderStyle: 'solid',
-    borderColor: '#ffffff',
+    borderColor: '#636363',
     borderWidth: 2,
-    borderRadius: 30,
+    borderRadius: 50,
     marginEnd: 15,
   },
   circle: {
-    width: 37,
-    height: 37,
+    width: 39,
+    height: 39,
     borderRadius: 50,
-    marginTop: 4,
-    backgroundColor: '#636363',
+    marginTop: -5,
+    backgroundColor: THEME.background, //TODO
     alignSelf: 'center',
     display: 'flex',
     alignItems: 'center',
@@ -426,7 +490,7 @@ const styles = StyleSheet.create({
   },
   circleText: {
     fontFamily: FONTS.medium,
-    color: '#ffffff',
+    color: THEME.fontColor,
     fontSize: 16,
   },
   block: {
@@ -434,22 +498,22 @@ const styles = StyleSheet.create({
     color: THEME.fontColor,
     fontSize: 18,
     textAlign: 'center',
-    marginTop: 7,
+    alignItems: 'center',
+    marginTop: -7,
   },
   date: {
     fontFamily: FONTS.regular,
-    color: '#ffffff',
+    color: THEME.fontColor,
     fontSize: 15,
     marginLeft: 10,
-    marginTop: 7,
+    marginTop: 6,
   },
   dayOfTheWeekCircle: {
-    width: 25,
-    height: 25,
+    width: 30,
+    height: 30,
     borderRadius: 50,
     marginTop: 5,
     marginLeft: 5,
-    backgroundColor: '#636363',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -476,8 +540,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   modalContentBlockInfoBox: {
-    backgroundColor: THEME.lightGrey,
-    borderRadius: 3,
+    backgroundColor: THEME.primary,
+    borderRadius: 10,
     marginTop: 10,
     width: 385,
     height: 150,
@@ -485,7 +549,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   modalContentBlockInfoBoxEmpty: {
-    backgroundColor: THEME.lightGrey,
+    backgroundColor: THEME.primary,
     borderRadius: 3,
     marginTop: 10,
     width: 385,
@@ -494,7 +558,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   modalContentBlockInfoBoxText: {
-    color: '#ffffff',
+    color: THEME.fontColor,
     fontSize: 17,
     fontFamily: FONTS.regular,
     marginLeft: 10,
@@ -508,7 +572,7 @@ const styles = StyleSheet.create({
     marginLeft: 25,
   },
   modalContentInfoText: {
-    color: '#ffffff',
+    color: THEME.fontColor,
     fontSize: 17,
     fontFamily: FONTS.regular,
     marginLeft: 20,
@@ -517,13 +581,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: 370,
+    width: 360,
     height: 45,
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#737475',
+    //borderWidth: 1,
+    borderTopColor: '#737475',
     alignSelf: 'center',
-    backgroundColor: THEME.lightGrey,
+    backgroundColor: THEME.primary,
   },
   weekendHolidayContentInfoContainer: {
     display: 'flex',
@@ -534,7 +598,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   weekendHolidayContentInfoText: {
-    color: '#ffffff',
+    color: THEME.fontColor,
     fontSize: 15,
     fontFamily: FONTS.regular,
     marginLeft: 20,
@@ -543,7 +607,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     justifyContent: 'center',
-    backgroundColor: THEME.lightGrey,
+    backgroundColor: THEME.primary,
   },
   head: {
     height: 44,
@@ -565,7 +629,7 @@ const styles = StyleSheet.create({
 /*
  <View style={styles.rowContainer}>
  <TouchableOpacity
- style={styles.frame}
+ style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
  onPress={() => {
  openSettingsModal(
  dayOfWeek,
@@ -583,14 +647,14 @@ const styles = StyleSheet.create({
  <Text
  numberOfLines={1}
  adjustsFontSizeToFit
- style={styles.circleText}>
+ style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
  {block1}
  </Text>
  </View>
  </TouchableOpacity>
 
  <TouchableOpacity
- style={styles.frame}
+ style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
  onPress={() => {
  openSettingsModal(
  dayOfWeek,
@@ -608,13 +672,13 @@ const styles = StyleSheet.create({
  <Text
  numberOfLines={1}
  adjustsFontSizeToFit
- style={styles.circleText}>
+ style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
  {block2}
  </Text>
  </View>
  </TouchableOpacity>
  <TouchableOpacity
- style={styles.frame}
+ style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
  onPress={() => {
  openSettingsModal(
  dayOfWeek,
@@ -632,13 +696,13 @@ const styles = StyleSheet.create({
  <Text
  numberOfLines={1}
  adjustsFontSizeToFit
- style={styles.circleText}>
+ style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
  {block3}
  </Text>
  </View>
  </TouchableOpacity>
  <TouchableOpacity
- style={styles.frame}
+ style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
  onPress={() => {
  openSettingsModal(
  dayOfWeek,
@@ -656,13 +720,13 @@ const styles = StyleSheet.create({
  <Text
  numberOfLines={1}
  adjustsFontSizeToFit
- style={styles.circleText}>
+ style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
  {block4}
  </Text>
  </View>
  </TouchableOpacity>
  <TouchableOpacity
- style={styles.frame}
+ style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
  onPress={() => {
  openSettingsModal(
  dayOfWeek,
@@ -680,7 +744,7 @@ const styles = StyleSheet.create({
  <Text
  numberOfLines={1}
  adjustsFontSizeToFit
- style={styles.circleText}>
+ style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
  {block5}
  </Text>
  </View>
@@ -691,7 +755,7 @@ const styles = StyleSheet.create({
 /*
  <View style={styles.weekendHolidayContainer}>
  <View style={styles.weekendHolidayContentInfoContainer}>
- <Ionicons name="cafe" size={20} color={'#ffffff'} />
+ <Icon name="cafe" size={20} color={THEME.fontColor} />
  <Text style={styles.weekendHolidayContentInfoText}>Wochenende</Text>
  </View>
  </View>
@@ -700,7 +764,7 @@ const styles = StyleSheet.create({
 /*
  <View style={styles.weekendHolidayContainer}>
  <View style={styles.weekendHolidayContentInfoContainer}>
- <Ionicons name="calendar" size={20} color={'#ffffff'} />
+ <Icon name="calendar" size={20} color={THEME.fontColor} />
  <Text style={styles.weekendHolidayContentInfoText}>Ferien</Text>
  </View>
  </View>

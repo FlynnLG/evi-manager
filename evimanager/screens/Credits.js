@@ -1,7 +1,7 @@
 import React from 'react';
-import {Text, View, TouchableOpacity, ScrollView} from 'react-native';
+import {Text, View, TouchableOpacity, ScrollView, StyleSheet} from 'react-native';
 
-import {THEME} from '../constants';
+import {THEME, FONTS} from '../constants';
 
 const CreditsScreen = ({}) => {
   console.info('Site: CREDITS');
@@ -14,13 +14,31 @@ const CreditsScreen = ({}) => {
         backgroundColor: THEME.background,
         height: 1000,
       }}>
-        <ScrollView>
-          <Text>Message Board</Text>
-
-          <Text>Keine weiteren Nachrichten...</Text>
-        </ScrollView>
+        <Text style={styles.header}>Credits</Text>
+        <Text style={styles.names}>
+        Programmierer: Lennard Leonard Grefrath, Valentino
+        Idee: Hanna Sophie Eisernack
+        </Text>
+        <Text style={styles.names}>
+        Wenn ihr Feedback oder Verbesserungsvorschläge habt, meldet euch im Tasca bei Lennard :)
+        </Text>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  header: {
+    fontFamily: FONTS.semiBold,
+    color: THEME.fontColor,
+    fontSize: 23,
+    paddingTop: 140,
+  },
+  names: {
+    fontFamily: FONTS.semiBold,
+    color: THEME.fontColor,
+    fontSize: 14,
+    paddingTop: 140,
+  },
+})
 
 export default CreditsScreen;
