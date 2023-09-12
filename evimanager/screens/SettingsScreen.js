@@ -1,5 +1,12 @@
 import React from 'react';
-import {Text, View, TouchableOpacity, StyleSheet, ScrollView, FlatList} from 'react-native';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  FlatList,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import RNRestart from 'react-native-restart';
 
@@ -8,7 +15,7 @@ import * as Keychain from 'react-native-keychain';
 import appStorage from '../components/appStorage';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import { FächerfarbenBtn } from '../components/fächerfarbenBtn';
+import {FächerfarbenBtn} from '../components/fächerfarbenBtn';
 
 async function userLogout(nav) {
   await Keychain.resetGenericPassword().then(async () => {
@@ -18,9 +25,9 @@ async function userLogout(nav) {
   });
 }
 
-async function switchTheme(theme){
-    appStorage.set('@localdata:settings/theme', theme)
-    RNRestart.restart()
+async function switchTheme(theme) {
+  appStorage.set('@localdata:settings/theme', theme);
+  RNRestart.restart();
 }
 
 const SettingsScreen = ({}) => {
@@ -28,32 +35,32 @@ const SettingsScreen = ({}) => {
   const nav = useNavigation();
 
   const possibleSubjects = [
-    {subjectShort: "DE",},
-    {subjectShort: "EN",},
-    {subjectShort: "MA",},
-    {subjectShort: "GE",},
-    {subjectShort: "PB",},
-    {subjectShort: "EK",},
-    {subjectShort: "PH",},
-    {subjectShort: "BIO",},
-    {subjectShort: "KU",},
-    {subjectShort: "MU",},
-    {subjectShort: "DS",},
-    {subjectShort: "IF",},
-    {subjectShort: "SP",},
-    {subjectShort: "SPA",},
-    {subjectShort: "FR",},
-    {subjectShort: "LA",},
-    {subjectShort: "CH",},
-    {subjectShort: "GW",},
-    {subjectShort: "NW",},
-    {subjectShort: "SK",},
-    {subjectShort: "TZ",},
-    {subjectShort: "GE-PB",},
-    {subjectShort: "MA/INF",},
-    {subjectShort: "MDK",},
-    {subjectShort: "FU",},
-  ]
+    {subjectShort: 'DE'},
+    {subjectShort: 'EN'},
+    {subjectShort: 'MA'},
+    {subjectShort: 'GE'},
+    {subjectShort: 'PB'},
+    {subjectShort: 'EK'},
+    {subjectShort: 'PH'},
+    {subjectShort: 'BIO'},
+    {subjectShort: 'KU'},
+    {subjectShort: 'MU'},
+    {subjectShort: 'DS'},
+    {subjectShort: 'IF'},
+    {subjectShort: 'SP'},
+    {subjectShort: 'SPA'},
+    {subjectShort: 'FR'},
+    {subjectShort: 'LA'},
+    {subjectShort: 'CH'},
+    {subjectShort: 'GW'},
+    {subjectShort: 'NW'},
+    {subjectShort: 'SK'},
+    {subjectShort: 'TZ'},
+    {subjectShort: 'GE-PB'},
+    {subjectShort: 'MA/INF'},
+    {subjectShort: 'MDK'},
+    {subjectShort: 'FU'},
+  ];
 
   return (
     <View
@@ -63,24 +70,30 @@ const SettingsScreen = ({}) => {
         height: 1000,
         alignItems: 'center',
       }}>
-      
-
       <Text style={styles.header}>Settings</Text>
       <View>
-      
         <TouchableOpacity style={styles.btnLightmode}>
-          <Icon name="sunny" size={25} color="#121414" onPress={() => switchTheme('SYSTEMLIGHT')}/>
+          <Icon
+            name="sunny"
+            size={25}
+            color="#121414"
+            onPress={() => switchTheme('SYSTEMLIGHT')}
+          />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnDarkmode} onPress={() => switchTheme('SYSTEMDARK')}>
-        <Icon name="moon" size={25} color="#e9e8ed"/>
+        <TouchableOpacity
+          style={styles.btnDarkmode}
+          onPress={() => switchTheme('SYSTEMDARK')}>
+          <Icon name="moon" size={25} color="#e9e8ed" />
         </TouchableOpacity>
       </View>
-      <View style={styles.line}></View>
+      <View style={styles.line} />
       <Text>Fächerfarben</Text>
       <View>
         <FlatList
           data={possibleSubjects}
-          renderItem={({item}) => <FächerfarbenBtn subject={item.subjectShort}/>}
+          renderItem={({item}) => (
+            <FächerfarbenBtn subject={item.subjectShort} />
+          )}
           numColumns={5}
           key={3}
         />
@@ -142,7 +155,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     height: 1.3,
     width: 3800,
-    backgroundColor: THEME.secondary
+    backgroundColor: THEME.secondary,
   },
 });
 

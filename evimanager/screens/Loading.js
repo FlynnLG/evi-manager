@@ -13,6 +13,7 @@ import appStorage from '../components/appStorage';
 const ytm = async nav => {
   try {
     appStorage.set('crawler_data', '');
+
     const credentials = await Keychain.getGenericPassword();
     if (!credentials || !credentials.username || !credentials.password) {
       await Keychain.resetGenericPassword().then(async () => {
@@ -273,24 +274,8 @@ const ytm = async nav => {
                                       [{text: 'OK', style: 'cancel'}],
                                       {cancelable: false},
                                     );
-                                    //console.log(cycleNum, cycleStart, cycleEnd)
-                                    if (cycleNum && cycleStart && cycleEnd) {
-                                      cycle.push([
-                                        cycleNum,
-                                        cycleStart,
-                                        cycleEnd,
-                                      ]);
-                                    } else {
-                                      console.log(
-                                        'Error while parsing cycle to string. #Error_2358',
-                                      );
-                                      break;
-                                    }
-
-                                    y += 1;
                                   }
                                 }
-                                
                                 await axios.default
                                   .get(
                                     'https://gymnasium-neuruppin.de/index.php?oid=19&id=95',
@@ -661,7 +646,7 @@ const ytm = async nav => {
                                     }
                                   });
                               }
-                            }); //Closing Bracket for the '.then(async response => {' in line 197
+                            });
                         }
                       });
                   }
