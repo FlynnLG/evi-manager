@@ -44,41 +44,51 @@ export const LessonCard = ({
     'Raum',
     'Info',
   ]);
-  const [tableData, setTableData] = useState([['undefined', 'undefined', 'undefined', 'undefined']]);
+  const [tableData, setTableData] = useState([
+    ['undefined', 'undefined', 'undefined', 'undefined'],
+  ]);
 
   // TODO: Define course number (e.g. EN12) in Modal!
   // TODO: Define course number (e.g. EN12) in Modal
 
-  let accentBorderColor = '#ffffff00'
-  let accentWidth = 360
-  let accentHeight = 140
-  let accentShadowColor = '#ffffff00'
-  let accentElevation = 0
-  let accentPaddingTop = 11.4
-  let dayAccent = THEME.background
-  if(accent == true){
-    accentBorderColor = THEME.green
-    accentWidth = 385
-    accentHeight = 155
-    if(THEME.scheme == 'dark'){
-      accentShadowColor = '#747475'
-    }else{
-      accentShadowColor = '#000000'
+  let accentBorderColor = '#636366';
+  let accentWidth = 360;
+  let accentHeight = 140;
+  let accentShadowColor = '#ffffff';
+  let accentElevation = 0;
+  let accentPaddingTop = 11.4;
+  let dayAccent = THEME.background;
+  let shadowOffsetWidth = 0;
+  let shadowOffsetHeight = 0;
+  let shadowOpacity = 0;
+  let shadowRadius = 0;
+  if (accent === true) {
+    //accentBorderColor = THEME.green
+    accentWidth = 385;
+    accentHeight = 155;
+    shadowOffsetWidth = -2;
+    shadowOffsetHeight = 4;
+    shadowOpacity = 0.075;
+    shadowRadius = 3;
+    if (THEME.scheme === 'dark') {
+      accentShadowColor = '#636366';
+    } else {
+      accentShadowColor = '#000000';
     }
-    accentElevation = 10
-    accentPaddingTop = 6
-    dayAccent = THEME.green
+    accentElevation = 10;
+    accentPaddingTop = 6;
+    dayAccent = THEME.green;
   }
 
-  function getBackgroundColor(subject){
-    const subjectColorsString = appStorage.getString('custom/subjectcolor')
+  function getBackgroundColor(subject) {
+    const subjectColorsString = appStorage.getString('custom/subjectcolor');
     //const subjectColors = subjectColorsString.split(" ");
     switch (subject) {
       case 'MA':
         console.log('You have a Math class.');
         break;
       case 'BIO':
-        return('#000')
+        return '#000';
       case 'History':
         console.log('You have a History class.');
         break;
@@ -91,7 +101,8 @@ export const LessonCard = ({
     return (
       <View style={styles.smallLessonCard}>
         <View style={styles.dateContainer}>
-          <View style={[styles.dayOfTheWeekCircle, {backgroundColor: dayAccent,}]}>
+          <View
+            style={[styles.dayOfTheWeekCircle, {backgroundColor: dayAccent}]}>
             <Text style={styles.dayOfTheWeekText}>{dayOfWeekShort}</Text>
           </View>
           <Text style={styles.date}>{date}</Text>
@@ -110,7 +121,8 @@ export const LessonCard = ({
     return (
       <View style={styles.smallLessonCard}>
         <View style={styles.dateContainer}>
-          <View style={[styles.dayOfTheWeekCircle, {backgroundColor: dayAccent,}]}>
+          <View
+            style={[styles.dayOfTheWeekCircle, {backgroundColor: dayAccent}]}>
             <Text style={styles.dayOfTheWeekText}>{dayOfWeekShort}</Text>
           </View>
           <Text style={styles.date}>{date}</Text>
@@ -125,12 +137,11 @@ export const LessonCard = ({
     );
   }
 
-  function isVisible(i){
-    //Look if there are any block informations?
-    if(typeof tableData[0][1] === 'undefined' || typeof tableData[0][1] === ''){
-      return("#ffffff00")
-    }else{
-      return(THEME.red)
+  function isVisible(rawTableData) {
+    if (typeof rawTableData[0][1] === 'undefined') {
+      return '#ffffff00';
+    } else {
+      return THEME.red;
     }
   }
 
@@ -162,16 +173,27 @@ export const LessonCard = ({
     }
 
     return (
-      <View style={[styles.lessonCard, 
-      {borderColor: accentBorderColor, 
-      width: accentWidth, 
-      height: accentHeight, 
-      shadowColor: accentShadowColor, 
-      elevation: accentElevation,
-      marginBottom: accentPaddingTop,
-      }]}>
+      <View
+        style={[
+          styles.lessonCard,
+          {
+            borderColor: accentBorderColor,
+            width: accentWidth,
+            height: accentHeight,
+            shadowColor: accentShadowColor,
+            elevation: accentElevation,
+            marginBottom: accentPaddingTop,
+            shadowOffset: {
+              width: shadowOffsetWidth,
+              height: shadowOffsetHeight,
+            },
+            shadowOpacity: shadowOpacity,
+            shadowRadius: shadowRadius,
+          },
+        ]}>
         <View style={styles.dateContainer}>
-          <View style={[styles.dayOfTheWeekCircle, {backgroundColor: dayAccent,}]}>
+          <View
+            style={[styles.dayOfTheWeekCircle, {backgroundColor: dayAccent}]}>
             <Text style={styles.dayOfTheWeekText}>{dayOfWeekShort}</Text>
           </View>
           <Text style={styles.date}>{date}</Text>
@@ -191,7 +213,10 @@ export const LessonCard = ({
     if (number === 1) {
       return (
         <TouchableOpacity
-          style={[styles.frame, {borderColor: () => getUserLessonTheme(blocks[0])}]}
+          style={[
+            styles.frame,
+            //{borderColor: () => getUserLessonTheme(blocks[0])},
+          ]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -204,13 +229,20 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Icon name='alert-circle' size={15} color={isVisible()}/>
+          <Icon
+            name="alert-circle"
+            size={15}
+            color={isVisible([blockInfos[0]])}
+          />
           <Text style={styles.block}>1</Text>
           <View style={styles.circle}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={[styles.circleText, {backgroundColor: () =>getUserLessonTheme(blocks[0])}]}>
+              style={[
+                styles.circleText,
+                {backgroundColor: () => getUserLessonTheme(blocks[0])},
+              ]}>
               {blocks[0]}
             </Text>
           </View>
@@ -219,7 +251,10 @@ export const LessonCard = ({
     } else if (number === 2) {
       return (
         <TouchableOpacity
-          style={[styles.frame, {borderColor: () => getUserLessonTheme(blocks[1])}]}
+          style={[
+            styles.frame,
+            //{borderColor: () => getUserLessonTheme(blocks[1])},
+          ]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -232,13 +267,20 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Icon name='alert-circle' size={15} color={isVisible()}/>
+          <Icon
+            name="alert-circle"
+            size={15}
+            color={isVisible([blockInfos[1]])}
+          />
           <Text style={styles.block}>2</Text>
           <View style={styles.circle}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={[styles.circleText, {backgroundColor: () =>getUserLessonTheme(blocks[1])}]}>
+              style={[
+                styles.circleText,
+                {backgroundColor: () => getUserLessonTheme(blocks[1])},
+              ]}>
               {blocks[1]}
             </Text>
           </View>
@@ -247,7 +289,10 @@ export const LessonCard = ({
     } else if (number === 3) {
       return (
         <TouchableOpacity
-          style={[styles.frame, {borderColor: () =>getUserLessonTheme(blocks[2])}]}
+          style={[
+            styles.frame,
+            //{borderColor: () => getUserLessonTheme(blocks[2])},
+          ]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -260,13 +305,20 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Icon name='alert-circle' size={15} color={isVisible()}/>
+          <Icon
+            name="alert-circle"
+            size={15}
+            color={isVisible([blockInfos[2]])}
+          />
           <Text style={styles.block}>3</Text>
           <View style={styles.circle}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={[styles.circleText, {backgroundColor: () =>getUserLessonTheme(blocks[2])}]}>
+              style={[
+                styles.circleText,
+                {backgroundColor: () => getUserLessonTheme(blocks[2])},
+              ]}>
               {blocks[2]}
             </Text>
           </View>
@@ -275,7 +327,10 @@ export const LessonCard = ({
     } else if (number === 4) {
       return (
         <TouchableOpacity
-          style={[styles.frame, {borderColor: () => getUserLessonTheme(blocks[3])}]}
+          style={[
+            styles.frame,
+            //{borderColor: () => getUserLessonTheme(blocks[3])},
+          ]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -288,13 +343,20 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Icon name='alert-circle' size={15} color={isVisible()}/>
+          <Icon
+            name="alert-circle"
+            size={15}
+            color={isVisible([blockInfos[3]])}
+          />
           <Text style={styles.block}>4</Text>
           <View style={styles.circle}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={[styles.circleText, {backgroundColor: () => getUserLessonTheme(blocks[3])}]}>
+              style={[
+                styles.circleText,
+                {backgroundColor: () => getUserLessonTheme(blocks[3])},
+              ]}>
               {blocks[3]}
             </Text>
           </View>
@@ -303,7 +365,10 @@ export const LessonCard = ({
     } else if (number === 5) {
       return (
         <TouchableOpacity
-          style={[styles.frame, {borderColor: () => getUserLessonTheme(blocks[4])}]}
+          style={[
+            styles.frame,
+            //{borderColor: () => getUserLessonTheme(blocks[4])},
+          ]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -316,9 +381,17 @@ export const LessonCard = ({
             );
             bottomSheetModalRef.current?.present();
           }}>
-          <Icon name='alert-circle' size={15} color={isVisible()}/>
+          <Icon
+            name="alert-circle"
+            size={15}
+            color={isVisible([blockInfos[4]])}
+          />
           <Text style={styles.block}>5</Text>
-          <View style={[styles.circle, {backgroundColor: getBackgroundColor(blocks[4])}]}>
+          <View
+            style={[
+              styles.circle,
+              {backgroundColor: getBackgroundColor(blocks[4])},
+            ]}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
@@ -446,8 +519,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: THEME.primary,
     borderRadius: 10,
-    borderWidth: 0,
-    //borderColor: '#737475', EDIT THIS VARIABLE WITH "accentBorderColor"
+    borderWidth: 1,
+    borderColor: '#737475', //EDIT THIS VARIABLE WITH "accentBorderColor"
   },
   smallLessonCard: {
     width: 360,
@@ -456,8 +529,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: THEME.primary,
     borderRadius: 10,
-    //borderWidth: 1,
-    borderColor: '#737475',
+    borderWidth: 1,
+    borderColor: '#636366',
   },
   rowContainer: {
     display: 'flex',
@@ -471,16 +544,16 @@ const styles = StyleSheet.create({
     width: 45,
     height: 80,
     borderStyle: 'solid',
-    borderColor: '#636363',
+    borderColor: '#8e8e93',
     borderWidth: 2,
     borderRadius: 50,
     marginEnd: 15,
   },
   circle: {
-    width: 39,
-    height: 39,
+    width: 38,
+    height: 38,
     borderRadius: 50,
-    marginTop: -5,
+    marginTop: 1,
     backgroundColor: THEME.background, //TODO
     alignSelf: 'center',
     display: 'flex',
@@ -584,8 +657,8 @@ const styles = StyleSheet.create({
     width: 360,
     height: 45,
     borderRadius: 10,
-    //borderWidth: 1,
-    borderTopColor: '#737475',
+    borderWidth: 1,
+    borderColor: '#636366',
     alignSelf: 'center',
     backgroundColor: THEME.primary,
   },

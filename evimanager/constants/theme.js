@@ -1,7 +1,7 @@
 export const SYSTEMDARK = {
   fontColor: '#f9f9f9',
-  background: '#121414',
-  primary: '#1f1f25',
+  background: '#1c1c1e',
+  primary: '#2c2c2e',
   secondary: '#272727',
   red: '#ff3b30',
   green: '#05a028',
@@ -26,6 +26,4 @@ export const FONTS = {
   light: 'Poppins-Light',
 };
 
-export const COLORS = {
-  
-}
+export const COLORS = {};

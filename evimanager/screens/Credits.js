@@ -16,8 +16,7 @@ const CreditsScreen = ({}) => {
       }}>
       <Text style={styles.header}>Credits</Text>
       <Text style={styles.names}>
-        Programmierer: Lennard Leonard Grefrath, Valentino Idee: Hanna Sophie
-        Eisernack
+        Programmierer: Lennard, Valentino {'\n'}Idee: Hanna Sophie Eisernack
       </Text>
       <Text style={styles.names}>
         Wenn ihr Feedback oder Verbesserungsvorschläge habt, meldet euch im
