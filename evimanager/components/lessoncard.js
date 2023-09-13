@@ -13,7 +13,7 @@ import {FONTS, THEME} from '../constants';
 //import Ionicons
 import Icon from 'react-native-vector-icons/Ionicons';
 import appStorage from './appStorage';
-//import Icon from 'react-native-vector-icons/Ionicons'; not used
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const LessonCard = ({
   accent,
@@ -81,19 +81,22 @@ export const LessonCard = ({
   }
 
   function getBackgroundColor(subject) {
-    const subjectColorsString = appStorage.getString('custom/subjectcolor');
-    //const subjectColors = subjectColorsString.split(" ");
-    switch (subject) {
-      case 'MA':
-        console.log('You have a Math class.');
-        break;
-      case 'BIO':
-        return '#000';
-      case 'History':
-        console.log('You have a History class.');
-        break;
-      default:
-        console.log('Subject not recognized.');
+    console.log(subject)
+    /**const bodyy = {
+      'DE':'#34c759',
+      'MA':'#32ade6',
+      'BIO':'#ff3b30',
+    }*/
+    //console.log(bodyy, JSON.stringify(bodyy))
+    //appStorage.set('custom/subjectcolor', JSON.stringify(bodyy))
+    const jsonObject = appStorage.get('custom/subjectcolor')
+    //console.log(jsonObject)
+    const subjectColors = JSON.parse(jsonObject)
+    console.log(subjectColors)
+    if(subjectColors === "undefined"){
+      return subjectColors[subject]
+    }else{
+      return THEME.background
     }
   }
 
@@ -215,7 +218,7 @@ export const LessonCard = ({
         <TouchableOpacity
           style={[
             styles.frame,
-            //{borderColor: () => getUserLessonTheme(blocks[0])},
+            //{borderColor: () => getBackgroundColor(blocks[0])},
           ]}
           onPress={() => {
             openSettingsModal(
@@ -241,7 +244,7 @@ export const LessonCard = ({
               adjustsFontSizeToFit
               style={[
                 styles.circleText,
-                {backgroundColor: () => getUserLessonTheme(blocks[0])},
+                {backgroundColor: () => getBackgroundColor(blocks[0])},
               ]}>
               {blocks[0]}
             </Text>
@@ -253,7 +256,7 @@ export const LessonCard = ({
         <TouchableOpacity
           style={[
             styles.frame,
-            //{borderColor: () => getUserLessonTheme(blocks[1])},
+            //{borderColor: () => getBackgroundColor(blocks[1])},
           ]}
           onPress={() => {
             openSettingsModal(
@@ -279,7 +282,7 @@ export const LessonCard = ({
               adjustsFontSizeToFit
               style={[
                 styles.circleText,
-                {backgroundColor: () => getUserLessonTheme(blocks[1])},
+                {backgroundColor: () => getBackgroundColor(blocks[1])},
               ]}>
               {blocks[1]}
             </Text>
@@ -291,7 +294,7 @@ export const LessonCard = ({
         <TouchableOpacity
           style={[
             styles.frame,
-            //{borderColor: () => getUserLessonTheme(blocks[2])},
+            //{borderColor: () => getBackgroundColor(blocks[2])},
           ]}
           onPress={() => {
             openSettingsModal(
@@ -317,7 +320,7 @@ export const LessonCard = ({
               adjustsFontSizeToFit
               style={[
                 styles.circleText,
-                {backgroundColor: () => getUserLessonTheme(blocks[2])},
+                {backgroundColor: () => getBackgroundColor(blocks[2])},
               ]}>
               {blocks[2]}
             </Text>
@@ -329,7 +332,7 @@ export const LessonCard = ({
         <TouchableOpacity
           style={[
             styles.frame,
-            //{borderColor: () => getUserLessonTheme(blocks[3])},
+            //{borderColor: () => getBackgroundColor(blocks[3])},
           ]}
           onPress={() => {
             openSettingsModal(
@@ -355,7 +358,7 @@ export const LessonCard = ({
               adjustsFontSizeToFit
               style={[
                 styles.circleText,
-                {backgroundColor: () => getUserLessonTheme(blocks[3])},
+                {backgroundColor: () => getBackgroundColor(blocks[3])},
               ]}>
               {blocks[3]}
             </Text>
@@ -367,7 +370,7 @@ export const LessonCard = ({
         <TouchableOpacity
           style={[
             styles.frame,
-            //{borderColor: () => getUserLessonTheme(blocks[4])},
+            //{borderColor: () => getBackgroundColor(blocks[4])},
           ]}
           onPress={() => {
             openSettingsModal(
@@ -390,7 +393,7 @@ export const LessonCard = ({
           <View
             style={[
               styles.circle,
-              {backgroundColor: getBackgroundColor(blocks[4])},
+              {backgroundColor: () => getBackgroundColor(blocks[4])},
             ]}>
             <Text
               numberOfLines={1}
@@ -553,7 +556,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 50,
-    marginTop: 1,
+    marginTop: -5,
     backgroundColor: THEME.background, //TODO
     alignSelf: 'center',
     display: 'flex',
@@ -678,24 +681,26 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 10,
+    padding: 12,
     justifyContent: 'center',
     backgroundColor: THEME.primary,
+    borderRadius: 12,
   },
   head: {
     height: 44,
-    backgroundColor: '#696868',
+    backgroundColor: THEME.secondary,
   },
   headText: {
-    fontSize: 14,
-    fontFamily: FONTS.medium,
+    fontSize: 12,
+    fontFamily: FONTS.semiBold,
     textAlign: 'center',
-    color: 'white',
+    color: THEME.fontColor,
   },
   text: {
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: FONTS.regular,
     textAlign: 'center',
+    color: THEME.fontColor,
   },
 });
 
