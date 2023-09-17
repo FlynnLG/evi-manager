@@ -13,7 +13,7 @@ import {FONTS, THEME} from '../constants';
 //import Ionicons
 import Icon from 'react-native-vector-icons/Ionicons';
 import appStorage from './appStorage';
-//import Icon from 'react-native-vector-icons/Ionicons'; not used
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const LessonCard = ({
   accent,
@@ -79,23 +79,15 @@ export const LessonCard = ({
     accentPaddingTop = 6;
     dayAccent = THEME.green;
   }
-
-  function getBackgroundColor(subject) {
-    const subjectColorsString = appStorage.getString('custom/subjectcolor');
-    //const subjectColors = subjectColorsString.split(" ");
-    switch (subject) {
-      case 'MA':
-        console.log('You have a Math class.');
-        break;
-      case 'BIO':
-        return '#000';
-      case 'History':
-        console.log('You have a History class.');
-        break;
-      default:
-        console.log('Subject not recognized.');
+    /**const bodyy = {
+      'DE':'#34c759',
+      'MA':'#32ade6',
+      'BIO':'#ff3b30',
     }
-  }
+    console.log(bodyy, JSON.stringify(bodyy))
+    appStorage.set('custom/subjectcolor', JSON.stringify(bodyy))*/
+    const jsonObject = appStorage.getString('custom/subjectcolor')
+    const subjectColors = JSON.parse(jsonObject)
 
   function weekendCard() {
     return (
@@ -215,7 +207,7 @@ export const LessonCard = ({
         <TouchableOpacity
           style={[
             styles.frame,
-            //{borderColor: () => getUserLessonTheme(blocks[0])},
+            {borderColor: subjectColors[blocks[0]]}, //@FlyynLG soll das so rein oder nur der Circle in farben
           ]}
           onPress={() => {
             openSettingsModal(
@@ -235,13 +227,12 @@ export const LessonCard = ({
             color={isVisible([blockInfos[0]])}
           />
           <Text style={styles.block}>1</Text>
-          <View style={styles.circle}>
+          <View style={[styles.circle, {backgroundColor: subjectColors[blocks[0]]}]}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
               style={[
                 styles.circleText,
-                {backgroundColor: () => getUserLessonTheme(blocks[0])},
               ]}>
               {blocks[0]}
             </Text>
@@ -253,7 +244,7 @@ export const LessonCard = ({
         <TouchableOpacity
           style={[
             styles.frame,
-            //{borderColor: () => getUserLessonTheme(blocks[1])},
+            {borderColor: subjectColors[blocks[1]]},
           ]}
           onPress={() => {
             openSettingsModal(
@@ -273,13 +264,12 @@ export const LessonCard = ({
             color={isVisible([blockInfos[1]])}
           />
           <Text style={styles.block}>2</Text>
-          <View style={styles.circle}>
+          <View style={[styles.circle, {backgroundColor: subjectColors[blocks[1]]}]}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
               style={[
                 styles.circleText,
-                {backgroundColor: () => getUserLessonTheme(blocks[1])},
               ]}>
               {blocks[1]}
             </Text>
@@ -291,7 +281,7 @@ export const LessonCard = ({
         <TouchableOpacity
           style={[
             styles.frame,
-            //{borderColor: () => getUserLessonTheme(blocks[2])},
+            {borderColor: subjectColors[blocks[2]]},
           ]}
           onPress={() => {
             openSettingsModal(
@@ -311,13 +301,12 @@ export const LessonCard = ({
             color={isVisible([blockInfos[2]])}
           />
           <Text style={styles.block}>3</Text>
-          <View style={styles.circle}>
+          <View style={[styles.circle, {backgroundColor: subjectColors[blocks[2]]}]}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
               style={[
                 styles.circleText,
-                {backgroundColor: () => getUserLessonTheme(blocks[2])},
               ]}>
               {blocks[2]}
             </Text>
@@ -329,7 +318,7 @@ export const LessonCard = ({
         <TouchableOpacity
           style={[
             styles.frame,
-            //{borderColor: () => getUserLessonTheme(blocks[3])},
+            {borderColor: subjectColors[blocks[3]]},
           ]}
           onPress={() => {
             openSettingsModal(
@@ -349,13 +338,12 @@ export const LessonCard = ({
             color={isVisible([blockInfos[3]])}
           />
           <Text style={styles.block}>4</Text>
-          <View style={styles.circle}>
+          <View style={[styles.circle, {backgroundColor: subjectColors[blocks[3]]}]}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
               style={[
                 styles.circleText,
-                {backgroundColor: () => getUserLessonTheme(blocks[3])},
               ]}>
               {blocks[3]}
             </Text>
@@ -367,7 +355,7 @@ export const LessonCard = ({
         <TouchableOpacity
           style={[
             styles.frame,
-            //{borderColor: () => getUserLessonTheme(blocks[4])},
+            {borderColor: subjectColors[blocks[4]]},
           ]}
           onPress={() => {
             openSettingsModal(
@@ -389,8 +377,7 @@ export const LessonCard = ({
           <Text style={styles.block}>5</Text>
           <View
             style={[
-              styles.circle,
-              {backgroundColor: getBackgroundColor(blocks[4])},
+              styles.circle, {backgroundColor: subjectColors[blocks[4]]}
             ]}>
             <Text
               numberOfLines={1}
@@ -553,7 +540,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 50,
-    marginTop: 1,
+    marginTop: -5,
     backgroundColor: THEME.background, //TODO
     alignSelf: 'center',
     display: 'flex',
@@ -678,24 +665,26 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 10,
+    padding: 12,
     justifyContent: 'center',
     backgroundColor: THEME.primary,
+    borderRadius: 12,
   },
   head: {
     height: 44,
-    backgroundColor: '#696868',
+    backgroundColor: THEME.secondary,
   },
   headText: {
-    fontSize: 14,
-    fontFamily: FONTS.medium,
+    fontSize: 12,
+    fontFamily: FONTS.semiBold,
     textAlign: 'center',
-    color: 'white',
+    color: THEME.fontColor,
   },
   text: {
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: FONTS.regular,
     textAlign: 'center',
+    color: THEME.fontColor,
   },
 });
 
