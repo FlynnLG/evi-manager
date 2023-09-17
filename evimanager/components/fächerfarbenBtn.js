@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
+import {View, Text, StyleSheet, TouchableOpacity, Modal} from 'react-native';
+import { ColorPicker, toHsv } from 'react-native-color-picker';
 
 import appStorage from './appStorage';
 import {FONTS, THEME} from '../constants';
@@ -20,14 +20,23 @@ const Colorpallet = ({color}) => {
 export const FächerfarbenBtn = ({
     subject,
 }) => {
-    console.log(subject)
+  const [modalColor, setModalColor] = useState('');
+  const [modalSubject, setModalSubject] = useState('');
+  const [color, setColor] = useState();
+
+    //console.log(subject)
     const jsonObject = appStorage.getString('custom/subjectcolor')
-    console.log(jsonObject)
+    //console.log(jsonObject)
     const subjectColors = JSON.parse(jsonObject)
-    console.log(subjectColors[subject])
+    //console.log(subjectColors[subject])
+
+    const openColorModal = (subject, color) => {
+        setModalColor(color)
+        setModalSubject(subject)
+    }
 
     return (
-        <TouchableOpacity style={[styles.subjectsBtn, {borderColor: subjectColors[subject]}]} onPress={() => openColorModal()}>
+        <TouchableOpacity style={[styles.subjectsBtn, {borderColor: subjectColors[subject]}]} onPress={() => {openColorModal(subject, subjectColors[subject]); bottomSheetModalRef.current?.present();}}>
           <Text style={[styles.subjectText]}>{subject}</Text>
         </TouchableOpacity>
     );

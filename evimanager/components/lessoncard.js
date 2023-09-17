@@ -87,9 +87,7 @@ export const LessonCard = ({
     console.log(bodyy, JSON.stringify(bodyy))
     appStorage.set('custom/subjectcolor', JSON.stringify(bodyy))*/
     const jsonObject = appStorage.getString('custom/subjectcolor')
-    console.log(jsonObject)
     const subjectColors = JSON.parse(jsonObject)
-    console.log(subjectColors)
 
   function weekendCard() {
     return (
@@ -246,7 +244,7 @@ export const LessonCard = ({
         <TouchableOpacity
           style={[
             styles.frame,
-            //{borderColor: () => getBackgroundColor(blocks[1])},
+            {borderColor: subjectColors[blocks[1]]},
           ]}
           onPress={() => {
             openSettingsModal(
@@ -266,13 +264,12 @@ export const LessonCard = ({
             color={isVisible([blockInfos[1]])}
           />
           <Text style={styles.block}>2</Text>
-          <View style={styles.circle}>
+          <View style={[styles.circle, {backgroundColor: subjectColors[blocks[1]]}]}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
               style={[
                 styles.circleText,
-                {backgroundColor: () => getBackgroundColor(blocks[1])},
               ]}>
               {blocks[1]}
             </Text>
@@ -284,7 +281,7 @@ export const LessonCard = ({
         <TouchableOpacity
           style={[
             styles.frame,
-            //{borderColor: () => getBackgroundColor(blocks[2])},
+            {borderColor: subjectColors[blocks[2]]},
           ]}
           onPress={() => {
             openSettingsModal(
@@ -304,13 +301,12 @@ export const LessonCard = ({
             color={isVisible([blockInfos[2]])}
           />
           <Text style={styles.block}>3</Text>
-          <View style={styles.circle}>
+          <View style={[styles.circle, {backgroundColor: subjectColors[blocks[2]]}]}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
               style={[
                 styles.circleText,
-                {backgroundColor: () => getBackgroundColor(blocks[2])},
               ]}>
               {blocks[2]}
             </Text>
@@ -322,7 +318,7 @@ export const LessonCard = ({
         <TouchableOpacity
           style={[
             styles.frame,
-            //{borderColor: () => getBackgroundColor(blocks[3])},
+            {borderColor: subjectColors[blocks[3]]},
           ]}
           onPress={() => {
             openSettingsModal(
@@ -342,13 +338,12 @@ export const LessonCard = ({
             color={isVisible([blockInfos[3]])}
           />
           <Text style={styles.block}>4</Text>
-          <View style={styles.circle}>
+          <View style={[styles.circle, {backgroundColor: subjectColors[blocks[3]]}]}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
               style={[
                 styles.circleText,
-                {backgroundColor: () => getBackgroundColor(blocks[3])},
               ]}>
               {blocks[3]}
             </Text>
@@ -360,7 +355,7 @@ export const LessonCard = ({
         <TouchableOpacity
           style={[
             styles.frame,
-            //{borderColor: () => getBackgroundColor(blocks[4])},
+            {borderColor: subjectColors[blocks[4]]},
           ]}
           onPress={() => {
             openSettingsModal(
@@ -382,8 +377,7 @@ export const LessonCard = ({
           <Text style={styles.block}>5</Text>
           <View
             style={[
-              styles.circle,
-              {backgroundColor: () => getBackgroundColor(blocks[4])},
+              styles.circle, {backgroundColor: subjectColors[blocks[4]]}
             ]}>
             <Text
               numberOfLines={1}
