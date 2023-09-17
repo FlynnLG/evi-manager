@@ -79,9 +79,6 @@ export const LessonCard = ({
     accentPaddingTop = 6;
     dayAccent = THEME.green;
   }
-
-  function getBackgroundColor(subject) {
-    console.log(subject)
     /**const bodyy = {
       'DE':'#34c759',
       'MA':'#32ade6',
@@ -93,12 +90,6 @@ export const LessonCard = ({
     console.log(jsonObject)
     const subjectColors = JSON.parse(jsonObject)
     console.log(subjectColors)
-    if(!subjectColors === "undefined"){
-      return subjectColors[subject]
-    }else{
-      return THEME.background
-    }
-  }
 
   function weekendCard() {
     return (
@@ -218,7 +209,7 @@ export const LessonCard = ({
         <TouchableOpacity
           style={[
             styles.frame,
-            //{borderColor: () => getBackgroundColor(blocks[0])},
+            {borderColor: subjectColors[blocks[0]]}, //@FlyynLG soll das so rein oder nur der Circle in farben
           ]}
           onPress={() => {
             openSettingsModal(
@@ -238,13 +229,12 @@ export const LessonCard = ({
             color={isVisible([blockInfos[0]])}
           />
           <Text style={styles.block}>1</Text>
-          <View style={styles.circle}>
+          <View style={[styles.circle, {backgroundColor: subjectColors[blocks[0]]}]}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
               style={[
                 styles.circleText,
-                {backgroundColor: () => getBackgroundColor(blocks[0])},
               ]}>
               {blocks[0]}
             </Text>
