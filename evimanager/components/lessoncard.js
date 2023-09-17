@@ -86,14 +86,14 @@ export const LessonCard = ({
       'DE':'#34c759',
       'MA':'#32ade6',
       'BIO':'#ff3b30',
-    }*/
-    //console.log(bodyy, JSON.stringify(bodyy))
-    //appStorage.set('custom/subjectcolor', JSON.stringify(bodyy))
-    const jsonObject = appStorage.get('custom/subjectcolor')
-    //console.log(jsonObject)
+    }
+    console.log(bodyy, JSON.stringify(bodyy))
+    appStorage.set('custom/subjectcolor', JSON.stringify(bodyy))*/
+    const jsonObject = appStorage.getString('custom/subjectcolor')
+    console.log(jsonObject)
     const subjectColors = JSON.parse(jsonObject)
     console.log(subjectColors)
-    if(subjectColors === "undefined"){
+    if(!subjectColors === "undefined"){
       return subjectColors[subject]
     }else{
       return THEME.background
