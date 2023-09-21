@@ -1,48 +1,39 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Modal} from 'react-native';
-import { ColorPicker, toHsv } from 'react-native-color-picker';
+import { ColorPicker, toHsv, fromHsv } from 'react-native-color-picker';
 import {useNavigation} from '@react-navigation/native';
+import Slider from '@react-native-community/slider';
 
 import appStorage from '../components/appStorage';
 import {FONTS, THEME} from '../constants';
 //import Ionicons
 import Icon from 'react-native-vector-icons/Ionicons';
 
-function changeColor(color){
-    console.log(color)
-}
+const jsonObject = appStorage.getString('custom/subjectcolor')
+let subjectColors = JSON.parse(jsonObject)
 
-const Colorpicker = ({oldColor}) => {
-    return(
-        <ColorPicker
-            oldColor={oldColor}
-            onColorSelected={(color) => {alert(`Color selected: ${color}`); setColor(color)}}
-            style={{flex: 1}}
-        />
-    )
+function goBack(nav){
+    nav.navigate('Settings')
 }
 
 const CustomColor = () => {
     const navigation = useNavigation();
-
-    const jsonObject = appStorage.getString('custom/subjectcolor')
-    let subjectColors = JSON.parse(jsonObject)
     const subject = appStorage.getString('temp/bin/subject')
-    console.info(subject)
+
+    function saveColor(nav){
+        subjectColors[subject] = fromHsv(color)
+        appStorage.set('custom/subjectcolor', JSON.stringify(subjectColors))
+        console.info('Saved new color')
+        appStorage.set('temp/bin/subject', '')
+        goBack(nav)
+    }
+
+    
    
-    const [color, setColor] = useState('');
+    const [color, setColor] = useState(subjectColors[subject]);
 
 
     const oldColor = subjectColors[subject]
-    setColor(oldColor)
-
-    function saveColor(nav){
-        subjectColors[subject] = color
-        appStorage.set('custom/subjectcolor', subjectColors)
-        console.info('Saved new color')
-        nav.navigate('SettingsTab')
-    }
-
     return (
         <View style={styles.background}>
         <Text>Vorschau:</Text>
@@ -64,7 +55,14 @@ const CustomColor = () => {
             </View>
             </View>
 
-            <Colorpicker oldColor={oldColor}/>
+            <View>
+                <ColorPicker
+                    oldColor={oldColor}
+                    onColorSelected={(color) => {alert(`Color selected: ${color}`); setColor(color)}}
+                    style={{flex: 1}}
+                    hideSliders={true}
+                />
+            </View>
 
             <TouchableOpacity
             onPress={() => saveColor(navigation)}

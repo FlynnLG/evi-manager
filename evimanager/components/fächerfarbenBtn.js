@@ -21,6 +21,7 @@ export const FächerfarbenBtn = ({
 
     const openColorModal = (nav) => {
         appStorage.set('temp/bin/subject', subject)
+        //console.log(appStorage.getString('temp/bin/subject'))
         nav.navigate('CustomColor')
     }
 
