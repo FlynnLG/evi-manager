@@ -1,7 +1,8 @@
 import { appStorage } from './appStorage'
-import {messagePreview} from './messagePeview'
+import {sendNotification, getPermission} from './notifications'
 
 export default {
     appStorage,
-    messagePreview,
+    sendNotification,
+    getPermission
 }

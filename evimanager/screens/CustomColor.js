@@ -22,7 +22,7 @@ const Colorpicker = ({oldColor}) => {
     )
 }
 
-export const CustomColor = () => {
+const CustomColor = () => {
     const navigation = useNavigation();
 
     const jsonObject = appStorage.getString('custom/subjectcolor')
@@ -34,7 +34,7 @@ export const CustomColor = () => {
 
 
     const oldColor = subjectColors[subject]
-    color = setColor(oldColor)
+    setColor(oldColor)
 
     function saveColor(nav){
         subjectColors[subject] = color
@@ -110,3 +110,5 @@ const styles = StyleSheet.create({
         width: 385,
     },
 })
+
+export default CustomColor
