@@ -21,7 +21,8 @@ async function userLogout(nav) {
   await Keychain.resetGenericPassword().then(async () => {
     appStorage.set('crawler_data', '');
     console.log('DEBUG | Logout');
-    nav.navigate('Login');
+    //nav.navigate('Login');
+    RNRestart.restart();
   });
 }
 

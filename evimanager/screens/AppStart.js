@@ -3,6 +3,7 @@ import {Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import * as Keychain from 'react-native-keychain';
 import {THEME, FONTS} from '../constants';
+import appStorage from '../components/appStorage';
 
 async function determineRoute(nav) {
   const credentials = await Keychain.getGenericPassword();
@@ -12,6 +13,44 @@ async function determineRoute(nav) {
   } else {
     console.log('No Keys found, login...');
     nav.navigate('Login');
+  }
+}
+
+function checkCoustomColors(){
+  if(appStorage.hasKey('custom/subjectcolor')){
+    //do nothing
+    console.info("CustomColors exist")
+    return
+  }else{
+    const defaultColors = {
+      'DE': THEME.green,
+      'EN': THEME.red,
+      'MA': THEME.blue,
+      'GE': '#fff',
+      'PB': THEME.brown,
+      'EK': THEME.brown,
+      'PH': THEME.orange,
+      'BIO':THEME.mint,
+      'KU': THEME.teal,
+      'MU': THEME.idingo,
+      'DS': THEME.idingo,
+      'IF': THEME.yellow,
+      'SP': THEME.cyan,
+      'SPA': THEME.yellow,
+      'FR': THEME.blue,
+      'LA': THEME.teal,
+      'CH': THEME.yellow,
+      'GW': '#fff',
+      'NW': THEME.orange,
+      'SK': '#1c1c1e',
+      'TZ': '#1c1c1e',
+      'GE-PB': THEME.brown,
+      'MA/INF': THEME.orange,
+      "MDK": THEME.brown,
+      "FU": "#1c3fe1",
+      'RE': THEME.purple,
+    }
+    appStorage.set('custom/subjectcolor', JSON.stringify(defaultColors))
   }
 }
 
