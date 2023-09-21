@@ -1,28 +1,17 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Modal} from 'react-native';
 import { ColorPicker, toHsv } from 'react-native-color-picker';
+import {useNavigation} from '@react-navigation/native';
 
 import appStorage from './appStorage';
 import {FONTS, THEME} from '../constants';
 //import Ionicons
 import Icon from 'react-native-vector-icons/Ionicons';
 
-function changeColor(color){
-    console.log(color)
-}
-
-const Colorpallet = ({color}) => {
-    return(
-        <TouchableOpacity style={[styles.subjectsBtn, {backgroundColor: color}]} onPress={() => changeColor(color)}/>
-    )
-}
-
 export const FächerfarbenBtn = ({
     subject,
 }) => {
-  const [modalColor, setModalColor] = useState('');
-  const [modalSubject, setModalSubject] = useState('');
-  const [color, setColor] = useState();
+    const navigation = useNavigation();
 
     //console.log(subject)
     const jsonObject = appStorage.getString('custom/subjectcolor')
@@ -30,13 +19,13 @@ export const FächerfarbenBtn = ({
     const subjectColors = JSON.parse(jsonObject)
     //console.log(subjectColors[subject])
 
-    const openColorModal = (subject, color) => {
-        setModalColor(color)
-        setModalSubject(subject)
+    const openColorModal = (nav) => {
+        appStorage.set('temp/bin/subject', subject)
+        nav.navigate('CustomColor')
     }
 
     return (
-        <TouchableOpacity style={[styles.subjectsBtn, {borderColor: subjectColors[subject]}]} onPress={() => {openColorModal(subject, subjectColors[subject]); bottomSheetModalRef.current?.present();}}>
+        <TouchableOpacity style={[styles.subjectsBtn, {borderColor: subjectColors[subject]}]} onPress={() => openColorModal(navigation)}>
           <Text style={[styles.subjectText]}>{subject}</Text>
         </TouchableOpacity>
     );
