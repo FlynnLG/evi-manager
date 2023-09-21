@@ -45,7 +45,8 @@ export const CustomColor = () => {
 
     return (
         <View style={styles.background}>
-            <TouchableOpacity
+        <Text>Vorschau:</Text>
+            <View
             style={[
                 styles.frame,
                 {borderColor: color}, 
@@ -61,8 +62,10 @@ export const CustomColor = () => {
                 {subject}
                 </Text>
             </View>
-            </TouchableOpacity>
+            </View>
+
             <Colorpicker oldColor={oldColor}/>
+
             <TouchableOpacity
             onPress={() => saveColor(navigation)}
             >
