@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   Text,
   View,
@@ -6,9 +6,16 @@ import {
   ScrollView,
   StatusBar,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import RNRestart from 'react-native-restart';
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+  BottomSheetBackdrop,
+} from '@gorhom/bottom-sheet';
+import DatePicker from 'react-native-date-picker'
 
 import {THEME, FONTS} from '../constants';
 
@@ -306,7 +313,60 @@ function Home() {
     }
   }
 
+  // ref
+  const bottomSheetModalRef = useRef(null);
+
+  // variables
+  const snapPoints = useMemo(() => ['15%', '65%'], []);
+  const [eventName, setEventName] = useState('');
+  const [date, setDate] = useState(new Date())
+  // callbacks
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+  const handleSheetChanges = useCallback((index) => {
+    console.log('handleSheetChanges', index);
+  }, []);
+
+  const renderBackdrop = useCallback(
+    props => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+      />
+    ),
+    [],
+  );
+
+  const saveEvent = () => {
+    const dateObject = new Date(date);
+
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = date.toLocaleDateString('de-DE', options);
+    console.log(formattedDate)
+
+    if(!eventName || eventName == ''){
+      console.log("No eventName set, can't safe the event")
+      return
+    }
+    let eventDates = JSON.parse(appStorage.getString('custom/dates'))
+    console.log(eventDates)
+    console.log(formattedDate)
+    if(eventDates[formattedDate]){
+      console.log("EventDate already exist!")
+      
+      eventDates[formattedDate].push(eventName);
+    }else{
+      eventDates[formattedDate] = [eventName];
+    }
+    appStorage.set('custom/dates', JSON.stringify(eventDates))
+    console.info("Stored successfull!")
+    bottomSheetModalRef.current?.dismiss();
+  }
+
   return (
+    <BottomSheetModalProvider>
     <ScrollView
       style={{
         flex: 1,
@@ -332,18 +392,21 @@ function Home() {
           {name}!
         </Text>
         <View style={{paddingTop: 48}}>
-          <Text
-            style={{
-              fontFamily: FONTS.semiBold,
-              color: THEME.fontColor,
-              paddingLeft: windowWidth - 105,
-            }}>
-            <TouchableOpacity onPress={() => RNRestart.restart()}>
-              <View style={{paddingLeft: 20}}>
+          <View style={{
+            flex: 1,
+            flexWrap: 'wrap',
+            flexDirection: 'row'}}>
+            <TouchableOpacity onPress={() => handlePresentModalPress()} style={{flexBasis: '85%'}}>
+              <View style={{marginLeft: windowWidth * 0.77}}>
+                <Icon name="add-circle" color="#3d3737" size={30} />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => RNRestart.restart()} style={{flexBasis: '15%'}}>
+              <View >
                 <Icon name="reload-circle" color="#3d3737" size={30} />
               </View>
             </TouchableOpacity>
-          </Text>
+          </View>
           <LessonCard
             accent
             dayOfWeekShort={moment().format('dddd').substring(0, 2)}
@@ -428,24 +491,54 @@ function Home() {
           />
         </View>
       </View>
+
+      <BottomSheetModal
+          ref={bottomSheetModalRef}
+          index={1}
+          snapPoints={snapPoints}
+          onChange={handleSheetChanges}
+          enablePanDownToClose={true}
+          backdropComponent={renderBackdrop}
+          backgroundStyle={{
+          backgroundColor: THEME.background,
+          }}>
+          <View style={{
+            flex: 1,
+            flexWrap: 'wrap',
+            flexDirection: 'row',
+            marginBottom: -80}}>
+            <Text style={{flexBasis: '75%', color: THEME.fontColor, fontFamily: FONTS.semiBold, fontSize: 21, paddingLeft: 25,}}>Neuer Termin</Text>
+            <TouchableOpacity style={{backgroundColor: THEME.blue, borderRadius: 50, flexBasis: '20%', paddingLeft: 5, paddingTop: 3,}} onPress={saveEvent}>
+              <Text style={{color: '#fff', fontFamily: FONTS.medium, fontSize: 18}}>Sichern</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{marginTop: 80,}}>
+          <TextInput
+              placeholder="Terminname"
+              placeholderTextColor={THEME.fontColor}
+              onChangeText={newText => setEventName(newText)}
+              style={{
+                margin: 10,
+                marginLeft: 25,
+                marginRight: 25,
+                backgroundColor: THEME.secondary,
+                borderRadius: 11,
+                height: 50,
+                padding: 10,
+                paddingTop: 12,
+                fontFamily: FONTS.medium,
+                color: THEME.fontColor,
+              }}
+            />
+            <Text style={{marginLeft: 25, color: THEME.fontColor, fontFamily: FONTS.semiBold, fontSize: 21,}}>Datum</Text>
+            <View style={{backgroundColor: '#fff', margin: 25, alignContent: 'center', borderRadius: 20, paddingLeft: 23,}}>
+            <DatePicker date={date} onDateChange={setDate} mode='date' locale='de' />
+            </View>
+          </View>
+        </BottomSheetModal>
     </ScrollView>
+    </BottomSheetModalProvider>
   );
 }
 
 export default Home;
-
-/*
- <SlidingUpPanel
- ref={c => (this._panel = c)}>
- <View
- style={{
- width: 370,
- height: 840,
- backgroundColor: 'white',
- top: 0,
- }}>
- <Text>Here is the content inside panel</Text>
- <Button title="Hide" onPress={() => this._panel.hide()} />
- </View>
- </SlidingUpPanel>
- */
