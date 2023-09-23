@@ -20,18 +20,19 @@ function checkStorageVars(){
   if(appStorage.contains('custom/subjectcolor')){
     //do nothing
     console.info("CustomColors exist!")
+    //appStorage.delete('custom/subjectcolor')
   }else{
     const defaultColors = {
       'DE': THEME.green,
       'EN': THEME.red,
       'MA': THEME.blue,
-      'GE': '#fff',
+      'GE': '#878787',
       'PB': THEME.brown,
       'EK': THEME.brown,
       'PH': THEME.orange,
       'BIO':THEME.mint,
       'KU': THEME.teal,
-      'MU': THEME.idingo,
+      'MU': '#2c2b94',
       'DS': THEME.idingo,
       'IF': THEME.yellow,
       'SP': THEME.cyan,
@@ -39,14 +40,14 @@ function checkStorageVars(){
       'FR': THEME.blue,
       'LA': THEME.teal,
       'CH': THEME.yellow,
-      'GW': '#fff',
+      'GW': '#878787',
       'NW': THEME.orange,
-      'SK': '#1c1c1e',
-      'TZ': '#1c1c1e',
+      'SK': THEME.idingo,
+      'TZ': '#2c2b94',
       'GE-PB': THEME.brown,
       'MA/INF': THEME.orange,
       "MDK": THEME.brown,
-      "FU": "#1c3fe1",
+      "FU": THEME.idingo,
       'RE': THEME.purple,
     }
     appStorage.set('custom/subjectcolor', JSON.stringify(defaultColors))
@@ -55,6 +56,7 @@ function checkStorageVars(){
   if(appStorage.contains('custom/dates')){
     //do nothing
     console.info("custom/dates exist!")
+    //appStorage.delete('custom/dates')
   }else{
     const dates = {
       example: ['event1', 'event2']
