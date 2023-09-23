@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     subjectsBtn: {
         backgroundColor: THEME.primary,
         //borderColor: '#B8B8B8',
-        borderWidth: 2,
+        borderWidth: 2.4,
         paddingTop: 22,
         borderRadius: 50,
         width: 66,
