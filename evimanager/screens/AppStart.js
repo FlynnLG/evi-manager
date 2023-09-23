@@ -16,11 +16,10 @@ async function determineRoute(nav) {
   }
 }
 
-function checkCoustomColors(){
-  if(appStorage.hasKey('custom/subjectcolor')){
+function checkStorageVars(){
+  if(appStorage.contains('custom/subjectcolor')){
     //do nothing
-    console.info("CustomColors exist")
-    return
+    console.info("CustomColors exist!")
   }else{
     const defaultColors = {
       'DE': THEME.green,
@@ -52,11 +51,24 @@ function checkCoustomColors(){
     }
     appStorage.set('custom/subjectcolor', JSON.stringify(defaultColors))
   }
+  //Check if EventDates Array is already existing
+  if(appStorage.contains('custom/dates')){
+    //do nothing
+    console.info("custom/dates exist!")
+  }else{
+    const dates = {
+      example: ['event1', 'event2']
+    }
+    appStorage.set('custom/dates', JSON.stringify(dates))
+  }
+  return
 }
 
 const AppStart = () => {
   console.info('Site: APPSTART');
   const navigation = useNavigation();
+
+  checkStorageVars();
 
   useEffect(() => {
     determineRoute(navigation).catch(console.error);
