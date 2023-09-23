@@ -9,8 +9,7 @@ import {FONTS, THEME} from '../constants';
 //import Ionicons
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const jsonObject = appStorage.getString('custom/subjectcolor')
-let subjectColors = JSON.parse(jsonObject)
+
 
 function goBack(nav){
     nav.navigate('Settings')
@@ -19,6 +18,9 @@ function goBack(nav){
 const CustomColor = () => {
     const navigation = useNavigation();
     const subject = appStorage.getString('temp/bin/subject')
+
+    const jsonObject = appStorage.getString('custom/subjectcolor')
+    let subjectColors = JSON.parse(jsonObject)
 
     function saveColor(nav){
         subjectColors[subject] = fromHsv(color)
