@@ -506,13 +506,14 @@ function Home() {
             flex: 1,
             flexWrap: 'wrap',
             flexDirection: 'row',
-            marginBottom: -80}}>
+            marginBottom: -100}}>
             <Text style={{flexBasis: '75%', color: THEME.fontColor, fontFamily: FONTS.semiBold, fontSize: 21, paddingLeft: 25,}}>Neuer Termin</Text>
             <TouchableOpacity style={{backgroundColor: THEME.blue, borderRadius: 50, flexBasis: '20%', paddingLeft: 5, paddingTop: 3,}} onPress={saveEvent}>
               <Text style={{color: '#fff', fontFamily: FONTS.medium, fontSize: 18}}>Sichern</Text>
             </TouchableOpacity>
           </View>
-          <View style={{marginTop: 80,}}>
+          
+          <Text style={{color: THEME.fontColor, fontFamily: FONTS.medium, fontSize: 19, textAlign: 'center'}}>Terminname</Text>
           <TextInput
               placeholder="Terminname"
               placeholderTextColor={THEME.fontColor}
@@ -530,11 +531,10 @@ function Home() {
                 color: THEME.fontColor,
               }}
             />
-            <Text style={{marginLeft: 25, color: THEME.fontColor, fontFamily: FONTS.semiBold, fontSize: 21,}}>Datum</Text>
-            <View style={{backgroundColor: '#fff', margin: 25, alignContent: 'center', borderRadius: 20, paddingLeft: 23,}}>
+            <Text style={{color: THEME.fontColor, fontFamily: FONTS.medium, fontSize: 19, textAlign: 'center'}}>Datum</Text>
+            <View style={{backgroundColor: '#fff', margin: 25, alignContent: 'center', borderRadius: 20, paddingLeft: 23, marginTop: 10,}}>
             <DatePicker date={date} onDateChange={setDate} mode='date' locale='de' />
             </View>
-          </View>
         </BottomSheetModal>
     </ScrollView>
     </BottomSheetModalProvider>
