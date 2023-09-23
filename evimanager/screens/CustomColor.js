@@ -1,13 +1,13 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Modal} from 'react-native';
-import { ColorPicker, toHsv, fromHsv } from 'react-native-color-picker';
 import {useNavigation} from '@react-navigation/native';
-import Slider from '@react-native-community/slider';
 
 import appStorage from '../components/appStorage';
 import {FONTS, THEME} from '../constants';
 //import Ionicons
 import Icon from 'react-native-vector-icons/Ionicons';
+
+import ColorPicker from 'react-native-wheel-color-picker'
 
 
 
@@ -23,17 +23,14 @@ const CustomColor = () => {
     let subjectColors = JSON.parse(jsonObject)
 
     function saveColor(nav){
-        subjectColors[subject] = fromHsv(color)
+        subjectColors[subject] = color
         appStorage.set('custom/subjectcolor', JSON.stringify(subjectColors))
         console.info('Saved new color')
         appStorage.set('temp/bin/subject', '')
         goBack(nav)
     }
 
-    
-   
     const [color, setColor] = useState(subjectColors[subject]);
-
 
     const oldColor = subjectColors[subject]
     return (
@@ -56,15 +53,18 @@ const CustomColor = () => {
                 </Text>
             </View>
             </View>
-
-            <View>
-                <ColorPicker
-                    oldColor={oldColor}
-                    onColorSelected={(color) => {alert(`Color selected: ${color}`); setColor(color)}}
-                    style={{flex: 1}}
-                    hideSliders={true}
-                />
-            </View>
+            <ColorPicker
+					ref={r => { this.picker = r }}
+					color={color}
+					swatchesOnly={false}
+					onColorChange={(color) => setColor(color)}
+					thumbSize={20}
+					sliderSize={25}
+					noSnap={true}
+					row={false}
+					swatches={true}
+					discrete={false}
+				/>
 
             <TouchableOpacity
             onPress={() => saveColor(navigation)}
@@ -80,35 +80,43 @@ const CustomColor = () => {
 const styles = StyleSheet.create({
     background: {
         backgroundColor: THEME.background,
+        height: 1000,
     },
-    subjectsBtn: {
-        backgroundColor: THEME.primary,
-        //borderColor: '#B8B8B8',
+    frame: {
+        marginTop: 100,
+        width: 45* 5/4,
+        height: 80 * 5/4,
+        borderStyle: 'solid',
+        borderColor: '#8e8e93',
         borderWidth: 2,
-        paddingTop: 22,
         borderRadius: 50,
-        width: 66,
-        height: 66,
-        margin: 5,
-    },
-    subjectText: {
-        fontFamily: FONTS.bold,
-        color: THEME.fontColor,
-        fontSize: 14,
-        textAlign: 'center',
-    },
-    modalContentContainer: {
-        flex: 1,
+        marginBottom: -200,
       },
-    modalContentText: {
-        fontSize: 20,
-        color: THEME.fontColor,
-        fontFamily: FONTS.regular,
+      circle: {
+        width: 38* 5/4,
+        height: 38* 5/4,
+        borderRadius: 50,
+        marginTop: 11,
+        backgroundColor: THEME.background, //TODO
         alignSelf: 'center',
-    },
-    modalColorPalett: { //TODO: Make a 4x3 Grid
-        width: 385,
-    },
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+      },
+      circleText: {
+        fontFamily: FONTS.medium,
+        color: THEME.fontColor,
+        fontSize: 16* 5/4,
+      },
+      block: {
+        fontFamily: FONTS.semiBold,
+        color: THEME.fontColor,
+        fontSize: 18* 5/4,
+        textAlign: 'center',
+        alignItems: 'center',
+        marginTop: -7,
+      },
 })
 
 export default CustomColor
