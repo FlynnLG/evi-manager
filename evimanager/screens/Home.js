@@ -313,11 +313,14 @@ function Home() {
     }
   }
 
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
+
   // ref
   const bottomSheetModalRef = useRef(null);
 
   // variables
-  const snapPoints = useMemo(() => ['15%', '65%'], []);
+  const snapPoints = useMemo(() => ['10%', '55%'], []);
   const [eventName, setEventName] = useState('');
   const [date, setDate] = useState(new Date())
   // callbacks
@@ -362,6 +365,7 @@ function Home() {
     }
     appStorage.set('custom/dates', JSON.stringify(eventDates))
     console.info("Stored successfull!")
+    forceUpdate();
     bottomSheetModalRef.current?.dismiss();
   }
 
