@@ -89,6 +89,31 @@ export const LessonCard = ({
     const jsonObject = appStorage.getString('custom/subjectcolor')
     const subjectColors = JSON.parse(jsonObject)
 
+    //Getting Events
+    const events = JSON.parse(appStorage.getString('custom/dates'))
+    //console.log(events["24. September 2023"])
+
+  function EventBar(){
+    if(!events[date]){
+      return(<Text style={{color: THEME.fontColor}}>Keine Termine</Text>)
+    }
+    if(events[date].length == 1){
+      return(
+        <Text style={{color: THEME.fontColor}}>Heute steht {events[date][0]} an!</Text>
+      ) 
+    }
+    if(events[date].length == 2){
+      return(
+        <Text style={{color: THEME.fontColor}}>Heute steht {events[date][0]} und {events[date][1]} an!</Text>
+      ) 
+    }
+    if(events[date].length >= 3){
+      return(
+        <Text style={{color: THEME.fontColor}}>Heute steht {events[date][0]} und {events[date].length} weitere Termine an!</Text>
+      )
+    }
+  }
+
   function weekendCard() {
     return (
       <View style={styles.smallLessonCard}>
@@ -103,6 +128,9 @@ export const LessonCard = ({
           <View style={styles.weekendHolidayContentInfoContainer}>
             <Icon name="cafe" size={20} color={THEME.fontColor} />
             <Text style={styles.weekendHolidayContentInfoText}>Wochenende</Text>
+          </View>
+          <View>
+            <EventBar/>
           </View>
         </View>
       </View>
