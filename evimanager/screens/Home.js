@@ -352,7 +352,7 @@ function Home() {
   );
 
   const saveEvent = () => {
-    const dateObject = new Date(date);
+    //const dateObject = new Date(date);
 
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const formattedDate = date.toLocaleDateString('de-DE', options);
