@@ -36,7 +36,7 @@ const CustomColor = () => {
     const [color, setColor] = useState(subjectColors[subject]);
     return (
         <View style={styles.background}>
-        <Text>Vorschau:</Text>
+        <Text style={{color: THEME.fontColor, fontFamily: FONTS.medium, fontSize: 22, textAlign: 'center'}}>Vorschau:</Text>
             <View
             style={[
                 styles.frame,
@@ -55,12 +55,13 @@ const CustomColor = () => {
             </View>
             </View>
             <ColorPicker
+                    style={{paddingTop: 0,}}
 					ref={r => { this.picker = r }}
 					color={color}
 					swatchesOnly={false}
                     onColorChange={(color) => setColor(color)}
-					thumbSize={20}
-					sliderSize={25}
+					thumbSize={15}
+					sliderSize={20}
 					noSnap={true}
 					row={false}
 					swatches={false}
@@ -71,7 +72,7 @@ const CustomColor = () => {
             onPress={() => saveColor(navigation)}
             style={styles.saveBtn}
             >
-                <Text>Save</Text>
+                <Text style={{color: THEME.fontColor, fontFamily: FONTS.medium, fontSize: 19, textAlign: 'center'}}>Save</Text>
             </TouchableOpacity>
         </View>
     );
@@ -83,8 +84,8 @@ const styles = StyleSheet.create({
     background: {
         backgroundColor: THEME.background,
         height: windowHeight,
-        textAlign: "center",
-        padding: 30,
+        alignItems: 'center',
+        padding: 40,
     },
     saveBtn: {
         textAlign: "center",
@@ -93,6 +94,7 @@ const styles = StyleSheet.create({
         margin: 100,
         height: 40,
         width: 80,
+        borderRadius: 50,
     },
     frame: {
         marginTop: 100,
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
         borderColor: '#8e8e93',
         borderWidth: 2,
         borderRadius: 50,
-        marginBottom: -200,
+        marginBottom: 50,
       },
       circle: {
         width: 38* 5/4,

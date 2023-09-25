@@ -45,5 +45,3 @@ export const FONTS = {
   regular: 'Poppins-Regular',
   light: 'Poppins-Light',
 };
-
-export const COLORS = {};

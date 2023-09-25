@@ -95,21 +95,21 @@ export const LessonCard = ({
 
   function EventBar(){
     if(!events[date]){
-      return(<Text style={{color: THEME.fontColor}}>Keine Termine</Text>)
+      return(<></>)
     }
     if(events[date].length == 1){
       return(
-        <Text style={{color: THEME.fontColor}}>Heute steht {events[date][0]} an!</Text>
+        <Text style={{color: THEME.fontColor}}>{events[date][0]}</Text>
       ) 
     }
     if(events[date].length == 2){
       return(
-        <Text style={{color: THEME.fontColor}}>Heute steht {events[date][0]} und {events[date][1]} an!</Text>
+        <Text style={{color: THEME.fontColor}}>{events[date][0]} und {events[date][1]}</Text>
       ) 
     }
     if(events[date].length >= 3){
       return(
-        <Text style={{color: THEME.fontColor}}>Heute steht {events[date][0]} und {events[date].length} weitere Termine an!</Text>
+        <Text style={{color: THEME.fontColor}}>{events[date][0]} und {events[date].length - 1} weitere Termine</Text>
       )
     }
   }
@@ -151,6 +151,9 @@ export const LessonCard = ({
           <View style={styles.weekendHolidayContentInfoContainer}>
             <Icon name="calendar" size={20} color={THEME.fontColor} />
             <Text style={styles.weekendHolidayContentInfoText}>Ferien</Text>
+          </View>
+          <View>
+            <EventBar/>
           </View>
         </View>
       </View>
@@ -224,6 +227,9 @@ export const LessonCard = ({
           {block3}
           {block4}
           {block5}
+        </View>
+        <View>
+            <EventBar/>
         </View>
       </View>
     );
