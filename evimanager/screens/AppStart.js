@@ -59,7 +59,7 @@ function checkStorageVars(){
     //appStorage.delete('custom/dates')
   }else{
     const dates = {
-      example: ['event1', 'event2']
+      example: [['event1', 'event2'], "notificationID"] //Documantation EVENT
     }
     appStorage.set('custom/dates', JSON.stringify(dates))
   }

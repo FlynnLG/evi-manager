@@ -84,7 +84,7 @@ const SettingsScreen = ({}) => {
         alignItems: 'center',
       }}>
       <Text style={styles.header}>Settings</Text>
-      <View>
+      <View style={{flex: 1, flexWrap: 'wrap', flexDirection: 'row',}}>
         <TouchableOpacity style={styles.btnLightmode}>
           <Icon
             name="sunny"

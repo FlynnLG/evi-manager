@@ -97,21 +97,26 @@ export const LessonCard = ({
     if(!events[date]){
       return(<></>)
     }
-    if(events[date].length == 1){
+    if(events[date].length >= 1){
       return(
-        <Text style={{color: THEME.fontColor}}>{events[date][0]}</Text>
+        <View style={{backgroundColor: THEME.background, padding: 8, margin: 8, borderRadius: 12, height: 45}}>
+          <View style={{flex: 1, flexWrap: 'wrap', flexDirection: 'row',}}>
+          <Text style={{color: THEME.fontColor, fontFamily: FONTS.semiBold, paddingLeft: 5, flexBasis: '93%'}}>{events[date][0][0]}</Text>
+            <TouchableOpacity style={{flexBasis: '7%'}} onPress={() => removeEvent(0)}>
+            <Icon name='remove-circle' size={25} color={THEME.red} />
+            </TouchableOpacity>
+          </View>
+        </View>
       ) 
     }
-    if(events[date].length == 2){
-      return(
-        <Text style={{color: THEME.fontColor}}>{events[date][0]} und {events[date][1]}</Text>
-      ) 
-    }
-    if(events[date].length >= 3){
-      return(
-        <Text style={{color: THEME.fontColor}}>{events[date][0]} und {events[date].length - 1} weitere Termine</Text>
-      )
-    }
+  }
+
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
+
+  function removeEvent(i){
+    appStorage.set('custom/dates', JSON.stringify(events[0][date].splice(i, 1)))
+    forceUpdate();
   }
 
   function weekendCard() {

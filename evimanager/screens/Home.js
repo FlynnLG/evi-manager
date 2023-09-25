@@ -368,9 +368,10 @@ function Home() {
     if(eventDates[formattedDate]){
       console.log("EventDate already exist!")
       
-      eventDates[formattedDate].push(eventName);
+      eventDates[0][formattedDate].push(eventName);
     }else{
-      eventDates[formattedDate] = [eventName];
+      
+      eventDates[0][formattedDate] = [[eventName], ];
     }
     appStorage.set('custom/dates', JSON.stringify(eventDates))
     console.info("Stored successfull!")
