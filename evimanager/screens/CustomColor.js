@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Modal} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import appStorage from '../components/appStorage';
@@ -8,6 +8,9 @@ import {FONTS, THEME} from '../constants';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import ColorPicker from 'react-native-wheel-color-picker'
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 
 
@@ -31,8 +34,6 @@ const CustomColor = () => {
     }
 
     const [color, setColor] = useState(subjectColors[subject]);
-
-    const oldColor = subjectColors[subject]
     return (
         <View style={styles.background}>
         <Text>Vorschau:</Text>
@@ -57,17 +58,18 @@ const CustomColor = () => {
 					ref={r => { this.picker = r }}
 					color={color}
 					swatchesOnly={false}
-					onColorChange={(color) => setColor(color)}
+                    onColorChange={(color) => setColor(color)}
 					thumbSize={20}
 					sliderSize={25}
 					noSnap={true}
 					row={false}
-					swatches={true}
-					discrete={false}
+					swatches={false}
+					discrete={true}
 				/>
 
             <TouchableOpacity
             onPress={() => saveColor(navigation)}
+            style={styles.saveBtn}
             >
                 <Text>Save</Text>
             </TouchableOpacity>
@@ -80,7 +82,17 @@ const CustomColor = () => {
 const styles = StyleSheet.create({
     background: {
         backgroundColor: THEME.background,
-        height: 1000,
+        height: windowHeight,
+        textAlign: "center",
+        padding: 30,
+    },
+    saveBtn: {
+        textAlign: "center",
+        backgroundColor: THEME.blue,
+        color: THEME.fontColor,
+        margin: 100,
+        height: 40,
+        width: 80,
     },
     frame: {
         marginTop: 100,
@@ -96,7 +108,7 @@ const styles = StyleSheet.create({
         width: 38* 5/4,
         height: 38* 5/4,
         borderRadius: 50,
-        marginTop: 11,
+        marginTop: -4.5,
         backgroundColor: THEME.background, //TODO
         alignSelf: 'center',
         display: 'flex',
@@ -115,7 +127,7 @@ const styles = StyleSheet.create({
         fontSize: 18* 5/4,
         textAlign: 'center',
         alignItems: 'center',
-        marginTop: -7,
+        marginTop: 11,
       },
 })
 

@@ -35,6 +35,18 @@ const SettingsScreen = ({}) => {
   console.info('Site: SETTINGS');
   const nav = useNavigation();
 
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
+
+  React.useEffect(() => {
+    const unsubscribe = nav.addListener('focus', () => {
+      forceUpdate();
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [nav]);
+
   const possibleSubjects = [
     {subjectShort: 'DE'},
     {subjectShort: 'EN'},
