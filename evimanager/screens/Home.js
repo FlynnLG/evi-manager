@@ -75,7 +75,7 @@ function isDateWeekend(date) {
 }
 
 function Home() {
-  const navigation = useNavigation();
+  const nav = useNavigation();
 
   console.info('Site: HOME');
   let json = JSON.parse(appStorage.getString('crawler_data'));
@@ -315,6 +315,15 @@ function Home() {
 
   const [, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
+
+  React.useEffect(() => {
+    const unsubscribe = nav.addListener('focus', () => {
+      forceUpdate();
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [nav]);
 
   // ref
   const bottomSheetModalRef = useRef(null);
