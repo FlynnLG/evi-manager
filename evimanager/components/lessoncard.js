@@ -89,6 +89,36 @@ export const LessonCard = ({
     const jsonObject = appStorage.getString('custom/subjectcolor')
     const subjectColors = JSON.parse(jsonObject)
 
+    //Getting Events
+    const events = JSON.parse(appStorage.getString('custom/dates'))
+    //console.log(events["24. September 2023"])
+
+  function EventBar(){
+    if(!events[date]){
+      return(<></>)
+    }
+    if(events[date].length >= 1){
+      return(
+        <View style={{backgroundColor: THEME.background, padding: 8, margin: 8, borderRadius: 12, height: 45}}>
+          <View style={{flex: 1, flexWrap: 'wrap', flexDirection: 'row',}}>
+          <Text style={{color: THEME.fontColor, fontFamily: FONTS.semiBold, paddingLeft: 5, flexBasis: '93%'}}>{events[date][0][0]}</Text>
+            <TouchableOpacity style={{flexBasis: '7%'}} onPress={() => removeEvent(0)}>
+            <Icon name='remove-circle' size={25} color={THEME.red} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      ) 
+    }
+  }
+
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
+
+  function removeEvent(i){
+    appStorage.set('custom/dates', JSON.stringify(events[0][date].splice(i, 1)))
+    forceUpdate();
+  }
+
   function weekendCard() {
     return (
       <View style={styles.smallLessonCard}>
@@ -103,6 +133,9 @@ export const LessonCard = ({
           <View style={styles.weekendHolidayContentInfoContainer}>
             <Icon name="cafe" size={20} color={THEME.fontColor} />
             <Text style={styles.weekendHolidayContentInfoText}>Wochenende</Text>
+          </View>
+          <View>
+            <EventBar/>
           </View>
         </View>
       </View>
@@ -123,6 +156,9 @@ export const LessonCard = ({
           <View style={styles.weekendHolidayContentInfoContainer}>
             <Icon name="calendar" size={20} color={THEME.fontColor} />
             <Text style={styles.weekendHolidayContentInfoText}>Ferien</Text>
+          </View>
+          <View>
+            <EventBar/>
           </View>
         </View>
       </View>
@@ -196,6 +232,9 @@ export const LessonCard = ({
           {block3}
           {block4}
           {block5}
+        </View>
+        <View>
+            <EventBar/>
         </View>
       </View>
     );

@@ -21,7 +21,8 @@ async function userLogout(nav) {
   await Keychain.resetGenericPassword().then(async () => {
     appStorage.set('crawler_data', '');
     console.log('DEBUG | Logout');
-    nav.navigate('Login');
+    //nav.navigate('Login');
+    RNRestart.restart();
   });
 }
 
@@ -33,6 +34,18 @@ async function switchTheme(theme) {
 const SettingsScreen = ({}) => {
   console.info('Site: SETTINGS');
   const nav = useNavigation();
+
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
+
+  React.useEffect(() => {
+    const unsubscribe = nav.addListener('focus', () => {
+      forceUpdate();
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [nav]);
 
   const possibleSubjects = [
     {subjectShort: 'DE'},
@@ -71,7 +84,7 @@ const SettingsScreen = ({}) => {
         alignItems: 'center',
       }}>
       <Text style={styles.header}>Settings</Text>
-      <View>
+      <View style={{flex: 1, flexWrap: 'wrap', flexDirection: 'row',}}>
         <TouchableOpacity style={styles.btnLightmode}>
           <Icon
             name="sunny"

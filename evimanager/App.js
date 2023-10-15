@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import AppStart from './screens/AppStart';
 import Login from './screens/Login';
 import Loading from './screens/Loading';
+import CustomColor from './screens/Customcolor';
 
 import {CreditsTabs, HomeTabs, SettingsTabs} from './components/tabs';
 import moment from 'moment';
@@ -26,6 +27,7 @@ const App = () => {
         <Stack.Screen name="HomeNav" component={HomeTabs} />
         <Stack.Screen name="SettingsNav" component={SettingsTabs} />
         <Stack.Screen name="CreditsNav" component={CreditsTabs} />
+        <Stack.Screen name="CustomColor" component={CustomColor} />
       </Stack.Navigator>
     </NavigationContainer>
   );
