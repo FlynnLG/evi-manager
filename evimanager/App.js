@@ -4,7 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import AppStart from './screens/AppStart';
 import Login from './screens/Login';
 import Loading from './screens/Loading';
-import CustomColor from './screens/Customcolor';
+import CustomColor from './screens/CustomColor';
 
 import {CreditsTabs, HomeTabs, SettingsTabs} from './components/tabs';
 import moment from 'moment';

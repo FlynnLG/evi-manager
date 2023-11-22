@@ -13,7 +13,6 @@ import {FONTS, THEME} from '../constants';
 //import Ionicons
 import Icon from 'react-native-vector-icons/Ionicons';
 import appStorage from './appStorage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const LessonCard = ({
   accent,
@@ -79,43 +78,63 @@ export const LessonCard = ({
     accentPaddingTop = 6;
     dayAccent = THEME.green;
   }
-    /**const bodyy = {
+  /**const bodyy = {
       'DE':'#34c759',
       'MA':'#32ade6',
       'BIO':'#ff3b30',
     }
     console.log(bodyy, JSON.stringify(bodyy))
     appStorage.set('custom/subjectcolor', JSON.stringify(bodyy))*/
-    const jsonObject = appStorage.getString('custom/subjectcolor')
-    const subjectColors = JSON.parse(jsonObject)
+  const jsonObject = appStorage.getString('custom/subjectcolor');
+  const subjectColors = JSON.parse(jsonObject);
 
-    //Getting Events
-    const events = JSON.parse(appStorage.getString('custom/dates'))
-    //console.log(events["24. September 2023"])
+  //Getting Events
+  const events = JSON.parse(appStorage.getString('custom/dates'));
+  //console.log(events["24. September 2023"])
 
-  function EventBar(){
-    if(!events[date]){
-      return(<></>)
+  function EventBar() {
+    if (!events[date]) {
+      return <></>;
     }
-    if(events[date].length >= 1){
-      return(
-        <View style={{backgroundColor: THEME.background, padding: 8, margin: 8, borderRadius: 12, height: 45}}>
-          <View style={{flex: 1, flexWrap: 'wrap', flexDirection: 'row',}}>
-          <Text style={{color: THEME.fontColor, fontFamily: FONTS.semiBold, paddingLeft: 5, flexBasis: '93%'}}>{events[date][0][0]}</Text>
-            <TouchableOpacity style={{flexBasis: '7%'}} onPress={() => removeEvent(0)}>
-            <Icon name='remove-circle' size={25} color={THEME.red} />
+    if (events[date].length >= 1) {
+      return (
+        <View
+          style={{
+            backgroundColor: THEME.background,
+            padding: 8,
+            margin: 8,
+            borderRadius: 12,
+            height: 45,
+          }}>
+          <View style={{flex: 1, flexWrap: 'wrap', flexDirection: 'row'}}>
+            <Text
+              style={{
+                color: THEME.fontColor,
+                fontFamily: FONTS.semiBold,
+                paddingLeft: 5,
+                flexBasis: '93%',
+              }}>
+              {events[date][0][0]}
+            </Text>
+            <TouchableOpacity
+              style={{flexBasis: '7%'}}
+              onPress={() => removeEvent(0)}>
+              <Icon name="remove-circle" size={25} color={THEME.red} />
             </TouchableOpacity>
           </View>
         </View>
-      ) 
+      );
     }
   }
 
   const [, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
 
-  function removeEvent(i){
-    appStorage.set('custom/dates', JSON.stringify(events[0][date].splice(i, 1)))
+  function removeEvent(i) {
+    appStorage.set(
+      'custom/dates',
+      JSON.stringify(events[0][date].splice(i, 1)),
+    );
     forceUpdate();
   }
 
@@ -135,7 +154,7 @@ export const LessonCard = ({
             <Text style={styles.weekendHolidayContentInfoText}>Wochenende</Text>
           </View>
           <View>
-            <EventBar/>
+            <EventBar />
           </View>
         </View>
       </View>
@@ -158,7 +177,7 @@ export const LessonCard = ({
             <Text style={styles.weekendHolidayContentInfoText}>Ferien</Text>
           </View>
           <View>
-            <EventBar/>
+            <EventBar />
           </View>
         </View>
       </View>
@@ -234,7 +253,7 @@ export const LessonCard = ({
           {block5}
         </View>
         <View>
-            <EventBar/>
+          <EventBar />
         </View>
       </View>
     );
@@ -266,13 +285,15 @@ export const LessonCard = ({
             color={isVisible([blockInfos[0]])}
           />
           <Text style={styles.block}>1</Text>
-          <View style={[styles.circle, {backgroundColor: subjectColors[blocks[0]]}]}>
+          <View
+            style={[
+              styles.circle,
+              {backgroundColor: subjectColors[blocks[0]]},
+            ]}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={[
-                styles.circleText,
-              ]}>
+              style={[styles.circleText]}>
               {blocks[0]}
             </Text>
           </View>
@@ -281,10 +302,7 @@ export const LessonCard = ({
     } else if (number === 2) {
       return (
         <TouchableOpacity
-          style={[
-            styles.frame,
-            {borderColor: subjectColors[blocks[1]]},
-          ]}
+          style={[styles.frame, {borderColor: subjectColors[blocks[1]]}]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -303,13 +321,15 @@ export const LessonCard = ({
             color={isVisible([blockInfos[1]])}
           />
           <Text style={styles.block}>2</Text>
-          <View style={[styles.circle, {backgroundColor: subjectColors[blocks[1]]}]}>
+          <View
+            style={[
+              styles.circle,
+              {backgroundColor: subjectColors[blocks[1]]},
+            ]}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={[
-                styles.circleText,
-              ]}>
+              style={[styles.circleText]}>
               {blocks[1]}
             </Text>
           </View>
@@ -318,10 +338,7 @@ export const LessonCard = ({
     } else if (number === 3) {
       return (
         <TouchableOpacity
-          style={[
-            styles.frame,
-            {borderColor: subjectColors[blocks[2]]},
-          ]}
+          style={[styles.frame, {borderColor: subjectColors[blocks[2]]}]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -340,13 +357,15 @@ export const LessonCard = ({
             color={isVisible([blockInfos[2]])}
           />
           <Text style={styles.block}>3</Text>
-          <View style={[styles.circle, {backgroundColor: subjectColors[blocks[2]]}]}>
+          <View
+            style={[
+              styles.circle,
+              {backgroundColor: subjectColors[blocks[2]]},
+            ]}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={[
-                styles.circleText,
-              ]}>
+              style={[styles.circleText]}>
               {blocks[2]}
             </Text>
           </View>
@@ -355,10 +374,7 @@ export const LessonCard = ({
     } else if (number === 4) {
       return (
         <TouchableOpacity
-          style={[
-            styles.frame,
-            {borderColor: subjectColors[blocks[3]]},
-          ]}
+          style={[styles.frame, {borderColor: subjectColors[blocks[3]]}]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -377,13 +393,15 @@ export const LessonCard = ({
             color={isVisible([blockInfos[3]])}
           />
           <Text style={styles.block}>4</Text>
-          <View style={[styles.circle, {backgroundColor: subjectColors[blocks[3]]}]}>
+          <View
+            style={[
+              styles.circle,
+              {backgroundColor: subjectColors[blocks[3]]},
+            ]}>
             <Text
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={[
-                styles.circleText,
-              ]}>
+              style={[styles.circleText]}>
               {blocks[3]}
             </Text>
           </View>
@@ -392,10 +410,7 @@ export const LessonCard = ({
     } else if (number === 5) {
       return (
         <TouchableOpacity
-          style={[
-            styles.frame,
-            {borderColor: subjectColors[blocks[4]]},
-          ]}
+          style={[styles.frame, {borderColor: subjectColors[blocks[4]]}]}
           onPress={() => {
             openSettingsModal(
               dayOfWeek,
@@ -416,7 +431,8 @@ export const LessonCard = ({
           <Text style={styles.block}>5</Text>
           <View
             style={[
-              styles.circle, {backgroundColor: subjectColors[blocks[4]]}
+              styles.circle,
+              {backgroundColor: subjectColors[blocks[4]]},
             ]}>
             <Text
               numberOfLines={1}
