@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  FlatList,
-} from 'react-native';
+import {Text, View, TouchableOpacity, StyleSheet, FlatList} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import RNRestart from 'react-native-restart';
 
@@ -15,8 +8,10 @@ import * as Keychain from 'react-native-keychain';
 import appStorage from '../components/appStorage';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+// TODO: Remove all Non-ASCII characters. Don't know why OctoDino added them.
 import {FächerfarbenBtn} from '../components/fächerfarbenBtn';
 
+// TODO: Check function functionality because RNRestart is used instead of navigating to Login screen
 async function userLogout(nav) {
   await Keychain.resetGenericPassword().then(async () => {
     appStorage.set('crawler_data', '');
@@ -39,13 +34,15 @@ const SettingsScreen = ({}) => {
   const forceUpdate = React.useCallback(() => updateState({}), []);
 
   React.useEffect(() => {
+    // TODO: Check what unsubscribe does. Because IDEA says it's redundant.
     const unsubscribe = nav.addListener('focus', () => {
       forceUpdate();
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
-  }, [nav]);
+    // TODO: Temporary added forceUpdate to the line below. Check if it's needed and if it works correctly.
+  }, [forceUpdate, nav]);
 
   const possibleSubjects = [
     {subjectShort: 'DE'},
@@ -84,7 +81,7 @@ const SettingsScreen = ({}) => {
         alignItems: 'center',
       }}>
       <Text style={styles.header}>Settings</Text>
-      <View style={{flex: 1, flexWrap: 'wrap', flexDirection: 'row',}}>
+      <View style={{flex: 1, flexWrap: 'wrap', flexDirection: 'row'}}>
         <TouchableOpacity style={styles.btnLightmode}>
           <Icon
             name="sunny"
@@ -99,9 +96,16 @@ const SettingsScreen = ({}) => {
           <Icon name="moon" size={25} color="#e9e8ed" />
         </TouchableOpacity>
       </View>
-      <View style={styles.line} />
-      <Text>Fächerfarben</Text>
-      <View>
+      <TouchableOpacity
+        style={styles.testButton}
+        onPress={() => {
+          userLogout(nav);
+        }}>
+        <Text style={styles.testButtonText}>Logout</Text>
+      </TouchableOpacity>
+
+      <Text style={[styles.subheader, {marginTop: 50}]}>Fächerfarben</Text>
+      <View style={{marginTop: 10}}>
         <FlatList
           data={possibleSubjects}
           renderItem={({item}) => (
@@ -111,14 +115,6 @@ const SettingsScreen = ({}) => {
           key={3}
         />
       </View>
-
-      <TouchableOpacity
-        style={styles.testButton}
-        onPress={() => {
-          userLogout(nav);
-        }}>
-        <Text style={styles.testButtonText}>Logout</Text>
-      </TouchableOpacity>
     </View>
   );
 };
