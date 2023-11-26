@@ -13,6 +13,20 @@
             buildForArchiving = "YES"
             buildForAnalyzing = "YES">
             <BuildableReference
+               BuildableIdentifier = "gray5"
+               BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
+               BuildableName = "evimanager.app"
+               BlueprintName = "evimanager"
+               ReferencedContainer = "container:evimanager.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
                BuildableName = "evimanager.app"
@@ -31,7 +45,7 @@
          <TestableReference
             skipped = "NO">
             <BuildableReference
-               BuildableIdentifier = "primary"
+               BuildableIdentifier = "gray5"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
                BuildableName = "evimanagerTests.xctest"
                BlueprintName = "evimanagerTests"
@@ -53,7 +67,7 @@
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
-            BuildableIdentifier = "primary"
+            BuildableIdentifier = "gray5"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
             BuildableName = "evimanager.app"
             BlueprintName = "evimanager"
@@ -70,13 +84,22 @@
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
-            BuildableIdentifier = "primary"
+            BuildableIdentifier = "gray5"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
             BuildableName = "evimanager.app"
             BlueprintName = "evimanager"
             ReferencedContainer = "container:evimanager.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "gray5"
+            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
+            BuildableName = "evimanager.app"
+            BlueprintName = "evimanager"
+            ReferencedContainer = "container:evimanager.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

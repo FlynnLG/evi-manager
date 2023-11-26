@@ -1,15 +1,34 @@
-import React from 'react';
-import {Text, View, TouchableOpacity, StyleSheet, FlatList} from 'react-native';
+import React, {useMemo, useState} from 'react';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+  Settings,
+  RefreshControl,
+  Switch,
+  SafeAreaView,
+  ScrollView,
+  Image,
+  Dimensions,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import RNRestart from 'react-native-restart';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import {THEME, FONTS} from '../constants';
 import * as Keychain from 'react-native-keychain';
 import appStorage from '../components/appStorage';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {widthPixel, heightPixel, fontPixel} from '../components/lessoncard';
+import {RadioButton} from 'react-native-paper';
 
 // TODO: Remove all Non-ASCII characters. Don't know why OctoDino added them.
 import {FächerfarbenBtn} from '../components/fächerfarbenBtn';
+
+const windowWidth = Dimensions.get('window').width;
+const windowsHeight = Dimensions.get('window').height;
 
 // TODO: Check function functionality because RNRestart is used instead of navigating to Login screen
 async function userLogout(nav) {
@@ -22,11 +41,188 @@ async function userLogout(nav) {
 }
 
 async function switchTheme(theme) {
-  appStorage.set('@localdata:settings/theme', theme);
-  RNRestart.restart();
+  if (theme !== appStorage.getString('@localdata:settings/theme')) {
+    appStorage.set('@localdata:settings/theme', theme);
+    RNRestart.restart();
+  }
 }
 
-const SettingsScreen = ({}) => {
+function checkTheme() {
+  const value = appStorage.getString('@localdata:settings/theme');
+  return value === 'SYSTEMDARK' ? 'dark' : 'light';
+}
+
+const SettingScreenDarkWhiteMode = ({}) => {
+  console.info('Site: SETTINGS->DarkWhiteMode');
+  const nav = useNavigation();
+
+  const [value, setValue] = React.useState(checkTheme());
+
+  return (
+    <SafeAreaView
+      style={{backgroundColor: THEME.background, height: windowsHeight}}>
+      <ScrollView
+        contentContainerStyle={[
+          styles.container,
+          {marginTop: heightPixel(-50)},
+        ]}>
+        <View style={styles.section}>
+          <RadioButton.Group
+            onValueChange={value =>
+              value === 'dark'
+                ? switchTheme('SYSTEMDARK')
+                : switchTheme('SYSTEMLIGHT')
+            }
+            value={value}>
+            <View style={styles.rowWrapperRatioButton}>
+              <RadioButton.Item
+                label="Dunkel"
+                value="dark"
+                color={THEME.fontColor}
+                labelStyle={styles.rowLabel}
+              />
+            </View>
+            <View
+              style={[styles.rowWrapperRatioButton, {borderBottomWidth: 1}]}>
+              <RadioButton.Item
+                label="Hell"
+                value="light"
+                color={THEME.fontColor}
+                labelStyle={styles.rowLabel}
+              />
+            </View>
+          </RadioButton.Group>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const SettingScreenUserInformation = ({}) => {
+  console.info('Site: SETTINGS->UserInformation');
+  const nav = useNavigation();
+
+  const UserInformationSections = [
+    {
+      header: '',
+      items: [
+        {
+          id: 'user',
+          icon: 'person-outline',
+          label: 'Benutzer',
+          type: 'text',
+        },
+        {
+          id: 'name',
+          icon: 'moon-outline',
+          label: 'Name',
+          type: 'text',
+        },
+        {
+          id: 'class',
+          icon: 'color-palette-outline',
+          label: 'Klasse',
+          type: 'text',
+        },
+      ],
+    },
+    {
+      header: ' ',
+      items: [
+        {id: 'logout', icon: 'log-out-outline', label: 'Logout', type: 'null'},
+      ],
+    },
+  ];
+
+  let json = JSON.parse(appStorage.getString('crawler_data'));
+
+  const [form, setForm] = useState({
+    user: json.userInformation.username.toString(),
+    name: json.userInformation.name.toString(),
+    class: json.userInformation.currentClass.toString(),
+  });
+
+  return (
+    <SafeAreaView
+      style={{backgroundColor: THEME.background, height: windowsHeight}}>
+      <ScrollView
+        contentContainerStyle={[
+          styles.container,
+          {marginTop: heightPixel(-120)},
+        ]}>
+        {UserInformationSections.map(({header, items}) => (
+          <View style={styles.section} key={header}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>{header}</Text>
+            </View>
+            <View style={styles.sectionBody}>
+              {items.map(({id, label, icon, type, value}, index) => {
+                return (
+                  <View
+                    key={id}
+                    style={[
+                      styles.rowWrapper,
+                      index === 0 && {borderTopWidth: 0},
+                    ]}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        if (id === 'logout') {
+                          userLogout(nav);
+                        }
+                      }}>
+                      <View style={styles.row}>
+                        <Icon
+                          color={id === 'logout' ? 'red' : '#616161'}
+                          name={icon}
+                          style={styles.rowIcon}
+                          size={22}
+                        />
+                        <Text
+                          style={[
+                            styles.rowLabel,
+                            {
+                              color:
+                                id === 'logout' ? THEME.red : THEME.fontColor,
+                            },
+                          ]}>
+                          {label}
+                        </Text>
+
+                        <View style={styles.rowSpacer} />
+
+                        {type === 'select' ||
+                          ('text' && (
+                            <Text style={styles.rowValue}>{form[id]}</Text>
+                          ))}
+
+                        {type === 'toggle' && (
+                          <Switch
+                            onChange={val => setForm({...form, [id]: val})}
+                            value={form[id]}
+                          />
+                        )}
+
+                        {(type === 'select' || type === 'link') && (
+                          <Icon
+                            color="#ababab"
+                            name="arrow-forward"
+                            size={22}
+                          />
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+        ))}
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const SettingScreen = ({}) => {
   console.info('Site: SETTINGS');
   const nav = useNavigation();
 
@@ -72,7 +268,148 @@ const SettingsScreen = ({}) => {
     {subjectShort: 'FU'},
   ];
 
+  const DefaultSections = [
+    {
+      header: 'App-Einstellungen',
+      items: [
+        {
+          id: 'user',
+          icon: 'person-outline',
+          label: 'Benutzer',
+          type: 'select',
+        },
+        {
+          id: 'darkWhiteMode',
+          icon: 'moon-outline',
+          label: 'Darstellung',
+          type: 'select',
+        },
+        {
+          id: 'classColors',
+          icon: 'color-palette-outline',
+          label: 'Fächerfarben',
+          type: 'select',
+        },
+      ],
+    },
+    {
+      header: 'Hilfe',
+      items: [
+        {id: 'bug', icon: 'flag-outline', label: 'Bug melden', type: 'link'},
+        {id: 'contact', icon: 'mail-outline', label: 'Kontakt', type: 'link'},
+      ],
+    },
+    {
+      header: 'Credits',
+      items: [
+        {
+          id: 'save',
+          icon: 'information-circle-outline',
+          label: 'Nutzende Pakete',
+          type: 'link',
+        },
+      ],
+    },
+    {
+      header: '',
+      items: [
+        {id: 'logout', icon: 'log-out-outline', label: 'Logout', type: 'null'},
+      ],
+    },
+  ];
+
+  let json = JSON.parse(appStorage.getString('crawler_data'));
+
+  const [form, setForm] = useState({
+    user: json.userInformation.username.toString(),
+  });
+
   return (
+    <SafeAreaView
+      style={{backgroundColor: THEME.background, height: windowsHeight}}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Einstellungen</Text>
+
+          <Text style={styles.subtitle}>
+            Hier können individuelle Einstellungen vorgenommen werden, Kontakt
+            aufgenommen werden und die Credits eingesehen werden.
+          </Text>
+        </View>
+
+        {DefaultSections.map(({header, items}) => (
+          <View style={styles.section} key={header}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>{header}</Text>
+            </View>
+            <View style={styles.sectionBody}>
+              {items.map(({id, label, icon, type, value}, index) => {
+                return (
+                  <View
+                    key={id}
+                    style={[
+                      styles.rowWrapper,
+                      index === 0 && {borderTopWidth: 0},
+                    ]}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        if (id === 'user') {
+                          nav.navigate('SettingNavUserInformation');
+                        } else if (id === 'darkWhiteMode') {
+                          nav.navigate('SettingNavDarkWhiteMode');
+                        } else if (id === 'logout') {
+                          userLogout(nav);
+                        }
+                      }}>
+                      <View style={styles.row}>
+                        <Icon
+                          color={id === 'logout' ? 'red' : '#616161'}
+                          name={icon}
+                          style={styles.rowIcon}
+                          size={22}
+                        />
+                        <Text
+                          style={[
+                            styles.rowLabel,
+                            {
+                              color:
+                                id === 'logout' ? THEME.red : THEME.fontColor,
+                            },
+                          ]}>
+                          {label}
+                        </Text>
+
+                        <View style={styles.rowSpacer} />
+
+                        {type === 'select' && (
+                          <Text style={styles.rowValue}>{form[id]}</Text>
+                        )}
+
+                        {type === 'toggle' && (
+                          <Switch
+                            onChange={val => setForm({...form, [id]: val})}
+                            value={form[id]}
+                          />
+                        )}
+
+                        {(type === 'select' || type === 'link') && (
+                          <Icon
+                            color="#ababab"
+                            name="arrow-forward"
+                            size={22}
+                          />
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+        ))}
+      </ScrollView>
+    </SafeAreaView>
+    /*
     <View
       style={{
         padding: 12,
@@ -116,10 +453,130 @@ const SettingsScreen = ({}) => {
         />
       </View>
     </View>
+    */
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingVertical: 24,
+  },
+  section: {
+    paddingTop: 12,
+  },
+  sectionHeader: {
+    paddingHorizontal: 24,
+    paddingVertical: 8,
+  },
+  sectionHeaderText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: THEME.fontColor,
+    textTransform: 'uppercase',
+    letterSpacing: 1.2,
+  },
+  sectionBody: {
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: THEME.gray,
+  },
+  header: {
+    paddingLeft: 24,
+    paddingRight: 24,
+    marginBottom: 12,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: '700',
+    color: THEME.fontColor,
+    marginBottom: 6,
+  },
+  subtitle: {
+    fontSize: 15,
+    fontWeight: '500',
+    color: THEME.fontColor,
+  },
+  profile: {
+    padding: 16,
+    flexDirection: 'column',
+    alignItems: 'center',
+    backgroundColor: THEME.gray6,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: THEME.gray,
+  },
+  profileAvatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 9999,
+  },
+  profileName: {
+    marginTop: 12,
+    fontSize: 20,
+    fontWeight: '600',
+    color: THEME.fontColor,
+  },
+  profileEmail: {
+    marginTop: 6,
+    fontSize: 16,
+    fontWeight: '400',
+    color: THEME.fontColor,
+  },
+  profileAction: {
+    marginTop: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: THEME.blue,
+    borderRadius: 12,
+  },
+  profileActionText: {
+    marginRight: 8,
+    fontSize: 15,
+    fontWeight: '600',
+    color: THEME.fontColor,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingRight: 24,
+    height: 50,
+  },
+  rowWrapper: {
+    paddingLeft: 24,
+    backgroundColor: THEME.gray6,
+    borderTopWidth: 1,
+    borderColor: THEME.gray,
+  },
+  rowWrapperRatioButton: {
+    paddingLeft: 24,
+    backgroundColor: THEME.gray6,
+    borderTopWidth: 1,
+    borderColor: THEME.gray,
+  },
+  rowIcon: {
+    marginRight: 12,
+  },
+  rowLabel: {
+    fontSize: 17,
+    fontWeight: '500',
+    color: THEME.fontColor,
+  },
+  rowValue: {
+    fontSize: 17,
+    color: THEME.gray,
+    marginRight: 4,
+  },
+  rowSpacer: {
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: 0,
+  },
+
+  /*
   header: {
     fontFamily: FONTS.semiBold,
     color: THEME.fontColor,
@@ -164,8 +621,13 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     height: 1.3,
     width: 3800,
-    backgroundColor: THEME.secondary,
+    backgroundColor: THEME.gray6,
   },
+  */
 });
 
-export default SettingsScreen;
+export {
+  SettingScreen,
+  SettingScreenUserInformation,
+  SettingScreenDarkWhiteMode,
+};

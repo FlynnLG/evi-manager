@@ -13,6 +13,38 @@ import {FONTS, THEME} from '../constants';
 //import Ionicons
 import Icon from 'react-native-vector-icons/Ionicons';
 import appStorage from './appStorage';
+import {scale, verticalScale} from 'react-native-size-matters';
+import {PixelRatio, Dimensions} from 'react-native';
+
+const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window');
+const widthBaseScale = SCREEN_WIDTH / 1290;
+const heightBaseScale = SCREEN_HEIGHT / 2796;
+
+function normalize(size, based = 'width') {
+  const newSize =
+    based === 'height' ? size * heightBaseScale : size * widthBaseScale;
+  return Math.round(PixelRatio.roundToNearestPixel(newSize));
+}
+//for width  pixel
+export const widthPixel = size => {
+  return normalize(size, 'width');
+};
+//for height  pixel
+export const heightPixel = size => {
+  return normalize(size, 'height');
+};
+//for font  pixel
+export const fontPixel = size => {
+  return heightPixel(size);
+};
+//for Margin and Padding vertical pixel
+export const pixelSizeVertical = size => {
+  return heightPixel(size);
+};
+//for Margin and Padding horizontal pixel
+export const pixelSizeHorizontal = size => {
+  return widthPixel(size);
+};
 
 export const LessonCard = ({
   accent,
@@ -50,32 +82,34 @@ export const LessonCard = ({
   // TODO: Define course number (e.g. EN12) in Modal!
   // TODO: Define course number (e.g. EN12) in Modal
 
-  let accentBorderColor = '#636366';
-  let accentWidth = 360;
-  let accentHeight = 140;
-  let accentShadowColor = '#ffffff';
+  let accentBorderColor = THEME.gray2;
+  let accentWidth = widthPixel(1100);
+  let accentHeight = widthPixel(450);
+  let accentHeightShort = heightPixel(290);
+  let accentShadowColor;
   let accentElevation = 0;
-  let accentPaddingTop = 11.4;
+  let accentPaddingTop = pixelSizeVertical(0);
   let dayAccent = THEME.background;
   let shadowOffsetWidth = 0;
   let shadowOffsetHeight = 0;
   let shadowOpacity = 0;
   let shadowRadius = 0;
   if (accent === true) {
-    //accentBorderColor = THEME.green
-    accentWidth = 385;
-    accentHeight = 155;
-    shadowOffsetWidth = -2;
-    shadowOffsetHeight = 4;
-    shadowOpacity = 0.075;
-    shadowRadius = 3;
+    accentBorderColor = THEME.green;
+    accentWidth = widthPixel(1200);
+    accentHeight = widthPixel(450);
+    accentHeightShort = heightPixel(290);
+    shadowOffsetWidth = widthPixel(-5);
+    shadowOffsetHeight = heightPixel(20);
+    shadowOpacity = 0.085;
+    shadowRadius = widthPixel(10);
     if (THEME.scheme === 'dark') {
-      accentShadowColor = '#636366';
+      accentShadowColor = THEME.gray2;
     } else {
-      accentShadowColor = '#000000';
+      accentShadowColor = THEME.background;
     }
-    accentElevation = 10;
-    accentPaddingTop = 6;
+    accentElevation = widthPixel(15);
+    accentPaddingTop = pixelSizeVertical(0);
     dayAccent = THEME.green;
   }
   /**const bodyy = {
@@ -140,7 +174,24 @@ export const LessonCard = ({
 
   function weekendCard() {
     return (
-      <View style={styles.smallLessonCard}>
+      <View
+        style={[
+          styles.smallLessonCard,
+          {
+            borderColor: accentBorderColor,
+            width: accentWidth,
+            height: accentHeightShort,
+            shadowColor: accentShadowColor,
+            elevation: accentElevation,
+            marginBottom: accentPaddingTop,
+            shadowOffset: {
+              width: shadowOffsetWidth,
+              height: shadowOffsetHeight,
+            },
+            shadowOpacity: shadowOpacity,
+            shadowRadius: shadowRadius,
+          },
+        ]}>
         <View style={styles.dateContainer}>
           <View
             style={[styles.dayOfTheWeekCircle, {backgroundColor: dayAccent}]}>
@@ -148,7 +199,11 @@ export const LessonCard = ({
           </View>
           <Text style={styles.date}>{date}</Text>
         </View>
-        <View style={styles.weekendHolidayContainer}>
+        <View
+          style={[
+            styles.weekendHolidayContainer,
+            {borderColor: accentBorderColor, width: accentWidth},
+          ]}>
           <View style={styles.weekendHolidayContentInfoContainer}>
             <Icon name="cafe" size={20} color={THEME.fontColor} />
             <Text style={styles.weekendHolidayContentInfoText}>Wochenende</Text>
@@ -163,7 +218,24 @@ export const LessonCard = ({
 
   function holidayCard() {
     return (
-      <View style={styles.smallLessonCard}>
+      <View
+        style={[
+          styles.smallLessonCard,
+          {
+            borderColor: accentBorderColor,
+            width: accentWidth,
+            height: accentHeightShort,
+            shadowColor: accentShadowColor,
+            elevation: accentElevation,
+            marginBottom: accentPaddingTop,
+            shadowOffset: {
+              width: shadowOffsetWidth,
+              height: shadowOffsetHeight,
+            },
+            shadowOpacity: shadowOpacity,
+            shadowRadius: shadowRadius,
+          },
+        ]}>
         <View style={styles.dateContainer}>
           <View
             style={[styles.dayOfTheWeekCircle, {backgroundColor: dayAccent}]}>
@@ -557,45 +629,43 @@ const styles = StyleSheet.create({
   lessonCard: {
     //width: 370,  EDIT THESE WITH THE VARIABELS "accentWidth" and "accentHeight"
     //height: 140,
-    margin: 10.4,
+    margin: heightPixel(40),
     alignSelf: 'center',
-    backgroundColor: THEME.primary,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#737475', //EDIT THIS VARIABLE WITH "accentBorderColor"
+    backgroundColor: THEME.gray6,
+    borderRadius: widthPixel(40),
+    borderWidth: widthPixel(2),
   },
   smallLessonCard: {
-    width: 360,
-    height: 90,
-    margin: 10.4,
+    width: widthPixel(1100),
+    height: widthPixel(450),
+    margin: pixelSizeVertical(40),
     alignSelf: 'center',
-    backgroundColor: THEME.primary,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#636366',
+    backgroundColor: THEME.gray6,
+    borderRadius: widthPixel(40),
+    borderWidth: widthPixel(2),
   },
   rowContainer: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     flexWrap: 'wrap',
-    marginEnd: -15,
+    marginEnd: pixelSizeHorizontal(-50),
   },
   frame: {
-    marginTop: 3,
-    width: 45,
-    height: 80,
+    marginTop: widthPixel(0),
+    width: widthPixel(125),
+    height: '103%',
     borderStyle: 'solid',
-    borderColor: '#8e8e93',
-    borderWidth: 2,
-    borderRadius: 50,
-    marginEnd: 15,
+    borderColor: THEME.fontColor,
+    borderWidth: widthPixel(5),
+    borderRadius: widthPixel(100),
+    marginEnd: widthPixel(50),
   },
   circle: {
-    width: 38,
-    height: 38,
-    borderRadius: 50,
-    marginTop: -5,
+    width: widthPixel(100),
+    height: widthPixel(100),
+    borderRadius: widthPixel(100),
+    marginTop: heightPixel(0),
     backgroundColor: THEME.background, //TODO
     alignSelf: 'center',
     display: 'flex',
@@ -606,29 +676,30 @@ const styles = StyleSheet.create({
   circleText: {
     fontFamily: FONTS.medium,
     color: THEME.fontColor,
-    fontSize: 16,
+    fontSize: fontPixel(50),
   },
   block: {
     fontFamily: FONTS.semiBold,
     color: THEME.fontColor,
-    fontSize: 18,
+    fontSize: fontPixel(60),
     textAlign: 'center',
     alignItems: 'center',
-    marginTop: -7,
+    marginBottom: '25%',
+    marginTop: '-25%',
   },
   date: {
     fontFamily: FONTS.regular,
     color: THEME.fontColor,
-    fontSize: 15,
-    marginLeft: 10,
-    marginTop: 6,
+    fontSize: fontPixel(50),
+    marginLeft: pixelSizeHorizontal(40),
+    marginTop: pixelSizeVertical(40),
   },
   dayOfTheWeekCircle: {
-    width: 30,
-    height: 30,
-    borderRadius: 50,
-    marginTop: 5,
-    marginLeft: 5,
+    width: widthPixel(90),
+    height: widthPixel(90),
+    borderRadius: widthPixel(100),
+    marginTop: widthPixel(25),
+    marginLeft: widthPixel(25),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -636,107 +707,108 @@ const styles = StyleSheet.create({
   dayOfTheWeekText: {
     fontFamily: FONTS.semiBold,
     color: THEME.fontColor,
-    fontSize: 13,
+    fontSize: fontPixel(50),
   },
   dateContainer: {
-    width: 200,
-    height: 40,
-    marginTop: 5,
-    marginLeft: 5,
+    width: widthPixel(800),
+    height: heightPixel(150),
+    marginTop: heightPixel(10),
+    marginLeft: heightPixel(10),
     flexDirection: 'row',
   },
   modalContentContainer: {
     flex: 1,
   },
   modalContentText: {
-    fontSize: 20,
+    fontSize: fontPixel(70),
     color: THEME.fontColor,
     fontFamily: FONTS.regular,
     alignSelf: 'center',
   },
   modalContentBlockInfoBox: {
-    backgroundColor: THEME.primary,
-    borderRadius: 10,
-    marginTop: 10,
-    width: 385,
-    height: 150,
+    backgroundColor: THEME.gray6,
+    borderRadius: widthPixel(30),
+    marginTop: heightPixel(30),
+    width: widthPixel(1200),
+    height: heightPixel(510),
     justifyContent: 'center',
     alignSelf: 'center',
   },
   modalContentBlockInfoBoxEmpty: {
-    backgroundColor: THEME.primary,
-    borderRadius: 3,
-    marginTop: 10,
-    width: 385,
-    height: 35,
+    backgroundColor: THEME.gray6,
+    borderRadius: widthPixel(30),
+    marginTop: heightPixel(30),
+    width: widthPixel(1200),
+    height: heightPixel(120),
     justifyContent: 'center',
     alignSelf: 'center',
   },
   modalContentBlockInfoBoxText: {
     color: THEME.fontColor,
-    fontSize: 17,
+    fontSize: fontPixel(60),
     fontFamily: FONTS.regular,
-    marginLeft: 10,
+    marginLeft: widthPixel(35),
   },
   modalContentInfoContainer: {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: 360,
-    marginTop: 20,
-    marginLeft: 25,
+    width: widthPixel(1100),
+    marginTop: heightPixel(60),
+    marginLeft: widthPixel(80),
   },
   modalContentInfoText: {
     color: THEME.fontColor,
-    fontSize: 17,
+    fontSize: fontPixel(60),
     fontFamily: FONTS.regular,
-    marginLeft: 20,
+    marginLeft: widthPixel(60),
   },
   weekendHolidayContainer: {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: 360,
-    height: 45,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#636366',
+    width: widthPixel(1100),
+    height: heightPixel(130),
+    borderRadius: widthPixel(40),
+    borderWidth: widthPixel(2),
+    borderColor: THEME.fontColor,
     alignSelf: 'center',
-    backgroundColor: THEME.primary,
+    backgroundColor: THEME.gray6,
   },
   weekendHolidayContentInfoContainer: {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: 360,
-    marginTop: 10,
-    marginLeft: 15,
+    width: widthPixel(1000),
+    height: heightPixel(70),
+    marginTop: widthPixel(26),
+    marginLeft: widthPixel(47),
   },
   weekendHolidayContentInfoText: {
     color: THEME.fontColor,
-    fontSize: 15,
+    fontSize: fontPixel(50),
     fontFamily: FONTS.regular,
-    marginLeft: 20,
+    marginLeft: widthPixel(57),
   },
   container: {
     flex: 1,
-    padding: 12,
+    padding: 12, // TODO: Convert to widthPixel/heightPixel
     justifyContent: 'center',
-    backgroundColor: THEME.primary,
-    borderRadius: 12,
+    backgroundColor: THEME.gray5,
+    borderRadius: 12, // TODO: Convert to widthPixel/heightPixel
   },
   head: {
-    height: 44,
-    backgroundColor: THEME.secondary,
+    height: 44, // TODO: Convert to widthPixel/heightPixel
+    backgroundColor: THEME.gray6,
   },
   headText: {
-    fontSize: 12,
+    fontSize: 12, // TODO: Convert to widthPixel/heightPixel
     fontFamily: FONTS.semiBold,
     textAlign: 'center',
     color: THEME.fontColor,
   },
   text: {
-    fontSize: 14,
+    fontSize: 14, // TODO: Convert to widthPixel/heightPixel
     fontFamily: FONTS.regular,
     textAlign: 'center',
     color: THEME.fontColor,

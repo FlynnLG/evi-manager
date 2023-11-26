@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {
   Text,
   View,
@@ -15,7 +15,7 @@ import {
   BottomSheetModalProvider,
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
-import DatePicker from 'react-native-date-picker'
+import DatePicker from 'react-native-date-picker';
 
 import {THEME, FONTS} from '../constants';
 
@@ -331,12 +331,12 @@ function Home() {
   // variables
   const snapPoints = useMemo(() => ['10%', '55%'], []);
   const [eventName, setEventName] = useState('');
-  const [date, setDate] = useState(new Date())
+  const [date, setDate] = useState(new Date());
   // callbacks
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
-  const handleSheetChanges = useCallback((index) => {
+  const handleSheetChanges = useCallback(index => {
     console.log('handleSheetChanges', index);
   }, []);
 
@@ -354,33 +354,31 @@ function Home() {
   const saveEvent = () => {
     //const dateObject = new Date(date);
 
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const options = {year: 'numeric', month: 'long', day: 'numeric'};
     const formattedDate = date.toLocaleDateString('de-DE', options);
-    console.log(formattedDate)
+    console.log(formattedDate);
 
-    if(!eventName || eventName == ''){
-      console.log("No eventName set, can't safe the event")
-      return
+    if (!eventName || eventName == '') {
+      console.log("No eventName set, can't safe the event");
+      return;
     }
-    let eventDates = JSON.parse(appStorage.getString('custom/dates'))
-    console.log(eventDates)
-    console.log(formattedDate)
-    if(eventDates[formattedDate]){
-      console.log("EventDate already exist!")
-      
+    let eventDates = JSON.parse(appStorage.getString('custom/dates'));
+    console.log(eventDates);
+    console.log(formattedDate);
+    if (eventDates[formattedDate]) {
+      console.log('EventDate already exist!');
+
       eventDates[0][formattedDate].push(eventName);
-    }else{
-      
-      eventDates[0][formattedDate] = [[eventName], ];
+    } else {
+      eventDates[0][formattedDate] = [[eventName]];
     }
-    appStorage.set('custom/dates', JSON.stringify(eventDates))
-    console.info("Stored successfull!")
+    appStorage.set('custom/dates', JSON.stringify(eventDates));
+    console.info('Stored successfull!');
     forceUpdate();
     bottomSheetModalRef.current?.dismiss();
-  }
+  };
 
   return (
-    <BottomSheetModalProvider>
     <ScrollView
       style={{
         flex: 1,
@@ -392,7 +390,7 @@ function Home() {
           paddingTop: 100,
           backgroundColor: THEME.background,
           color: THEME.fontColor,
-          paddingBottom: 80,
+          paddingBottom: 100,
         }}>
         <Text
           style={{
@@ -406,17 +404,23 @@ function Home() {
           {name}!
         </Text>
         <View style={{paddingTop: 48}}>
-          <View style={{
-            flex: 1,
-            flexWrap: 'wrap',
-            flexDirection: 'row'}}>
-            <TouchableOpacity onPress={() => handlePresentModalPress()} style={{flexBasis: '85%'}}>
+          <View
+            style={{
+              flex: 1,
+              flexWrap: 'wrap',
+              flexDirection: 'row',
+            }}>
+            <TouchableOpacity
+              onPress={() => handlePresentModalPress()}
+              style={{flexBasis: '85%'}}>
               <View style={{marginLeft: windowWidth * 0.77}}>
                 <Icon name="add-circle" color="#3d3737" size={30} />
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => RNRestart.restart()} style={{flexBasis: '15%'}}>
-              <View >
+            <TouchableOpacity
+              onPress={() => RNRestart.restart()}
+              style={{flexBasis: '15%'}}>
+              <View>
                 <Icon name="reload-circle" color="#3d3737" size={30} />
               </View>
             </TouchableOpacity>
@@ -507,51 +511,101 @@ function Home() {
       </View>
 
       <BottomSheetModal
-          ref={bottomSheetModalRef}
-          index={1}
-          snapPoints={snapPoints}
-          onChange={handleSheetChanges}
-          enablePanDownToClose={true}
-          backdropComponent={renderBackdrop}
-          backgroundStyle={{
+        ref={bottomSheetModalRef}
+        index={1}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+        enablePanDownToClose={true}
+        backdropComponent={renderBackdrop}
+        backgroundStyle={{
           backgroundColor: THEME.background,
-          }}>
-          <View style={{
+        }}>
+        <View
+          style={{
             flex: 1,
             flexWrap: 'wrap',
             flexDirection: 'row',
-            marginBottom: -100}}>
-            <Text style={{flexBasis: '75%', color: THEME.fontColor, fontFamily: FONTS.semiBold, fontSize: 21, paddingLeft: 25,}}>Neuer Termin</Text>
-            <TouchableOpacity style={{backgroundColor: THEME.blue, borderRadius: 50, flexBasis: '20%', paddingLeft: 5, paddingTop: 3,}} onPress={saveEvent}>
-              <Text style={{color: '#fff', fontFamily: FONTS.medium, fontSize: 18}}>Sichern</Text>
-            </TouchableOpacity>
-          </View>
-          
-          <Text style={{color: THEME.fontColor, fontFamily: FONTS.medium, fontSize: 19, textAlign: 'center'}}>Terminname</Text>
-          <TextInput
-              placeholder="Terminname"
-              placeholderTextColor={THEME.fontColor}
-              onChangeText={newText => setEventName(newText)}
-              style={{
-                margin: 10,
-                marginLeft: 25,
-                marginRight: 25,
-                backgroundColor: THEME.secondary,
-                borderRadius: 11,
-                height: 50,
-                padding: 10,
-                paddingTop: 12,
-                fontFamily: FONTS.medium,
-                color: THEME.fontColor,
-              }}
-            />
-            <Text style={{color: THEME.fontColor, fontFamily: FONTS.medium, fontSize: 19, textAlign: 'center'}}>Datum</Text>
-            <View style={{backgroundColor: '#fff', margin: 25, alignContent: 'center', borderRadius: 20, paddingLeft: 23, marginTop: 10,}}>
-            <DatePicker date={date} onDateChange={setDate} mode='date' locale='de' />
-            </View>
-        </BottomSheetModal>
+            marginBottom: -100,
+          }}>
+          <Text
+            style={{
+              flexBasis: '75%',
+              color: THEME.fontColor,
+              fontFamily: FONTS.semiBold,
+              fontSize: 21,
+              paddingLeft: 25,
+            }}>
+            Neuer Termin
+          </Text>
+          <TouchableOpacity
+            style={{
+              backgroundColor: THEME.blue,
+              borderRadius: 50,
+              flexBasis: '20%',
+              paddingLeft: 5,
+              paddingTop: 3,
+            }}
+            onPress={saveEvent}>
+            <Text
+              style={{color: '#fff', fontFamily: FONTS.medium, fontSize: 18}}>
+              Sichern
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <Text
+          style={{
+            color: THEME.fontColor,
+            fontFamily: FONTS.medium,
+            fontSize: 19,
+            textAlign: 'center',
+          }}>
+          Terminname
+        </Text>
+        <TextInput
+          placeholder="Terminname"
+          placeholderTextColor={THEME.fontColor}
+          onChangeText={newText => setEventName(newText)}
+          style={{
+            margin: 10,
+            marginLeft: 25,
+            marginRight: 25,
+            backgroundColor: THEME.gray6,
+            borderRadius: 11,
+            height: 50,
+            padding: 10,
+            paddingTop: 12,
+            fontFamily: FONTS.medium,
+            color: THEME.fontColor,
+          }}
+        />
+        <Text
+          style={{
+            color: THEME.fontColor,
+            fontFamily: FONTS.medium,
+            fontSize: 19,
+            textAlign: 'center',
+          }}>
+          Datum
+        </Text>
+        <View
+          style={{
+            backgroundColor: '#fff',
+            margin: 25,
+            alignContent: 'center',
+            borderRadius: 20,
+            paddingLeft: 23,
+            marginTop: 10,
+          }}>
+          <DatePicker
+            date={date}
+            onDateChange={setDate}
+            mode="date"
+            locale="de"
+          />
+        </View>
+      </BottomSheetModal>
     </ScrollView>
-    </BottomSheetModalProvider>
   );
 }
 

@@ -6,11 +6,15 @@ import AppStart from '../screens/AppStart';
 import Login from '../screens/Login';
 import Loading from '../screens/Loading';
 import Home from '../screens/Home';
-import SettingsScreen from '../screens/SettingsScreen';
+import {
+  SettingScreen,
+  SettingScreenDarkWhiteMode,
+  SettingScreenUserInformation,
+} from '../screens/SettingsScreen';
 import CreditsScreen from '../screens/Credits';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
-import { THEME } from '../constants';
+import {THEME} from '../constants';
 
 const HomeNav = createStackNavigator();
 
@@ -23,26 +27,56 @@ export function HomeStackScreen() {
       <HomeNav.Screen name="Login" component={Login} />
       <HomeNav.Screen name="Loading" component={Loading} />
       <HomeNav.Screen name="HomeNav" component={Home} />
-      <HomeNav.Screen name="SettingsNav" component={SettingsScreen} />
+      <HomeNav.Screen name="SettingNav" component={SettingScreen} />
       <HomeNav.Screen name="CreditsNav" component={CreditsScreen} />
     </HomeNav.Navigator>
   );
 }
 
-const SettingsNav = createStackNavigator();
+const SettingNav = createStackNavigator();
 
-export function SettingsStackScreen() {
+export function SettingStackScreen() {
   return (
-    <SettingsNav.Navigator
+    <SettingNav.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="SettingsNav">
-      <SettingsNav.Screen name="AppStart" component={AppStart} />
-      <SettingsNav.Screen name="Login" component={Login} />
-      <SettingsNav.Screen name="Loading" component={Loading} />
-      <SettingsNav.Screen name="HomeNav" component={Home} />
-      <SettingsNav.Screen name="SettingsNav" component={SettingsScreen} />
-      <SettingsNav.Screen name="CreditsNav" component={CreditsScreen} />
-    </SettingsNav.Navigator>
+      initialRouteName="Einstellungen">
+      <SettingNav.Screen name="Einstellungen" component={SettingScreen} />
+      <SettingNav.Screen
+        name="SettingNavUserInformation"
+        component={SettingNavPagesUserInformationStackScreen}
+      />
+      <SettingNav.Screen
+        name="SettingNavDarkWhiteMode"
+        component={SettingNavPagesDarkWhiteModeStackScreen}
+      />
+    </SettingNav.Navigator>
+  );
+}
+
+const SettingNavPagesUserInformation = createStackNavigator();
+
+export function SettingNavPagesUserInformationStackScreen() {
+  return (
+    <SettingNavPagesUserInformation.Navigator
+      screenOptions={{headerShown: true}}>
+      <SettingNavPagesUserInformation.Screen
+        name="Benutzer"
+        component={SettingScreenUserInformation}
+      />
+    </SettingNavPagesUserInformation.Navigator>
+  );
+}
+
+const SettingNavPagesDarkWhiteMode = createStackNavigator();
+
+export function SettingNavPagesDarkWhiteModeStackScreen() {
+  return (
+    <SettingNavPagesDarkWhiteMode.Navigator screenOptions={{headerShown: true}}>
+      <SettingNavPagesDarkWhiteMode.Screen
+        name="Darstellung"
+        component={SettingScreenDarkWhiteMode}
+      />
+    </SettingNavPagesDarkWhiteMode.Navigator>
   );
 }
 
@@ -57,7 +91,7 @@ export function CreditsStackScreen() {
       <CreditsStack.Screen name="Login" component={Login} />
       <CreditsStack.Screen name="Loading" component={Loading} />
       <CreditsStack.Screen name="HomeNav" component={Home} />
-      <CreditsStack.Screen name="SettingsNav" component={SettingsScreen} />
+      <CreditsStack.Screen name="SettingNav" component={SettingScreen} />
       <CreditsStack.Screen name="CreditsNav" component={CreditsScreen} />
     </CreditsStack.Navigator>
   );
@@ -70,7 +104,7 @@ export const HomeTabs = () => {
     <BottomSheetModalProvider>
       <HomeTab.Navigator
         screenOptions={({route}) => ({
-          tabBarStyle: {position: 'absolute', backgroundColor: THEME.secondary},
+          tabBarStyle: {position: 'absolute', backgroundColor: THEME.gray6},
           tabBarActiveTintColor: '#007aff',
           headerShown: false,
           tabBarShowLabel: true,
@@ -93,20 +127,20 @@ export const HomeTabs = () => {
         })}
         initialRouteName="Home">
         <HomeTab.Screen name="Home" component={HomeStackScreen} />
-        <HomeTab.Screen name="Settings" component={SettingsStackScreen} />
+        <HomeTab.Screen name="Settings" component={SettingStackScreen} />
         <HomeTab.Screen name="Credits" component={CreditsStackScreen} />
       </HomeTab.Navigator>
     </BottomSheetModalProvider>
   );
 };
 
-const SettingsTab = createBottomTabNavigator();
+const SettingTab = createBottomTabNavigator();
 
-export const SettingsTabs = () => {
+export const SettingTabs = () => {
   return (
-    <SettingsTab.Navigator
+    <SettingTab.Navigator
       screenOptions={({route}) => ({
-        tabBarStyle: {position: 'absolute', backgroundColor: THEME.secondary},
+        tabBarStyle: {position: 'absolute', backgroundColor: THEME.gray6},
         tabBarActiveTintColor: '#007aff',
         headerShown: false,
         tabBarShowLabel: true,
@@ -128,10 +162,10 @@ export const SettingsTabs = () => {
         },
       })}
       initialRouteName="Settings">
-      <SettingsTab.Screen name="Home" component={HomeStackScreen} />
-      <SettingsTab.Screen name="Settings" component={SettingsStackScreen} />
-      <SettingsTab.Screen name="Credits" component={CreditsStackScreen} />
-    </SettingsTab.Navigator>
+      <SettingTab.Screen name="Home" component={HomeStackScreen} />
+      <SettingTab.Screen name="Settings" component={SettingStackScreen} />
+      <SettingTab.Screen name="Credits" component={CreditsStackScreen} />
+    </SettingTab.Navigator>
   );
 };
 
@@ -141,7 +175,7 @@ export const CreditsTabs = () => {
   return (
     <CreditsTab.Navigator
       screenOptions={({route}) => ({
-        tabBarStyle: {position: 'absolute', backgroundColor: THEME.secondary},
+        tabBarStyle: {position: 'absolute', backgroundColor: THEME.gray6},
         tabBarActiveTintColor: '#007aff',
         headerShown: false,
         tabBarShowLabel: true,
@@ -164,7 +198,7 @@ export const CreditsTabs = () => {
       })}
       initialRouteName="Credits">
       <CreditsTab.Screen name="Home" component={HomeStackScreen} />
-      <CreditsTab.Screen name="Settings" component={SettingsStackScreen} />
+      <CreditsTab.Screen name="Settings" component={SettingStackScreen} />
       <CreditsTab.Screen name="Credits" component={CreditsStackScreen} />
     </CreditsTab.Navigator>
   );

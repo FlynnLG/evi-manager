@@ -583,6 +583,7 @@ const ytm = async nav => {
                                               userInformation: {
                                                 name: name,
                                                 currentClass: currentClass,
+                                                username: credentials.username,
                                               },
                                               homepageMessages: {
                                                 newMessagesCounter:
