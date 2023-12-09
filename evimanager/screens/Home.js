@@ -8,13 +8,10 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import RNRestart from 'react-native-restart';
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-  BottomSheetBackdrop,
-} from '@gorhom/bottom-sheet';
+import {BottomSheetModal, BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import DatePicker from 'react-native-date-picker';
 
 import {THEME, FONTS} from '../constants';
@@ -24,6 +21,7 @@ import appStorage from '../components/appStorage';
 import moment from 'moment/moment';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import {widthPixel, heightPixel, fontPixel} from '../components/lessoncard';
 
 function dateManager() {
   const date = new Date(new Date().getTime());
@@ -379,233 +377,237 @@ function Home() {
   };
 
   return (
-    <ScrollView
-      style={{
-        flex: 1,
-        paddingTop: StatusBar.currentHeight,
-        backgroundColor: THEME.background,
-      }}>
-      <View
+    <SafeAreaView
+      edges={['top', 'left', 'right']}
+      style={{flex: 1, backgroundColor: THEME.background}}>
+      <ScrollView
         style={{
-          paddingTop: 100,
+          flex: 1,
+          paddingTop: StatusBar.currentHeight,
           backgroundColor: THEME.background,
-          color: THEME.fontColor,
-          paddingBottom: 100,
         }}>
-        <Text
+        <View
           style={{
-            paddingLeft: 30,
-            fontFamily: FONTS.semiBold,
+            paddingTop: heightPixel(50),
+            backgroundColor: THEME.background,
             color: THEME.fontColor,
-            fontSize: 24,
-            paddingBottom: 20,
+            paddingBottom: 100,
           }}>
-          {welcomeMessage.toString()}
-          {name}!
-        </Text>
-        <View style={{paddingTop: 48}}>
+          <Text
+            style={{
+              paddingLeft: 30,
+              fontFamily: FONTS.semiBold,
+              color: THEME.fontColor,
+              fontSize: fontPixel(90),
+              paddingBottom: 20,
+            }}>
+            {welcomeMessage.toString()}
+            {name}!
+          </Text>
+          <View style={{paddingTop: 48}}>
+            <View
+              style={{
+                flex: 1,
+                flexWrap: 'wrap',
+                flexDirection: 'row',
+              }}>
+              <TouchableOpacity
+                onPress={() => handlePresentModalPress()}
+                style={{flexBasis: '85%'}}>
+                <View style={{marginLeft: windowWidth * 0.77}}>
+                  <Icon name="add-circle" color="#3d3737" size={30} />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => RNRestart.restart()}
+                style={{flexBasis: '15%'}}>
+                <View>
+                  <Icon name="reload-circle" color="#3d3737" size={30} />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <LessonCard
+              accent
+              dayOfWeekShort={moment().format('dddd').substring(0, 2)}
+              date={moment().format('DD. MMMM YYYY')}
+              blocks={lcData[0][1]}
+              dayOfWeek={moment().format('dddd')}
+              blockInfos={lcData[0][4]}
+              teachers={lcData[0][3]}
+              rooms={lcData[0][2]}
+            />
+            <LessonCard
+              dayOfWeekShort={moment()
+                .add(1, 'day')
+                .format('dddd')
+                .substring(0, 2)}
+              date={moment().add(1, 'day').format('DD. MMMM YYYY')}
+              blocks={lcData[1][1]}
+              dayOfWeek={moment().add(1, 'day').format('dddd')}
+              blockInfos={lcData[1][4]}
+              teachers={lcData[1][3]}
+              rooms={lcData[1][2]}
+            />
+            <LessonCard
+              dayOfWeekShort={moment()
+                .add(2, 'days')
+                .format('dddd')
+                .substring(0, 2)}
+              date={moment().add(2, 'days').format('DD. MMMM YYYY')}
+              blocks={lcData[2][1]}
+              dayOfWeek={moment().add(2, 'days').format('dddd')}
+              blockInfos={lcData[2][4]}
+              teachers={lcData[2][3]}
+              rooms={lcData[2][2]}
+            />
+            <LessonCard
+              dayOfWeekShort={moment()
+                .add(3, 'days')
+                .format('dddd')
+                .substring(0, 2)}
+              date={moment().add(3, 'days').format('DD. MMMM YYYY')}
+              blocks={lcData[3][1]}
+              dayOfWeek={moment().add(3, 'days').format('dddd')}
+              blockInfos={lcData[3][4]}
+              teachers={lcData[3][3]}
+              rooms={lcData[3][2]}
+            />
+            <LessonCard
+              dayOfWeekShort={moment()
+                .add(4, 'days')
+                .format('dddd')
+                .substring(0, 2)}
+              date={moment().add(4, 'days').format('DD. MMMM YYYY')}
+              blocks={lcData[4][1]}
+              dayOfWeek={moment().add(4, 'days').format('dddd')}
+              blockInfos={lcData[4][4]}
+              teachers={lcData[4][3]}
+              rooms={lcData[4][2]}
+            />
+            <LessonCard
+              dayOfWeekShort={moment()
+                .add(5, 'days')
+                .format('dddd')
+                .substring(0, 2)}
+              date={moment().add(5, 'days').format('DD. MMMM YYYY')}
+              blocks={lcData[5][1]}
+              dayOfWeek={moment().add(5, 'days').format('dddd')}
+              blockInfos={lcData[5][4]}
+              teachers={lcData[5][3]}
+              rooms={lcData[5][2]}
+            />
+            <LessonCard
+              dayOfWeekShort={moment()
+                .add(6, 'days')
+                .format('dddd')
+                .substring(0, 2)}
+              date={moment().add(6, 'days').format('DD. MMMM YYYY')}
+              blocks={lcData[6][1]}
+              dayOfWeek={moment().add(6, 'days').format('dddd')}
+              blockInfos={lcData[6][4]}
+              teachers={lcData[6][3]}
+              rooms={lcData[6][2]}
+            />
+          </View>
+        </View>
+
+        <BottomSheetModal
+          ref={bottomSheetModalRef}
+          index={1}
+          snapPoints={snapPoints}
+          onChange={handleSheetChanges}
+          enablePanDownToClose={true}
+          backdropComponent={renderBackdrop}
+          backgroundStyle={{
+            backgroundColor: THEME.background,
+          }}>
           <View
             style={{
               flex: 1,
               flexWrap: 'wrap',
               flexDirection: 'row',
+              marginBottom: -100,
             }}>
+            <Text
+              style={{
+                flexBasis: '75%',
+                color: THEME.fontColor,
+                fontFamily: FONTS.semiBold,
+                fontSize: 21,
+                paddingLeft: 25,
+              }}>
+              Neuer Termin
+            </Text>
             <TouchableOpacity
-              onPress={() => handlePresentModalPress()}
-              style={{flexBasis: '85%'}}>
-              <View style={{marginLeft: windowWidth * 0.77}}>
-                <Icon name="add-circle" color="#3d3737" size={30} />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => RNRestart.restart()}
-              style={{flexBasis: '15%'}}>
-              <View>
-                <Icon name="reload-circle" color="#3d3737" size={30} />
-              </View>
+              style={{
+                backgroundColor: THEME.blue,
+                borderRadius: 50,
+                flexBasis: '20%',
+                paddingLeft: 5,
+                paddingTop: 3,
+              }}
+              onPress={saveEvent}>
+              <Text
+                style={{color: '#fff', fontFamily: FONTS.medium, fontSize: 18}}>
+                Sichern
+              </Text>
             </TouchableOpacity>
           </View>
-          <LessonCard
-            accent
-            dayOfWeekShort={moment().format('dddd').substring(0, 2)}
-            date={moment().format('DD. MMMM YYYY')}
-            blocks={lcData[0][1]}
-            dayOfWeek={moment().format('dddd')}
-            blockInfos={lcData[0][4]}
-            teachers={lcData[0][3]}
-            rooms={lcData[0][2]}
-          />
-          <LessonCard
-            dayOfWeekShort={moment()
-              .add(1, 'day')
-              .format('dddd')
-              .substring(0, 2)}
-            date={moment().add(1, 'day').format('DD. MMMM YYYY')}
-            blocks={lcData[1][1]}
-            dayOfWeek={moment().add(1, 'day').format('dddd')}
-            blockInfos={lcData[1][4]}
-            teachers={lcData[1][3]}
-            rooms={lcData[1][2]}
-          />
-          <LessonCard
-            dayOfWeekShort={moment()
-              .add(2, 'days')
-              .format('dddd')
-              .substring(0, 2)}
-            date={moment().add(2, 'days').format('DD. MMMM YYYY')}
-            blocks={lcData[2][1]}
-            dayOfWeek={moment().add(2, 'days').format('dddd')}
-            blockInfos={lcData[2][4]}
-            teachers={lcData[2][3]}
-            rooms={lcData[2][2]}
-          />
-          <LessonCard
-            dayOfWeekShort={moment()
-              .add(3, 'days')
-              .format('dddd')
-              .substring(0, 2)}
-            date={moment().add(3, 'days').format('DD. MMMM YYYY')}
-            blocks={lcData[3][1]}
-            dayOfWeek={moment().add(3, 'days').format('dddd')}
-            blockInfos={lcData[3][4]}
-            teachers={lcData[3][3]}
-            rooms={lcData[3][2]}
-          />
-          <LessonCard
-            dayOfWeekShort={moment()
-              .add(4, 'days')
-              .format('dddd')
-              .substring(0, 2)}
-            date={moment().add(4, 'days').format('DD. MMMM YYYY')}
-            blocks={lcData[4][1]}
-            dayOfWeek={moment().add(4, 'days').format('dddd')}
-            blockInfos={lcData[4][4]}
-            teachers={lcData[4][3]}
-            rooms={lcData[4][2]}
-          />
-          <LessonCard
-            dayOfWeekShort={moment()
-              .add(5, 'days')
-              .format('dddd')
-              .substring(0, 2)}
-            date={moment().add(5, 'days').format('DD. MMMM YYYY')}
-            blocks={lcData[5][1]}
-            dayOfWeek={moment().add(5, 'days').format('dddd')}
-            blockInfos={lcData[5][4]}
-            teachers={lcData[5][3]}
-            rooms={lcData[5][2]}
-          />
-          <LessonCard
-            dayOfWeekShort={moment()
-              .add(6, 'days')
-              .format('dddd')
-              .substring(0, 2)}
-            date={moment().add(6, 'days').format('DD. MMMM YYYY')}
-            blocks={lcData[6][1]}
-            dayOfWeek={moment().add(6, 'days').format('dddd')}
-            blockInfos={lcData[6][4]}
-            teachers={lcData[6][3]}
-            rooms={lcData[6][2]}
-          />
-        </View>
-      </View>
 
-      <BottomSheetModal
-        ref={bottomSheetModalRef}
-        index={1}
-        snapPoints={snapPoints}
-        onChange={handleSheetChanges}
-        enablePanDownToClose={true}
-        backdropComponent={renderBackdrop}
-        backgroundStyle={{
-          backgroundColor: THEME.background,
-        }}>
-        <View
-          style={{
-            flex: 1,
-            flexWrap: 'wrap',
-            flexDirection: 'row',
-            marginBottom: -100,
-          }}>
           <Text
             style={{
-              flexBasis: '75%',
               color: THEME.fontColor,
-              fontFamily: FONTS.semiBold,
-              fontSize: 21,
-              paddingLeft: 25,
+              fontFamily: FONTS.medium,
+              fontSize: 19,
+              textAlign: 'center',
             }}>
-            Neuer Termin
+            Terminname
           </Text>
-          <TouchableOpacity
+          <TextInput
+            placeholder="Terminname"
+            placeholderTextColor={THEME.fontColor}
+            onChangeText={newText => setEventName(newText)}
             style={{
-              backgroundColor: THEME.blue,
-              borderRadius: 50,
-              flexBasis: '20%',
-              paddingLeft: 5,
-              paddingTop: 3,
+              margin: 10,
+              marginLeft: 25,
+              marginRight: 25,
+              backgroundColor: THEME.gray6,
+              borderRadius: 11,
+              height: 50,
+              padding: 10,
+              paddingTop: 12,
+              fontFamily: FONTS.medium,
+              color: THEME.fontColor,
             }}
-            onPress={saveEvent}>
-            <Text
-              style={{color: '#fff', fontFamily: FONTS.medium, fontSize: 18}}>
-              Sichern
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <Text
-          style={{
-            color: THEME.fontColor,
-            fontFamily: FONTS.medium,
-            fontSize: 19,
-            textAlign: 'center',
-          }}>
-          Terminname
-        </Text>
-        <TextInput
-          placeholder="Terminname"
-          placeholderTextColor={THEME.fontColor}
-          onChangeText={newText => setEventName(newText)}
-          style={{
-            margin: 10,
-            marginLeft: 25,
-            marginRight: 25,
-            backgroundColor: THEME.gray6,
-            borderRadius: 11,
-            height: 50,
-            padding: 10,
-            paddingTop: 12,
-            fontFamily: FONTS.medium,
-            color: THEME.fontColor,
-          }}
-        />
-        <Text
-          style={{
-            color: THEME.fontColor,
-            fontFamily: FONTS.medium,
-            fontSize: 19,
-            textAlign: 'center',
-          }}>
-          Datum
-        </Text>
-        <View
-          style={{
-            backgroundColor: '#fff',
-            margin: 25,
-            alignContent: 'center',
-            borderRadius: 20,
-            paddingLeft: 23,
-            marginTop: 10,
-          }}>
-          <DatePicker
-            date={date}
-            onDateChange={setDate}
-            mode="date"
-            locale="de"
           />
-        </View>
-      </BottomSheetModal>
-    </ScrollView>
+          <Text
+            style={{
+              color: THEME.fontColor,
+              fontFamily: FONTS.medium,
+              fontSize: 19,
+              textAlign: 'center',
+            }}>
+            Datum
+          </Text>
+          <View
+            style={{
+              backgroundColor: '#fff',
+              margin: 25,
+              alignContent: 'center',
+              borderRadius: 20,
+              paddingLeft: 23,
+              marginTop: 10,
+            }}>
+            <DatePicker
+              date={date}
+              onDateChange={setDate}
+              mode="date"
+              locale="de"
+            />
+          </View>
+        </BottomSheetModal>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

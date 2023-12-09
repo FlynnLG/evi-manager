@@ -11,10 +11,10 @@ import {
   SettingScreenDarkWhiteMode,
   SettingScreenUserInformation,
 } from '../screens/SettingsScreen';
-import CreditsScreen from '../screens/Credits';
+import MessagesScreen from '../screens/Messages';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
-import {THEME} from '../constants';
+import {FONTS, THEME} from '../constants';
 
 const HomeNav = createStackNavigator();
 
@@ -28,7 +28,7 @@ export function HomeStackScreen() {
       <HomeNav.Screen name="Loading" component={Loading} />
       <HomeNav.Screen name="HomeNav" component={Home} />
       <HomeNav.Screen name="SettingNav" component={SettingScreen} />
-      <HomeNav.Screen name="CreditsNav" component={CreditsScreen} />
+      <HomeNav.Screen name="MessagesNav" component={MessagesScreen} />
     </HomeNav.Navigator>
   );
 }
@@ -39,8 +39,8 @@ export function SettingStackScreen() {
   return (
     <SettingNav.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="Einstellungen">
-      <SettingNav.Screen name="Einstellungen" component={SettingScreen} />
+      initialRouteName="Settings">
+      <SettingNav.Screen name="Settings" component={SettingScreen} />
       <SettingNav.Screen
         name="SettingNavUserInformation"
         component={SettingNavPagesUserInformationStackScreen}
@@ -62,6 +62,16 @@ export function SettingNavPagesUserInformationStackScreen() {
       <SettingNavPagesUserInformation.Screen
         name="Benutzer"
         component={SettingScreenUserInformation}
+        options={{
+          headerStyle: {
+            backgroundColor: THEME.idingo,
+            shadowColor: 'transparent',
+          },
+          headerTintColor: THEME.fontColor,
+          headerTitleStyle: {
+            fontFamily: FONTS.medium,
+          },
+        }}
       />
     </SettingNavPagesUserInformation.Navigator>
   );
@@ -75,25 +85,35 @@ export function SettingNavPagesDarkWhiteModeStackScreen() {
       <SettingNavPagesDarkWhiteMode.Screen
         name="Darstellung"
         component={SettingScreenDarkWhiteMode}
+        options={{
+          headerStyle: {
+            backgroundColor: THEME.idingo,
+            shadowColor: 'transparent',
+          },
+          headerTintColor: THEME.fontColor,
+          headerTitleStyle: {
+            fontFamily: FONTS.medium,
+          },
+        }}
       />
     </SettingNavPagesDarkWhiteMode.Navigator>
   );
 }
 
-const CreditsStack = createStackNavigator();
+const MessagesStack = createStackNavigator();
 
-export function CreditsStackScreen() {
+export function MessagesStackScreen() {
   return (
-    <CreditsStack.Navigator
+    <MessagesStack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="CreditsNav">
-      <CreditsStack.Screen name="AppStart" component={AppStart} />
-      <CreditsStack.Screen name="Login" component={Login} />
-      <CreditsStack.Screen name="Loading" component={Loading} />
-      <CreditsStack.Screen name="HomeNav" component={Home} />
-      <CreditsStack.Screen name="SettingNav" component={SettingScreen} />
-      <CreditsStack.Screen name="CreditsNav" component={CreditsScreen} />
-    </CreditsStack.Navigator>
+      initialRouteName="MessagesNav">
+      <MessagesStack.Screen name="AppStart" component={AppStart} />
+      <MessagesStack.Screen name="Login" component={Login} />
+      <MessagesStack.Screen name="Loading" component={Loading} />
+      <MessagesStack.Screen name="HomeNav" component={Home} />
+      <MessagesStack.Screen name="SettingNav" component={SettingScreen} />
+      <MessagesStack.Screen name="MessagesNav" component={MessagesScreen} />
+    </MessagesStack.Navigator>
   );
 }
 
@@ -104,31 +124,33 @@ export const HomeTabs = () => {
     <BottomSheetModalProvider>
       <HomeTab.Navigator
         screenOptions={({route}) => ({
-          tabBarStyle: {position: 'absolute', backgroundColor: THEME.gray6},
-          tabBarActiveTintColor: '#007aff',
+          tabBarStyle: {
+            position: 'absolute',
+            backgroundColor: THEME.navigation,
+            borderTopColor: 'transparent',
+          },
+          tabBarActiveTintColor: THEME.idingo,
           headerShown: false,
           tabBarShowLabel: true,
           tabBarIcon: ({focused, color, size}) => {
             let iconName;
 
-            if (route.name === 'Home') {
+            if (route.name === 'Startseite') {
               iconName = focused ? 'home' : 'home-outline';
-            } else if (route.name === 'Settings') {
+            } else if (route.name === 'Einstellungen') {
               iconName = focused ? 'cog' : 'cog-outline';
-            } else if (route.name === 'Credits') {
-              iconName = focused
-                ? 'information-circle'
-                : 'information-circle-outline';
+            } else if (route.name === 'Nachrichten') {
+              iconName = focused ? 'mail' : 'mail-outline';
             }
 
             // You can return any component that you like here!
             return <Icon name={iconName} size={size} color={color} />;
           },
         })}
-        initialRouteName="Home">
-        <HomeTab.Screen name="Home" component={HomeStackScreen} />
-        <HomeTab.Screen name="Settings" component={SettingStackScreen} />
-        <HomeTab.Screen name="Credits" component={CreditsStackScreen} />
+        initialRouteName="Startseite">
+        <HomeTab.Screen name="Startseite" component={HomeStackScreen} />
+        <HomeTab.Screen name="Nachrichten" component={MessagesStackScreen} />
+        <HomeTab.Screen name="Einstellungen" component={SettingStackScreen} />
       </HomeTab.Navigator>
     </BottomSheetModalProvider>
   );
@@ -140,66 +162,70 @@ export const SettingTabs = () => {
   return (
     <SettingTab.Navigator
       screenOptions={({route}) => ({
-        tabBarStyle: {position: 'absolute', backgroundColor: THEME.gray6},
-        tabBarActiveTintColor: '#007aff',
+        tabBarStyle: {
+          position: 'absolute',
+          backgroundColor: THEME.navigation,
+          borderTopColor: 'transparent',
+        },
+        tabBarActiveTintColor: THEME.idingo,
         headerShown: false,
         tabBarShowLabel: true,
         tabBarIcon: ({focused, color, size}) => {
           let iconName;
 
-          if (route.name === 'Home') {
+          if (route.name === 'Startseite') {
             iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'Settings') {
+          } else if (route.name === 'Einstellungen') {
             iconName = focused ? 'cog' : 'cog-outline';
-          } else if (route.name === 'Credits') {
-            iconName = focused
-              ? 'information-circle'
-              : 'information-circle-outline';
+          } else if (route.name === 'Nachrichten') {
+            iconName = focused ? 'mail' : 'mail-outline';
           }
 
           // You can return any component that you like here!
           return <Icon name={iconName} size={size} color={color} />;
         },
       })}
-      initialRouteName="Settings">
-      <SettingTab.Screen name="Home" component={HomeStackScreen} />
-      <SettingTab.Screen name="Settings" component={SettingStackScreen} />
-      <SettingTab.Screen name="Credits" component={CreditsStackScreen} />
+      initialRouteName="Einstellungen">
+      <SettingTab.Screen name="Startseite" component={HomeStackScreen} />
+      <SettingTab.Screen name="Nachrichten" component={MessagesStackScreen} />
+      <SettingTab.Screen name="Einstellungen" component={SettingStackScreen} />
     </SettingTab.Navigator>
   );
 };
 
-const CreditsTab = createBottomTabNavigator();
+const MessagesTab = createBottomTabNavigator();
 
-export const CreditsTabs = () => {
+export const MessagesTabs = () => {
   return (
-    <CreditsTab.Navigator
+    <MessagesTab.Navigator
       screenOptions={({route}) => ({
-        tabBarStyle: {position: 'absolute', backgroundColor: THEME.gray6},
-        tabBarActiveTintColor: '#007aff',
+        tabBarStyle: {
+          position: 'absolute',
+          backgroundColor: THEME.navigation,
+          borderTopColor: 'transparent',
+        },
+        tabBarActiveTintColor: THEME.idingo,
         headerShown: false,
         tabBarShowLabel: true,
         tabBarIcon: ({focused, color, size}) => {
           let iconName;
 
-          if (route.name === 'Home') {
+          if (route.name === 'Startseite') {
             iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'Settings') {
+          } else if (route.name === 'Einstellungen') {
             iconName = focused ? 'cog' : 'cog-outline';
-          } else if (route.name === 'Credits') {
-            iconName = focused
-              ? 'information-circle'
-              : 'information-circle-outline';
+          } else if (route.name === 'Nachrichten') {
+            iconName = focused ? 'mail' : 'mail-outline';
           }
 
           // You can return any component that you like here!
           return <Icon name={iconName} size={size} color={color} />;
         },
       })}
-      initialRouteName="Credits">
-      <CreditsTab.Screen name="Home" component={HomeStackScreen} />
-      <CreditsTab.Screen name="Settings" component={SettingStackScreen} />
-      <CreditsTab.Screen name="Credits" component={CreditsStackScreen} />
-    </CreditsTab.Navigator>
+      initialRouteName="Nachrichten">
+      <MessagesTab.Screen name="Startseite" component={HomeStackScreen} />
+      <MessagesTab.Screen name="Nachrichten" component={MessagesStackScreen} />
+      <MessagesTab.Screen name="Einstellungen" component={SettingStackScreen} />
+    </MessagesTab.Navigator>
   );
 };

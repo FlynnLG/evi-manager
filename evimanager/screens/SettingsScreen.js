@@ -1,24 +1,19 @@
-import React, {useMemo, useState} from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   View,
   TouchableOpacity,
   StyleSheet,
-  FlatList,
-  Settings,
-  RefreshControl,
   Switch,
   SafeAreaView,
   ScrollView,
-  Image,
   Dimensions,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import RNRestart from 'react-native-restart';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import {THEME, FONTS} from '../constants';
+import {THEME} from '../constants';
 import * as Keychain from 'react-native-keychain';
 import appStorage from '../components/appStorage';
 import {widthPixel, heightPixel, fontPixel} from '../components/lessoncard';

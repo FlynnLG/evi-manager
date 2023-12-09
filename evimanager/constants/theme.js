@@ -8,6 +8,7 @@ export const SYSTEMDARK = {
   gray4: '#3a3a3c',
   gray5: '#2c2c2e',
   gray6: '#1c1c1e',
+  navigation: '#121214',
   red: '#ff453a',
   orange: '#ff9f0a',
   yellow: '#ffd60a',

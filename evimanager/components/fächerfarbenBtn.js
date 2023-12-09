@@ -1,12 +1,9 @@
-import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Modal} from 'react-native';
-import {ColorPicker, toHsv} from 'react-native-color-picker';
+import React from 'react';
+import {Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import appStorage from './appStorage';
 import {FONTS, THEME} from '../constants';
-//import Ionicons
-import Icon from 'react-native-vector-icons/Ionicons';
 
 export const FächerfarbenBtn = ({subject}) => {
   const navigation = useNavigation();

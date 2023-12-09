@@ -6,7 +6,7 @@ import Login from './screens/Login';
 import Loading from './screens/Loading';
 import CustomColor from './screens/CustomColor';
 
-import {CreditsTabs, HomeTabs, SettingTabs} from './components/tabs';
+import {MessagesTabs, HomeTabs, SettingTabs} from './components/tabs';
 import moment from 'moment';
 import 'moment/locale/de';
 
@@ -26,7 +26,7 @@ const App = () => {
         <Stack.Screen name="Loading" component={Loading} />
         <Stack.Screen name="HomeNav" component={HomeTabs} />
         <Stack.Screen name="SettingNav" component={SettingTabs} />
-        <Stack.Screen name="CreditsNav" component={CreditsTabs} />
+        <Stack.Screen name="MessagesNav" component={MessagesTabs} />
         <Stack.Screen name="CustomColor" component={CustomColor} />
       </Stack.Navigator>
     </NavigationContainer>

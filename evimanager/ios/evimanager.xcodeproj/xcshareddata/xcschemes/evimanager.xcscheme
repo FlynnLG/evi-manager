@@ -34,6 +34,20 @@
                ReferencedContainer = "container:evimanager.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "gray5"
+               BlueprintIdentifier = "00E356ED1AD99517003FC87E"
+               BuildableName = "evimanagerTests.xctest"
+               BlueprintName = "evimanagerTests"
+               ReferencedContainer = "container:evimanager.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -67,13 +81,22 @@
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
-            BuildableIdentifier = "gray5"
+            BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
             BuildableName = "evimanager.app"
             BlueprintName = "evimanager"
             ReferencedContainer = "container:evimanager.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "gray5"
+            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
+            BuildableName = "evimanager.app"
+            BlueprintName = "evimanager"
+            ReferencedContainer = "container:evimanager.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
