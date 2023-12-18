@@ -268,6 +268,36 @@ const SettingScreenClassColors = ({}) => {
           key={3}
         />
       </View>
+      <Text style={[styles.sectionHeaderText, {marginTop: 50}]}>
+        App primär farbe
+      </Text>
+      <View>
+        <TouchableOpacity
+            onPress={() => {
+              sendMessageToUser(dropdownitem, message);
+            }}
+            style={{
+              alignSelf: 'center',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: THEME.idingo,
+              borderRadius: 10,
+              flexDirection: 'row',
+              width: 150,
+              height: 50,
+              marginTop: 30,
+            }}>
+            <Text style={[styles.rowLabel, {marginRight: 8, fontSize: 16, marginLeft: 10}]}>
+              Farbe ändern 
+            </Text>
+            <Icon
+              color= {THEME.fontColor}
+              name="color-palette"
+              size={25}
+              style={{marginTop: 5, marginBottom: 5, fontWeight: 600,}}
+            />
+          </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -382,39 +412,14 @@ const SettingScreen = ({}) => {
                         } else if (id === 'classColors') {
                           nav.navigate('SettingNavClassColors');
                         } else if (id === 'bug') {
-                          Linking.canOpenURL(
-                            'https://github.com/FlynnLG/evi-manager/issues/new',
-                          ).then(supported => {
-                            if (supported) {
+                          
                               Linking.openURL(
                                 'https://github.com/FlynnLG/evi-manager/issues/new',
                               );
-                            } else {
-                              Alert.alert(
-                                'Fehler',
-                                'Die Seite konnte nicht geöffnet werden, da die Berechtigung dazu fehlt.',
-                                [{text: 'OK', style: 'cancel'}],
-                                {cancelable: false},
-                              );
-                            }
-                          });
                         } else if (id === 'contact') {
-                          Linking.canOpenURL(
-                            'https://github.com/FlynnLG/evi-manager/discussions',
-                          ).then(supported => {
-                            if (supported) {
                               Linking.openURL(
                                 'https://github.com/FlynnLG/evi-manager/discussions',
                               );
-                            } else {
-                              Alert.alert(
-                                'Fehler',
-                                'Die Seite konnte nicht geöffnet werden, da die Berechtigung dazu fehlt.',
-                                [{text: 'OK', style: 'cancel'}],
-                                {cancelable: false},
-                              );
-                            }
-                          });
                         } else if (id === 'logout') {
                           userLogout(nav);
                         }
