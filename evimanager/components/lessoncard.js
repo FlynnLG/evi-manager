@@ -601,7 +601,7 @@ export const LessonCard = ({
         snapPoints={snapPoints}
         backdropComponent={renderBackdrop}
         backgroundStyle={{
-          backgroundColor: THEME.background,
+          backgroundColor: THEME.gray6,
         }}>
         <View style={styles.modalContentContainer}>
           <Text style={styles.modalContentText}>
@@ -732,7 +732,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   modalContentBlockInfoBox: {
-    backgroundColor: THEME.gray6,
+    backgroundColor: THEME.gray5,
     borderRadius: widthPixel(30),
     marginTop: heightPixel(30),
     width: widthPixel(1200),
@@ -741,7 +741,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   modalContentBlockInfoBoxEmpty: {
-    backgroundColor: THEME.gray6,
+    backgroundColor: THEME.gray5,
     borderRadius: widthPixel(30),
     marginTop: heightPixel(30),
     width: widthPixel(1200),

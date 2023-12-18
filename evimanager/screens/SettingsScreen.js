@@ -8,6 +8,9 @@ import {
   SafeAreaView,
   ScrollView,
   Dimensions,
+  Linking,
+  Alert,
+  FlatList,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import RNRestart from 'react-native-restart';
@@ -217,23 +220,9 @@ const SettingScreenUserInformation = ({}) => {
   );
 };
 
-const SettingScreen = ({}) => {
-  console.info('Site: SETTINGS');
+const SettingScreenClassColors = ({}) => {
+  console.info('Site: SETTINGS->ClassColors');
   const nav = useNavigation();
-
-  const [, updateState] = React.useState();
-  const forceUpdate = React.useCallback(() => updateState({}), []);
-
-  React.useEffect(() => {
-    // TODO: Check what unsubscribe does. Because IDEA says it's redundant.
-    const unsubscribe = nav.addListener('focus', () => {
-      forceUpdate();
-    });
-
-    // Return the function to unsubscribe from the event so it gets removed on unmount
-    return unsubscribe;
-    // TODO: Temporary added forceUpdate to the line below. Check if it's needed and if it works correctly.
-  }, [forceUpdate, nav]);
 
   const possibleSubjects = [
     {subjectShort: 'DE'},
@@ -262,6 +251,44 @@ const SettingScreen = ({}) => {
     {subjectShort: 'MDK'},
     {subjectShort: 'FU'},
   ];
+
+  return (
+    <SafeAreaView
+      style={{backgroundColor: THEME.background, height: windowsHeight}}>
+      <Text style={[styles.sectionHeaderText, {marginTop: 50}]}>
+        Fächerfarben
+      </Text>
+      <View style={{marginTop: 10}}>
+        <FlatList
+          data={possibleSubjects}
+          renderItem={({item}) => (
+            <FächerfarbenBtn subject={item.subjectShort} />
+          )}
+          numColumns={5}
+          key={3}
+        />
+      </View>
+    </SafeAreaView>
+  );
+};
+
+const SettingScreen = ({}) => {
+  console.info('Site: SETTINGS');
+  const nav = useNavigation();
+
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
+
+  React.useEffect(() => {
+    // TODO: Check what unsubscribe does. Because IDEA says it's redundant.
+    const unsubscribe = nav.addListener('focus', () => {
+      forceUpdate();
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+    // TODO: Temporary added forceUpdate to the line below. Check if it's needed and if it works correctly.
+  }, [forceUpdate, nav]);
 
   const DefaultSections = [
     {
@@ -352,6 +379,42 @@ const SettingScreen = ({}) => {
                           nav.navigate('SettingNavUserInformation');
                         } else if (id === 'darkWhiteMode') {
                           nav.navigate('SettingNavDarkWhiteMode');
+                        } else if (id === 'classColors') {
+                          nav.navigate('SettingNavClassColors');
+                        } else if (id === 'bug') {
+                          Linking.canOpenURL(
+                            'https://github.com/FlynnLG/evi-manager/issues/new',
+                          ).then(supported => {
+                            if (supported) {
+                              Linking.openURL(
+                                'https://github.com/FlynnLG/evi-manager/issues/new',
+                              );
+                            } else {
+                              Alert.alert(
+                                'Fehler',
+                                'Die Seite konnte nicht geöffnet werden, da die Berechtigung dazu fehlt.',
+                                [{text: 'OK', style: 'cancel'}],
+                                {cancelable: false},
+                              );
+                            }
+                          });
+                        } else if (id === 'contact') {
+                          Linking.canOpenURL(
+                            'https://github.com/FlynnLG/evi-manager/discussions',
+                          ).then(supported => {
+                            if (supported) {
+                              Linking.openURL(
+                                'https://github.com/FlynnLG/evi-manager/discussions',
+                              );
+                            } else {
+                              Alert.alert(
+                                'Fehler',
+                                'Die Seite konnte nicht geöffnet werden, da die Berechtigung dazu fehlt.',
+                                [{text: 'OK', style: 'cancel'}],
+                                {cancelable: false},
+                              );
+                            }
+                          });
                         } else if (id === 'logout') {
                           userLogout(nav);
                         }
@@ -625,4 +688,5 @@ export {
   SettingScreen,
   SettingScreenUserInformation,
   SettingScreenDarkWhiteMode,
+  SettingScreenClassColors,
 };
