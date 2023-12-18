@@ -90,7 +90,7 @@ async function getNamesFlatlist(type) {
     return final.map(name => ({
       name: name.split('">')[0],
       value: name.split('">')[1],
-    }));
+    })); //TODO: maybe save this in localStorage, with timeStamp, when timeStamp is older than 24h than crawl new data
   } catch (error) {
     console.error(error);
   }
