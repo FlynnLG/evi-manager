@@ -4,12 +4,6 @@ import {useNavigation} from '@react-navigation/native';
 
 import {THEME, FONTS} from '../constants';
 
-import * as axios from 'axios';
-import * as cheerio from 'cheerio';
-import moment from 'moment';
-import * as Keychain from 'react-native-keychain';
-import appStorage from '../components/appStorage';
-
 import ytm from '../utility/ytm';
 
 const Loading = () => {
