@@ -25,7 +25,7 @@
     "react-native-date-picker": "^4.3.3",
     "react-native-gesture-handler": "^2.9.0",
     "react-native-keychain": "^8.1.2",
-    "react-native-mmkv": "^2.8.0",
+    "react-native-mmkv": "^2.11.0",
     "react-native-reanimated": "^3.0.2",
     "react-native-reanimated-table": "^0.0.2",
     "react-native-restart": "^0.0.27",
