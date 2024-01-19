@@ -2,13 +2,11 @@ import assets from './assets';
 import {SYSTEMLIGHT, SYSTEMDARK, FONTS} from './theme';
 import appStorage from '../components/appStorage';
 
-let THEME = SYSTEMDARK; 
+let THEME = SYSTEMDARK;
 
-async function getStorage(){
-  console.info("Searching for Themes")
-  if (
-    appStorage.getString('@localdata:settings/theme') === 'SYSTEMLIGHT'
-  ) {
+async function getStorage() {
+  console.info('Searching for Themes');
+  if (appStorage.getString('@localdata:settings/theme') === 'SYSTEMLIGHT') {
     THEME = SYSTEMLIGHT;
   } else {
     THEME = SYSTEMDARK;
@@ -16,7 +14,6 @@ async function getStorage(){
   //console.info(AsyncStorage.getItem('@localdata:settings/theme').toString())
 }
 
-getStorage()
-
+getStorage();
 
 export {assets, THEME, FONTS, getStorage};

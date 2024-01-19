@@ -4,7 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import {THEME, FONTS} from '../constants';
 
-import ytm from '../utility/ytm';
+import {ytm} from '../utility/ytm';
 
 const Loading = () => {
   console.info('Site: LOADING');

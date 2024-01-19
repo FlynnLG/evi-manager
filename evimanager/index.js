@@ -7,21 +7,21 @@ import App from './App';
 import {name as appName} from './app.json';
 import 'react-native-gesture-handler';
 
-import PushNotificationIOS from "@react-native-community/push-notification-ios";
-import PushNotification, { Importance } from "react-native-push-notification";
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import PushNotification, {Importance} from 'react-native-push-notification';
 
-AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent('evimanager', () => App);
 
 // Must be outside of any component LifeCycle (such as `componentDidMount`).
 PushNotification.configure({
   // (optional) Called when Token is generated (iOS and Android)
   onRegister: function (token) {
-    console.log("TOKEN:", token);
+    console.log('TOKEN:', token);
   },
 
   // (required) Called when a remote is received or opened, or local notification is opened
   onNotification: function (notification) {
-    console.log("NOTIFICATION:", notification);
+    console.log('NOTIFICATION:', notification);
 
     // process the notification
 
@@ -31,14 +31,14 @@ PushNotification.configure({
 
   // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
   onAction: function (notification) {
-    console.log("ACTION:", notification.action);
-    console.log("NOTIFICATION:", notification);
+    console.log('ACTION:', notification.action);
+    console.log('NOTIFICATION:', notification);
 
     // process the action
   },
 
   // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
-  onRegistrationError: function(err) {
+  onRegistrationError: function (err) {
     console.error(err.message, err);
   },
 
@@ -55,22 +55,21 @@ PushNotification.configure({
   requestPermissions: Platform == 'ios',
 });
 
-
-
-PushNotification.channelExists("evimanager", function (exists) {
-  console.log("Channel exist: " + exists); // true/false
-  if(exists == false && Platform.OS == "android"){
+PushNotification.channelExists('evimanager', function (exists) {
+  console.log('Channel exist: ' + exists); // true/false
+  if (exists === false) {
     PushNotification.createChannel(
       {
-        channelId: "evimanager", // (required)
-        channelName: "Evimanager", // (required)
-        channelDescription: "The Channel of the notification of the evimanager app",
+        channelId: 'evimanager', // (required)
+        channelName: 'Evimanager', // (required)
+        channelDescription:
+          'The Channel of the notification of the evimanager app',
         playSound: true, // (optional) default: true
-        soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+        soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
         importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
         vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
       },
-      (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+      created => console.log(`createChannel returned '${created}'`), // (optional) callback returns whether the channel was created, false means it already existed.
     );
   }
 });
