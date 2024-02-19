@@ -10,10 +10,39 @@ import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 import {Table, Row, Rows} from 'react-native-reanimated-table';
 
 import {FONTS, THEME} from '../constants';
-//import Ionicons
 import Icon from 'react-native-vector-icons/Ionicons';
 import appStorage from './appStorage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {PixelRatio, Dimensions} from 'react-native';
+
+const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window');
+const widthBaseScale = SCREEN_WIDTH / 1290;
+const heightBaseScale = SCREEN_HEIGHT / 2796;
+
+function normalize(size, based = 'width') {
+  const newSize =
+    based === 'height' ? size * heightBaseScale : size * widthBaseScale;
+  return Math.round(PixelRatio.roundToNearestPixel(newSize));
+}
+//for width  pixel
+export const widthPixel = size => {
+  return normalize(size, 'width');
+};
+//for height  pixel
+export const heightPixel = size => {
+  return normalize(size, 'height');
+};
+//for font  pixel
+export const fontPixel = size => {
+  return heightPixel(size);
+};
+//for Margin and Padding vertical pixel
+export const pixelSizeVertical = size => {
+  return heightPixel(size);
+};
+//for Margin and Padding horizontal pixel
+export const pixelSizeHorizontal = size => {
+  return widthPixel(size);
+};
 
 export const LessonCard = ({
   accent,
@@ -51,77 +80,111 @@ export const LessonCard = ({
   // TODO: Define course number (e.g. EN12) in Modal!
   // TODO: Define course number (e.g. EN12) in Modal
 
-  let accentBorderColor = '#636366';
-  let accentWidth = 360;
-  let accentHeight = 140;
-  let accentShadowColor = '#ffffff';
+  let accentBorderColor = THEME.gray2;
+  let accentWidth = widthPixel(1100);
+  let accentShadowColor;
   let accentElevation = 0;
-  let accentPaddingTop = 11.4;
+  let accentPaddingTop = pixelSizeVertical(0);
   let dayAccent = THEME.background;
   let shadowOffsetWidth = 0;
   let shadowOffsetHeight = 0;
   let shadowOpacity = 0;
   let shadowRadius = 0;
   if (accent === true) {
-    //accentBorderColor = THEME.green
-    accentWidth = 385;
-    accentHeight = 155;
-    shadowOffsetWidth = -2;
-    shadowOffsetHeight = 4;
-    shadowOpacity = 0.075;
-    shadowRadius = 3;
+    accentBorderColor = THEME.green;
+    accentWidth = widthPixel(1200);
+    shadowOffsetWidth = widthPixel(-5);
+    shadowOffsetHeight = heightPixel(20);
+    shadowOpacity = 0.085;
+    shadowRadius = widthPixel(10);
     if (THEME.scheme === 'dark') {
-      accentShadowColor = '#636366';
+      accentShadowColor = THEME.gray2;
     } else {
-      accentShadowColor = '#000000';
+      accentShadowColor = THEME.background;
     }
-    accentElevation = 10;
-    accentPaddingTop = 6;
+    accentElevation = widthPixel(15);
+    accentPaddingTop = pixelSizeVertical(0);
     dayAccent = THEME.green;
   }
-    /**const bodyy = {
+  /**const bodyy = {
       'DE':'#34c759',
       'MA':'#32ade6',
       'BIO':'#ff3b30',
     }
     console.log(bodyy, JSON.stringify(bodyy))
     appStorage.set('custom/subjectcolor', JSON.stringify(bodyy))*/
-    const jsonObject = appStorage.getString('custom/subjectcolor')
-    const subjectColors = JSON.parse(jsonObject)
+  const jsonObject = appStorage.getString('custom/subjectcolor');
+  const subjectColors = JSON.parse(jsonObject);
 
-    //Getting Events
-    const events = JSON.parse(appStorage.getString('custom/dates'))
-    //console.log(events["24. September 2023"])
+  //Getting Events
+  const events = JSON.parse(appStorage.getString('custom/dates'));
+  //console.log(events["24. September 2023"])
 
-  function EventBar(){
-    if(!events[date]){
-      return(<></>)
+  function EventBar() {
+    if (!events[date]) {
+      return <></>;
     }
-    if(events[date].length >= 1){
-      return(
-        <View style={{backgroundColor: THEME.background, padding: 8, margin: 8, borderRadius: 12, height: 45}}>
-          <View style={{flex: 1, flexWrap: 'wrap', flexDirection: 'row',}}>
-          <Text style={{color: THEME.fontColor, fontFamily: FONTS.semiBold, paddingLeft: 5, flexBasis: '93%'}}>{events[date][0][0]}</Text>
-            <TouchableOpacity style={{flexBasis: '7%'}} onPress={() => removeEvent(0)}>
-            <Icon name='remove-circle' size={25} color={THEME.red} />
+    if (events[date].length >= 1) {
+      return (
+        <View
+          style={{
+            backgroundColor: THEME.background,
+            padding: 8,
+            margin: 8,
+            borderRadius: 12,
+            height: 45,
+          }}>
+          <View style={{flex: 1, flexWrap: 'wrap', flexDirection: 'row'}}>
+            <Text
+              style={{
+                color: THEME.fontColor,
+                fontFamily: FONTS.semiBold,
+                paddingLeft: 5,
+                flexBasis: '93%',
+              }}>
+              {events[date][0][0]}
+            </Text>
+            <TouchableOpacity
+              style={{flexBasis: '7%'}}
+              onPress={() => removeEvent(0)}>
+              <Icon name="remove-circle" size={25} color={THEME.red} />
             </TouchableOpacity>
           </View>
         </View>
-      ) 
+      );
     }
   }
 
   const [, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
 
-  function removeEvent(i){
-    appStorage.set('custom/dates', JSON.stringify(events[0][date].splice(i, 1)))
+  function removeEvent(i) {
+    appStorage.set(
+      'custom/dates',
+      JSON.stringify(events[0][date].splice(i, 1)),
+    );
     forceUpdate();
   }
 
   function weekendCard() {
     return (
-      <View style={styles.smallLessonCard}>
+      <View
+        style={[
+          styles.smallLessonCard,
+          {
+            borderColor: accentBorderColor,
+            width: accentWidth,
+            shadowColor: accentShadowColor,
+            elevation: accentElevation,
+            marginBottom: accentPaddingTop,
+            shadowOffset: {
+              width: shadowOffsetWidth,
+              height: shadowOffsetHeight,
+            },
+            shadowOpacity: shadowOpacity,
+            shadowRadius: shadowRadius,
+          },
+        ]}>
         <View style={styles.dateContainer}>
           <View
             style={[styles.dayOfTheWeekCircle, {backgroundColor: dayAccent}]}>
@@ -129,13 +192,17 @@ export const LessonCard = ({
           </View>
           <Text style={styles.date}>{date}</Text>
         </View>
-        <View style={styles.weekendHolidayContainer}>
+        <View
+          style={[
+            styles.weekendHolidayContainer,
+            {borderColor: accentBorderColor, width: accentWidth},
+          ]}>
           <View style={styles.weekendHolidayContentInfoContainer}>
             <Icon name="cafe" size={20} color={THEME.fontColor} />
             <Text style={styles.weekendHolidayContentInfoText}>Wochenende</Text>
           </View>
           <View>
-            <EventBar/>
+            <EventBar />
           </View>
         </View>
       </View>
@@ -144,7 +211,23 @@ export const LessonCard = ({
 
   function holidayCard() {
     return (
-      <View style={styles.smallLessonCard}>
+      <View
+        style={[
+          styles.smallLessonCard,
+          {
+            borderColor: accentBorderColor,
+            width: accentWidth,
+            shadowColor: accentShadowColor,
+            elevation: accentElevation,
+            marginBottom: accentPaddingTop,
+            shadowOffset: {
+              width: shadowOffsetWidth,
+              height: shadowOffsetHeight,
+            },
+            shadowOpacity: shadowOpacity,
+            shadowRadius: shadowRadius,
+          },
+        ]}>
         <View style={styles.dateContainer}>
           <View
             style={[styles.dayOfTheWeekCircle, {backgroundColor: dayAccent}]}>
@@ -158,7 +241,7 @@ export const LessonCard = ({
             <Text style={styles.weekendHolidayContentInfoText}>Ferien</Text>
           </View>
           <View>
-            <EventBar/>
+            <EventBar />
           </View>
         </View>
       </View>
@@ -207,7 +290,6 @@ export const LessonCard = ({
           {
             borderColor: accentBorderColor,
             width: accentWidth,
-            height: accentHeight,
             shadowColor: accentShadowColor,
             elevation: accentElevation,
             marginBottom: accentPaddingTop,
@@ -234,7 +316,7 @@ export const LessonCard = ({
           {block5}
         </View>
         <View>
-            <EventBar/>
+          <EventBar />
         </View>
       </View>
     );
@@ -243,189 +325,201 @@ export const LessonCard = ({
   function getBlockForLessonCard(number) {
     if (number === 1) {
       return (
-        <TouchableOpacity
-          style={[
-            styles.frame,
-            {borderColor: subjectColors[blocks[0]]}, //@FlyynLG soll das so rein oder nur der Circle in farben
-          ]}
-          onPress={() => {
-            openSettingsModal(
-              dayOfWeek,
-              '1. Block',
-              blockInfos[0],
-              blocks[0],
-              teachers[0],
-              rooms[0],
-              '8:00-9:20',
-            );
-            bottomSheetModalRef.current?.present();
-          }}>
+        <View>
           <Icon
             name="alert-circle"
-            size={15}
+            size={23}
             color={isVisible([blockInfos[0]])}
+            style={{marginLeft: widthPixel(120)}}
           />
-          <Text style={styles.block}>1</Text>
-          <View style={[styles.circle, {backgroundColor: subjectColors[blocks[0]]}]}>
-            <Text
-              numberOfLines={1}
-              adjustsFontSizeToFit
+          <TouchableOpacity
+            style={[
+              styles.frame,
+              {borderColor: subjectColors[blocks[0]]}, //@FlyynLG soll das so rein oder nur der Circle in farben
+            ]}
+            onPress={() => {
+              openSettingsModal(
+                dayOfWeek,
+                '1. Block',
+                blockInfos[0],
+                blocks[0],
+                teachers[0],
+                rooms[0],
+                '8:00-9:20',
+              );
+              bottomSheetModalRef.current?.present();
+            }}>
+            <Text style={styles.block}>1</Text>
+            <View
               style={[
-                styles.circleText,
+                styles.circle,
+                {backgroundColor: subjectColors[blocks[0]]},
               ]}>
-              {blocks[0]}
-            </Text>
-          </View>
-        </TouchableOpacity>
+              <Text
+                numberOfLines={1}
+                adjustsFontSizeToFit
+                style={[styles.circleText]}>
+                {blocks[0]}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       );
     } else if (number === 2) {
       return (
-        <TouchableOpacity
-          style={[
-            styles.frame,
-            {borderColor: subjectColors[blocks[1]]},
-          ]}
-          onPress={() => {
-            openSettingsModal(
-              dayOfWeek,
-              '2. Block',
-              blockInfos[1],
-              blocks[1],
-              teachers[1],
-              rooms[1],
-              '9:40-11:00',
-            );
-            bottomSheetModalRef.current?.present();
-          }}>
+        <View>
           <Icon
             name="alert-circle"
-            size={15}
+            size={23}
             color={isVisible([blockInfos[1]])}
+            style={{marginLeft: widthPixel(120)}}
           />
-          <Text style={styles.block}>2</Text>
-          <View style={[styles.circle, {backgroundColor: subjectColors[blocks[1]]}]}>
-            <Text
-              numberOfLines={1}
-              adjustsFontSizeToFit
+          <TouchableOpacity
+            style={[styles.frame, {borderColor: subjectColors[blocks[1]]}]}
+            onPress={() => {
+              openSettingsModal(
+                dayOfWeek,
+                '2. Block',
+                blockInfos[1],
+                blocks[1],
+                teachers[1],
+                rooms[1],
+                '9:40-11:00',
+              );
+              bottomSheetModalRef.current?.present();
+            }}>
+            <Text style={styles.block}>2</Text>
+            <View
               style={[
-                styles.circleText,
+                styles.circle,
+                {backgroundColor: subjectColors[blocks[1]]},
               ]}>
-              {blocks[1]}
-            </Text>
-          </View>
-        </TouchableOpacity>
+              <Text
+                numberOfLines={1}
+                adjustsFontSizeToFit
+                style={[styles.circleText]}>
+                {blocks[1]}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       );
     } else if (number === 3) {
       return (
-        <TouchableOpacity
-          style={[
-            styles.frame,
-            {borderColor: subjectColors[blocks[2]]},
-          ]}
-          onPress={() => {
-            openSettingsModal(
-              dayOfWeek,
-              '3. Block',
-              blockInfos[2],
-              blocks[2],
-              teachers[2],
-              rooms[2],
-              '11:30-12:50',
-            );
-            bottomSheetModalRef.current?.present();
-          }}>
+        <View>
           <Icon
             name="alert-circle"
-            size={15}
+            size={23}
             color={isVisible([blockInfos[2]])}
+            style={{marginLeft: widthPixel(120)}}
           />
-          <Text style={styles.block}>3</Text>
-          <View style={[styles.circle, {backgroundColor: subjectColors[blocks[2]]}]}>
-            <Text
-              numberOfLines={1}
-              adjustsFontSizeToFit
+          <TouchableOpacity
+            style={[styles.frame, {borderColor: subjectColors[blocks[2]]}]}
+            onPress={() => {
+              openSettingsModal(
+                dayOfWeek,
+                '3. Block',
+                blockInfos[2],
+                blocks[2],
+                teachers[2],
+                rooms[2],
+                '11:30-12:50',
+              );
+              bottomSheetModalRef.current?.present();
+            }}>
+            <Text style={styles.block}>3</Text>
+            <View
               style={[
-                styles.circleText,
+                styles.circle,
+                {backgroundColor: subjectColors[blocks[2]]},
               ]}>
-              {blocks[2]}
-            </Text>
-          </View>
-        </TouchableOpacity>
+              <Text
+                numberOfLines={1}
+                adjustsFontSizeToFit
+                style={[styles.circleText]}>
+                {blocks[2]}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       );
     } else if (number === 4) {
       return (
-        <TouchableOpacity
-          style={[
-            styles.frame,
-            {borderColor: subjectColors[blocks[3]]},
-          ]}
-          onPress={() => {
-            openSettingsModal(
-              dayOfWeek,
-              '4. Block',
-              blockInfos[3],
-              blocks[3],
-              teachers[3],
-              rooms[3],
-              '13:10-14:30',
-            );
-            bottomSheetModalRef.current?.present();
-          }}>
+        <View>
           <Icon
             name="alert-circle"
-            size={15}
+            size={23}
             color={isVisible([blockInfos[3]])}
+            style={{marginLeft: widthPixel(120)}}
           />
-          <Text style={styles.block}>4</Text>
-          <View style={[styles.circle, {backgroundColor: subjectColors[blocks[3]]}]}>
-            <Text
-              numberOfLines={1}
-              adjustsFontSizeToFit
+          <TouchableOpacity
+            style={[styles.frame, {borderColor: subjectColors[blocks[3]]}]}
+            onPress={() => {
+              openSettingsModal(
+                dayOfWeek,
+                '4. Block',
+                blockInfos[3],
+                blocks[3],
+                teachers[3],
+                rooms[3],
+                '13:10-14:30',
+              );
+              bottomSheetModalRef.current?.present();
+            }}>
+            <Text style={styles.block}>4</Text>
+            <View
               style={[
-                styles.circleText,
+                styles.circle,
+                {backgroundColor: subjectColors[blocks[3]]},
               ]}>
-              {blocks[3]}
-            </Text>
-          </View>
-        </TouchableOpacity>
+              <Text
+                numberOfLines={1}
+                adjustsFontSizeToFit
+                style={[styles.circleText]}>
+                {blocks[3]}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       );
     } else if (number === 5) {
       return (
-        <TouchableOpacity
-          style={[
-            styles.frame,
-            {borderColor: subjectColors[blocks[4]]},
-          ]}
-          onPress={() => {
-            openSettingsModal(
-              dayOfWeek,
-              '5. Block',
-              blockInfos[4],
-              blocks[4],
-              teachers[4],
-              rooms[4],
-              '14:35-15:55',
-            );
-            bottomSheetModalRef.current?.present();
-          }}>
+        <View>
           <Icon
             name="alert-circle"
-            size={15}
+            size={23}
             color={isVisible([blockInfos[4]])}
+            style={{marginLeft: widthPixel(120)}}
           />
-          <Text style={styles.block}>5</Text>
-          <View
-            style={[
-              styles.circle, {backgroundColor: subjectColors[blocks[4]]}
-            ]}>
-            <Text
-              numberOfLines={1}
-              adjustsFontSizeToFit
-              style={[styles.circleText]}>
-              {blocks[4]}
-            </Text>
-          </View>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.frame, {borderColor: subjectColors[blocks[4]]}]}
+            onPress={() => {
+              openSettingsModal(
+                dayOfWeek,
+                '5. Block',
+                blockInfos[4],
+                blocks[4],
+                teachers[4],
+                rooms[4],
+                '14:35-15:55',
+              );
+              bottomSheetModalRef.current?.present();
+            }}>
+            <Text style={styles.block}>5</Text>
+            <View
+              style={[
+                styles.circle,
+                {backgroundColor: subjectColors[blocks[4]]},
+              ]}>
+              <Text
+                numberOfLines={1}
+                adjustsFontSizeToFit
+                style={[styles.circleText]}>
+                {blocks[4]}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       );
     }
   }
@@ -507,7 +601,7 @@ export const LessonCard = ({
         snapPoints={snapPoints}
         backdropComponent={renderBackdrop}
         backgroundStyle={{
-          backgroundColor: THEME.background,
+          backgroundColor: THEME.gray6,
         }}>
         <View style={styles.modalContentContainer}>
           <Text style={styles.modalContentText}>
@@ -541,46 +635,44 @@ const styles = StyleSheet.create({
   lessonCard: {
     //width: 370,  EDIT THESE WITH THE VARIABELS "accentWidth" and "accentHeight"
     //height: 140,
-    margin: 10.4,
+    margin: heightPixel(40),
     alignSelf: 'center',
-    backgroundColor: THEME.primary,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#737475', //EDIT THIS VARIABLE WITH "accentBorderColor"
+    backgroundColor: THEME.gray6,
+    borderRadius: widthPixel(40),
+    borderWidth: widthPixel(2),
   },
   smallLessonCard: {
-    width: 360,
-    height: 90,
-    margin: 10.4,
+    width: widthPixel(1100),
+    margin: pixelSizeVertical(40),
     alignSelf: 'center',
-    backgroundColor: THEME.primary,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#636366',
+    backgroundColor: THEME.gray6,
+    borderRadius: widthPixel(40),
+    borderWidth: widthPixel(2),
   },
   rowContainer: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     flexWrap: 'wrap',
-    marginEnd: -15,
+    marginEnd: pixelSizeHorizontal(-50),
+    marginBottom: heightPixel(40),
   },
   frame: {
-    marginTop: 3,
-    width: 45,
-    height: 80,
+    marginTop: widthPixel(-30),
+    width: widthPixel(150),
     borderStyle: 'solid',
-    borderColor: '#8e8e93',
-    borderWidth: 2,
-    borderRadius: 50,
-    marginEnd: 15,
+    borderColor: THEME.fontColor,
+    borderWidth: widthPixel(5),
+    borderRadius: widthPixel(100),
+    marginEnd: widthPixel(60),
   },
   circle: {
-    width: 38,
-    height: 38,
-    borderRadius: 50,
-    marginTop: -5,
+    width: widthPixel(125),
+    height: widthPixel(125),
+    borderRadius: widthPixel(100),
     backgroundColor: THEME.background, //TODO
+    marginBottom: heightPixel(7),
+    marginTop: heightPixel(30),
     alignSelf: 'center',
     display: 'flex',
     alignItems: 'center',
@@ -590,29 +682,30 @@ const styles = StyleSheet.create({
   circleText: {
     fontFamily: FONTS.medium,
     color: THEME.fontColor,
-    fontSize: 16,
+    fontSize: fontPixel(50),
   },
   block: {
     fontFamily: FONTS.semiBold,
     color: THEME.fontColor,
-    fontSize: 18,
+    fontSize: fontPixel(60),
+    marginBottom: heightPixel(0),
+    marginTop: heightPixel(30),
     textAlign: 'center',
     alignItems: 'center',
-    marginTop: -7,
   },
   date: {
     fontFamily: FONTS.regular,
     color: THEME.fontColor,
-    fontSize: 15,
-    marginLeft: 10,
-    marginTop: 6,
+    fontSize: fontPixel(50),
+    marginLeft: pixelSizeHorizontal(40),
+    marginTop: pixelSizeVertical(40),
   },
   dayOfTheWeekCircle: {
-    width: 30,
-    height: 30,
-    borderRadius: 50,
-    marginTop: 5,
-    marginLeft: 5,
+    width: widthPixel(90),
+    height: widthPixel(90),
+    borderRadius: widthPixel(100),
+    marginTop: widthPixel(25),
+    marginLeft: widthPixel(25),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -620,253 +713,112 @@ const styles = StyleSheet.create({
   dayOfTheWeekText: {
     fontFamily: FONTS.semiBold,
     color: THEME.fontColor,
-    fontSize: 13,
+    fontSize: fontPixel(50),
   },
   dateContainer: {
-    width: 200,
-    height: 40,
-    marginTop: 5,
-    marginLeft: 5,
+    width: widthPixel(800),
+    height: heightPixel(120),
+    marginTop: heightPixel(10),
+    marginLeft: heightPixel(10),
     flexDirection: 'row',
   },
   modalContentContainer: {
     flex: 1,
   },
   modalContentText: {
-    fontSize: 20,
+    fontSize: fontPixel(70),
     color: THEME.fontColor,
     fontFamily: FONTS.regular,
     alignSelf: 'center',
   },
   modalContentBlockInfoBox: {
-    backgroundColor: THEME.primary,
-    borderRadius: 10,
-    marginTop: 10,
-    width: 385,
-    height: 150,
+    backgroundColor: THEME.gray5,
+    borderRadius: widthPixel(30),
+    marginTop: heightPixel(30),
+    width: widthPixel(1200),
+    height: heightPixel(510),
     justifyContent: 'center',
     alignSelf: 'center',
   },
   modalContentBlockInfoBoxEmpty: {
-    backgroundColor: THEME.primary,
-    borderRadius: 3,
-    marginTop: 10,
-    width: 385,
-    height: 35,
+    backgroundColor: THEME.gray5,
+    borderRadius: widthPixel(30),
+    marginTop: heightPixel(30),
+    width: widthPixel(1200),
+    height: heightPixel(120),
     justifyContent: 'center',
     alignSelf: 'center',
   },
   modalContentBlockInfoBoxText: {
     color: THEME.fontColor,
-    fontSize: 17,
+    fontSize: fontPixel(60),
     fontFamily: FONTS.regular,
-    marginLeft: 10,
+    marginLeft: widthPixel(35),
   },
   modalContentInfoContainer: {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: 360,
-    marginTop: 20,
-    marginLeft: 25,
+    width: widthPixel(1100),
+    marginTop: heightPixel(60),
+    marginLeft: widthPixel(80),
   },
   modalContentInfoText: {
     color: THEME.fontColor,
-    fontSize: 17,
+    fontSize: fontPixel(60),
     fontFamily: FONTS.regular,
-    marginLeft: 20,
+    marginLeft: widthPixel(60),
   },
   weekendHolidayContainer: {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: 360,
-    height: 45,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#636366',
+    width: widthPixel(1100),
+    height: heightPixel(130),
+    borderRadius: widthPixel(40),
+    borderWidth: widthPixel(2),
+    marginTop: heightPixel(20),
+    marginBottom: heightPixel(-2),
+    borderColor: THEME.fontColor,
     alignSelf: 'center',
-    backgroundColor: THEME.primary,
+    backgroundColor: THEME.gray6,
   },
   weekendHolidayContentInfoContainer: {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: 360,
-    marginTop: 10,
-    marginLeft: 15,
+    width: widthPixel(1000),
+    height: heightPixel(70),
+    marginTop: widthPixel(26),
+    marginLeft: widthPixel(47),
   },
   weekendHolidayContentInfoText: {
     color: THEME.fontColor,
-    fontSize: 15,
+    fontSize: fontPixel(50),
     fontFamily: FONTS.regular,
-    marginLeft: 20,
+    marginLeft: widthPixel(57),
   },
   container: {
     flex: 1,
-    padding: 12,
+    padding: 12, // TODO: Convert to widthPixel/heightPixel
     justifyContent: 'center',
-    backgroundColor: THEME.primary,
-    borderRadius: 12,
+    backgroundColor: THEME.gray5,
+    borderRadius: 12, // TODO: Convert to widthPixel/heightPixel
   },
   head: {
-    height: 44,
-    backgroundColor: THEME.secondary,
+    height: 44, // TODO: Convert to widthPixel/heightPixel
+    backgroundColor: THEME.gray6,
   },
   headText: {
-    fontSize: 12,
+    fontSize: 12, // TODO: Convert to widthPixel/heightPixel
     fontFamily: FONTS.semiBold,
     textAlign: 'center',
     color: THEME.fontColor,
   },
   text: {
-    fontSize: 14,
+    fontSize: 14, // TODO: Convert to widthPixel/heightPixel
     fontFamily: FONTS.regular,
     textAlign: 'center',
     color: THEME.fontColor,
   },
 });
-
-/*
- <View style={styles.rowContainer}>
- <TouchableOpacity
- style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
- onPress={() => {
- openSettingsModal(
- dayOfWeek,
- '1. Block',
- blockInfo1,
- block1,
- teacher1,
- room1,
- '8:00-9:20',
- );
- bottomSheetModalRef.current?.present();
- }}>
- <Text style={styles.block}>1</Text>
- <View style={styles.circle}>
- <Text
- numberOfLines={1}
- adjustsFontSizeToFit
- style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
- {block1}
- </Text>
- </View>
- </TouchableOpacity>
-
- <TouchableOpacity
- style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
- onPress={() => {
- openSettingsModal(
- dayOfWeek,
- '2. Block',
- blockInfo2,
- block2,
- teacher2,
- room2,
- '9:40-11:00',
- );
- bottomSheetModalRef.current?.present();
- }}>
- <Text style={styles.block}>2</Text>
- <View style={styles.circle}>
- <Text
- numberOfLines={1}
- adjustsFontSizeToFit
- style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
- {block2}
- </Text>
- </View>
- </TouchableOpacity>
- <TouchableOpacity
- style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
- onPress={() => {
- openSettingsModal(
- dayOfWeek,
- '3. Block',
- blockInfo3,
- block3,
- teacher3,
- room3,
- '11:30-12:50',
- );
- bottomSheetModalRef.current?.present();
- }}>
- <Text style={styles.block}>3</Text>
- <View style={styles.circle}>
- <Text
- numberOfLines={1}
- adjustsFontSizeToFit
- style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
- {block3}
- </Text>
- </View>
- </TouchableOpacity>
- <TouchableOpacity
- style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
- onPress={() => {
- openSettingsModal(
- dayOfWeek,
- '4. Block',
- blockInfo4,
- block4,
- teacher4,
- room4,
- '13:10-14:30',
- );
- bottomSheetModalRef.current?.present();
- }}>
- <Text style={styles.block}>4</Text>
- <View style={styles.circle}>
- <Text
- numberOfLines={1}
- adjustsFontSizeToFit
- style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
- {block4}
- </Text>
- </View>
- </TouchableOpacity>
- <TouchableOpacity
- style={[styles.frame, borderColor=getUserLessonTheme(blocks)]}
- onPress={() => {
- openSettingsModal(
- dayOfWeek,
- '5. Block',
- blockInfo5,
- block5,
- teacher5,
- room5,
- '14:35-15:55',
- );
- bottomSheetModalRef.current?.present();
- }}>
- <Text style={styles.block}>5</Text>
- <View style={styles.circle}>
- <Text
- numberOfLines={1}
- adjustsFontSizeToFit
- style={[styles.circleText, backgroundColor=getUserLessonTheme(blocks)]}>
- {block5}
- </Text>
- </View>
- </TouchableOpacity>
- </View>
- */
-
-/*
- <View style={styles.weekendHolidayContainer}>
- <View style={styles.weekendHolidayContentInfoContainer}>
- <Icon name="cafe" size={20} color={THEME.fontColor} />
- <Text style={styles.weekendHolidayContentInfoText}>Wochenende</Text>
- </View>
- </View>
- */
-
-/*
- <View style={styles.weekendHolidayContainer}>
- <View style={styles.weekendHolidayContentInfoContainer}>
- <Icon name="calendar" size={20} color={THEME.fontColor} />
- <Text style={styles.weekendHolidayContentInfoText}>Ferien</Text>
- </View>
- </View>
- */

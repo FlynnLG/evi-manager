@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {
   Text,
   View,
@@ -8,14 +8,11 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import RNRestart from 'react-native-restart';
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-  BottomSheetBackdrop,
-} from '@gorhom/bottom-sheet';
-import DatePicker from 'react-native-date-picker'
+import {BottomSheetModal, BottomSheetBackdrop} from '@gorhom/bottom-sheet';
+import DatePicker from 'react-native-date-picker';
 
 import {THEME, FONTS} from '../constants';
 
@@ -24,6 +21,7 @@ import appStorage from '../components/appStorage';
 import moment from 'moment/moment';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import {widthPixel, heightPixel, fontPixel} from '../components/lessoncard';
 
 function dateManager() {
   const date = new Date(new Date().getTime());
@@ -331,12 +329,12 @@ function Home() {
   // variables
   const snapPoints = useMemo(() => ['10%', '55%'], []);
   const [eventName, setEventName] = useState('');
-  const [date, setDate] = useState(new Date())
+  const [date, setDate] = useState(new Date());
   // callbacks
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
-  const handleSheetChanges = useCallback((index) => {
+  const handleSheetChanges = useCallback(index => {
     console.log('handleSheetChanges', index);
   }, []);
 
@@ -354,159 +352,166 @@ function Home() {
   const saveEvent = () => {
     //const dateObject = new Date(date);
 
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const options = {year: 'numeric', month: 'long', day: 'numeric'};
     const formattedDate = date.toLocaleDateString('de-DE', options);
-    console.log(formattedDate)
+    console.log(formattedDate);
 
-    if(!eventName || eventName == ''){
-      console.log("No eventName set, can't safe the event")
-      return
+    if (!eventName || eventName == '') {
+      console.log("No eventName set, can't safe the event");
+      return;
     }
-    let eventDates = JSON.parse(appStorage.getString('custom/dates'))
-    console.log(eventDates)
-    console.log(formattedDate)
-    if(eventDates[formattedDate]){
-      console.log("EventDate already exist!")
-      
+    let eventDates = JSON.parse(appStorage.getString('custom/dates'));
+    console.log(eventDates);
+    console.log(formattedDate);
+    if (eventDates[formattedDate]) {
+      console.log('EventDate already exist!');
+
       eventDates[0][formattedDate].push(eventName);
-    }else{
-      
-      eventDates[0][formattedDate] = [[eventName], ];
+    } else {
+      eventDates[0][formattedDate] = [[eventName]];
     }
-    appStorage.set('custom/dates', JSON.stringify(eventDates))
-    console.info("Stored successfull!")
+    appStorage.set('custom/dates', JSON.stringify(eventDates));
+    console.info('Stored successfull!');
     forceUpdate();
     bottomSheetModalRef.current?.dismiss();
-  }
+  };
 
   return (
-    <BottomSheetModalProvider>
-    <ScrollView
-      style={{
-        flex: 1,
-        paddingTop: StatusBar.currentHeight,
-        backgroundColor: THEME.background,
-      }}>
-      <View
+    <SafeAreaView
+      edges={['top', 'left', 'right']}
+      style={{flex: 1, backgroundColor: THEME.background}}>
+      <ScrollView
         style={{
-          paddingTop: 100,
+          flex: 1,
+          paddingTop: StatusBar.currentHeight,
           backgroundColor: THEME.background,
-          color: THEME.fontColor,
-          paddingBottom: 80,
         }}>
-        <Text
+        <View
           style={{
-            paddingLeft: 30,
-            fontFamily: FONTS.semiBold,
+            paddingTop: heightPixel(50),
+            backgroundColor: THEME.background,
             color: THEME.fontColor,
-            fontSize: 24,
-            paddingBottom: 20,
+            paddingBottom: 100,
           }}>
-          {welcomeMessage.toString()}
-          {name}!
-        </Text>
-        <View style={{paddingTop: 48}}>
-          <View style={{
-            flex: 1,
-            flexWrap: 'wrap',
-            flexDirection: 'row'}}>
-            <TouchableOpacity onPress={() => handlePresentModalPress()} style={{flexBasis: '85%'}}>
-              <View style={{marginLeft: windowWidth * 0.77}}>
-                <Icon name="add-circle" color="#3d3737" size={30} />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => RNRestart.restart()} style={{flexBasis: '15%'}}>
-              <View >
-                <Icon name="reload-circle" color="#3d3737" size={30} />
-              </View>
-            </TouchableOpacity>
+          <Text
+            style={{
+              paddingLeft: 30,
+              fontFamily: FONTS.semiBold,
+              color: THEME.fontColor,
+              fontSize: fontPixel(90),
+              paddingBottom: 20,
+            }}>
+            {welcomeMessage.toString()}
+            {name}!
+          </Text>
+          <View style={{paddingTop: 48}}>
+            <View
+              style={{
+                flex: 1,
+                flexWrap: 'wrap',
+                flexDirection: 'row',
+              }}>
+              <TouchableOpacity
+                onPress={() => handlePresentModalPress()}
+                style={{flexBasis: '85%'}}>
+                <View style={{marginLeft: windowWidth * 0.77}}>
+                  <Icon name="add-circle" color="#3d3737" size={30} />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => RNRestart.restart()}
+                style={{flexBasis: '15%'}}>
+                <View>
+                  <Icon name="reload-circle" color="#3d3737" size={30} />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <LessonCard
+              accent
+              dayOfWeekShort={moment().format('dddd').substring(0, 2)}
+              date={moment().format('DD. MMMM YYYY')}
+              blocks={lcData[0][1]}
+              dayOfWeek={moment().format('dddd')}
+              blockInfos={lcData[0][4]}
+              teachers={lcData[0][3]}
+              rooms={lcData[0][2]}
+            />
+            <LessonCard
+              dayOfWeekShort={moment()
+                .add(1, 'day')
+                .format('dddd')
+                .substring(0, 2)}
+              date={moment().add(1, 'day').format('DD. MMMM YYYY')}
+              blocks={lcData[1][1]}
+              dayOfWeek={moment().add(1, 'day').format('dddd')}
+              blockInfos={lcData[1][4]}
+              teachers={lcData[1][3]}
+              rooms={lcData[1][2]}
+            />
+            <LessonCard
+              dayOfWeekShort={moment()
+                .add(2, 'days')
+                .format('dddd')
+                .substring(0, 2)}
+              date={moment().add(2, 'days').format('DD. MMMM YYYY')}
+              blocks={lcData[2][1]}
+              dayOfWeek={moment().add(2, 'days').format('dddd')}
+              blockInfos={lcData[2][4]}
+              teachers={lcData[2][3]}
+              rooms={lcData[2][2]}
+            />
+            <LessonCard
+              dayOfWeekShort={moment()
+                .add(3, 'days')
+                .format('dddd')
+                .substring(0, 2)}
+              date={moment().add(3, 'days').format('DD. MMMM YYYY')}
+              blocks={lcData[3][1]}
+              dayOfWeek={moment().add(3, 'days').format('dddd')}
+              blockInfos={lcData[3][4]}
+              teachers={lcData[3][3]}
+              rooms={lcData[3][2]}
+            />
+            <LessonCard
+              dayOfWeekShort={moment()
+                .add(4, 'days')
+                .format('dddd')
+                .substring(0, 2)}
+              date={moment().add(4, 'days').format('DD. MMMM YYYY')}
+              blocks={lcData[4][1]}
+              dayOfWeek={moment().add(4, 'days').format('dddd')}
+              blockInfos={lcData[4][4]}
+              teachers={lcData[4][3]}
+              rooms={lcData[4][2]}
+            />
+            <LessonCard
+              dayOfWeekShort={moment()
+                .add(5, 'days')
+                .format('dddd')
+                .substring(0, 2)}
+              date={moment().add(5, 'days').format('DD. MMMM YYYY')}
+              blocks={lcData[5][1]}
+              dayOfWeek={moment().add(5, 'days').format('dddd')}
+              blockInfos={lcData[5][4]}
+              teachers={lcData[5][3]}
+              rooms={lcData[5][2]}
+            />
+            <LessonCard
+              dayOfWeekShort={moment()
+                .add(6, 'days')
+                .format('dddd')
+                .substring(0, 2)}
+              date={moment().add(6, 'days').format('DD. MMMM YYYY')}
+              blocks={lcData[6][1]}
+              dayOfWeek={moment().add(6, 'days').format('dddd')}
+              blockInfos={lcData[6][4]}
+              teachers={lcData[6][3]}
+              rooms={lcData[6][2]}
+            />
           </View>
-          <LessonCard
-            accent
-            dayOfWeekShort={moment().format('dddd').substring(0, 2)}
-            date={moment().format('DD. MMMM YYYY')}
-            blocks={lcData[0][1]}
-            dayOfWeek={moment().format('dddd')}
-            blockInfos={lcData[0][4]}
-            teachers={lcData[0][3]}
-            rooms={lcData[0][2]}
-          />
-          <LessonCard
-            dayOfWeekShort={moment()
-              .add(1, 'day')
-              .format('dddd')
-              .substring(0, 2)}
-            date={moment().add(1, 'day').format('DD. MMMM YYYY')}
-            blocks={lcData[1][1]}
-            dayOfWeek={moment().add(1, 'day').format('dddd')}
-            blockInfos={lcData[1][4]}
-            teachers={lcData[1][3]}
-            rooms={lcData[1][2]}
-          />
-          <LessonCard
-            dayOfWeekShort={moment()
-              .add(2, 'days')
-              .format('dddd')
-              .substring(0, 2)}
-            date={moment().add(2, 'days').format('DD. MMMM YYYY')}
-            blocks={lcData[2][1]}
-            dayOfWeek={moment().add(2, 'days').format('dddd')}
-            blockInfos={lcData[2][4]}
-            teachers={lcData[2][3]}
-            rooms={lcData[2][2]}
-          />
-          <LessonCard
-            dayOfWeekShort={moment()
-              .add(3, 'days')
-              .format('dddd')
-              .substring(0, 2)}
-            date={moment().add(3, 'days').format('DD. MMMM YYYY')}
-            blocks={lcData[3][1]}
-            dayOfWeek={moment().add(3, 'days').format('dddd')}
-            blockInfos={lcData[3][4]}
-            teachers={lcData[3][3]}
-            rooms={lcData[3][2]}
-          />
-          <LessonCard
-            dayOfWeekShort={moment()
-              .add(4, 'days')
-              .format('dddd')
-              .substring(0, 2)}
-            date={moment().add(4, 'days').format('DD. MMMM YYYY')}
-            blocks={lcData[4][1]}
-            dayOfWeek={moment().add(4, 'days').format('dddd')}
-            blockInfos={lcData[4][4]}
-            teachers={lcData[4][3]}
-            rooms={lcData[4][2]}
-          />
-          <LessonCard
-            dayOfWeekShort={moment()
-              .add(5, 'days')
-              .format('dddd')
-              .substring(0, 2)}
-            date={moment().add(5, 'days').format('DD. MMMM YYYY')}
-            blocks={lcData[5][1]}
-            dayOfWeek={moment().add(5, 'days').format('dddd')}
-            blockInfos={lcData[5][4]}
-            teachers={lcData[5][3]}
-            rooms={lcData[5][2]}
-          />
-          <LessonCard
-            dayOfWeekShort={moment()
-              .add(6, 'days')
-              .format('dddd')
-              .substring(0, 2)}
-            date={moment().add(6, 'days').format('DD. MMMM YYYY')}
-            blocks={lcData[6][1]}
-            dayOfWeek={moment().add(6, 'days').format('dddd')}
-            blockInfos={lcData[6][4]}
-            teachers={lcData[6][3]}
-            rooms={lcData[6][2]}
-          />
         </View>
-      </View>
 
-      <BottomSheetModal
+        <BottomSheetModal
           ref={bottomSheetModalRef}
           index={1}
           snapPoints={snapPoints}
@@ -514,44 +519,95 @@ function Home() {
           enablePanDownToClose={true}
           backdropComponent={renderBackdrop}
           backgroundStyle={{
-          backgroundColor: THEME.background,
+            backgroundColor: THEME.background,
           }}>
-          <View style={{
-            flex: 1,
-            flexWrap: 'wrap',
-            flexDirection: 'row',
-            marginBottom: -100}}>
-            <Text style={{flexBasis: '75%', color: THEME.fontColor, fontFamily: FONTS.semiBold, fontSize: 21, paddingLeft: 25,}}>Neuer Termin</Text>
-            <TouchableOpacity style={{backgroundColor: THEME.blue, borderRadius: 50, flexBasis: '20%', paddingLeft: 5, paddingTop: 3,}} onPress={saveEvent}>
-              <Text style={{color: '#fff', fontFamily: FONTS.medium, fontSize: 18}}>Sichern</Text>
+          <View
+            style={{
+              flex: 1,
+              flexWrap: 'wrap',
+              flexDirection: 'row',
+              marginBottom: -100,
+            }}>
+            <Text
+              style={{
+                flexBasis: '75%',
+                color: THEME.fontColor,
+                fontFamily: FONTS.semiBold,
+                fontSize: 21,
+                paddingLeft: 25,
+              }}>
+              Neuer Termin
+            </Text>
+            <TouchableOpacity
+              style={{
+                backgroundColor: THEME.blue,
+                borderRadius: 50,
+                flexBasis: '20%',
+                paddingLeft: 5,
+                paddingTop: 3,
+              }}
+              onPress={saveEvent}>
+              <Text
+                style={{color: '#fff', fontFamily: FONTS.medium, fontSize: 18}}>
+                Sichern
+              </Text>
             </TouchableOpacity>
           </View>
-          
-          <Text style={{color: THEME.fontColor, fontFamily: FONTS.medium, fontSize: 19, textAlign: 'center'}}>Terminname</Text>
+
+          <Text
+            style={{
+              color: THEME.fontColor,
+              fontFamily: FONTS.medium,
+              fontSize: 19,
+              textAlign: 'center',
+            }}>
+            Terminname
+          </Text>
           <TextInput
-              placeholder="Terminname"
-              placeholderTextColor={THEME.fontColor}
-              onChangeText={newText => setEventName(newText)}
-              style={{
-                margin: 10,
-                marginLeft: 25,
-                marginRight: 25,
-                backgroundColor: THEME.secondary,
-                borderRadius: 11,
-                height: 50,
-                padding: 10,
-                paddingTop: 12,
-                fontFamily: FONTS.medium,
-                color: THEME.fontColor,
-              }}
+            placeholder="Terminname"
+            placeholderTextColor={THEME.fontColor}
+            onChangeText={newText => setEventName(newText)}
+            style={{
+              margin: 10,
+              marginLeft: 25,
+              marginRight: 25,
+              backgroundColor: THEME.gray6,
+              borderRadius: 11,
+              height: 50,
+              padding: 10,
+              paddingTop: 12,
+              fontFamily: FONTS.medium,
+              color: THEME.fontColor,
+            }}
+          />
+          <Text
+            style={{
+              color: THEME.fontColor,
+              fontFamily: FONTS.medium,
+              fontSize: 19,
+              textAlign: 'center',
+            }}>
+            Datum
+          </Text>
+          <View
+            style={{
+              backgroundColor: '#fff',
+              margin: 25,
+              alignContent: 'center',
+              borderRadius: 20,
+              paddingLeft: 23,
+              marginTop: 10,
+            }}>
+            <DatePicker
+              date={date}
+              onDateChange={setDate}
+              mode="date"
+              locale="de"
             />
-            <Text style={{color: THEME.fontColor, fontFamily: FONTS.medium, fontSize: 19, textAlign: 'center'}}>Datum</Text>
-            <View style={{backgroundColor: '#fff', margin: 25, alignContent: 'center', borderRadius: 20, paddingLeft: 23, marginTop: 10,}}>
-            <DatePicker date={date} onDateChange={setDate} mode='date' locale='de' />
-            </View>
+          </View>
         </BottomSheetModal>
-    </ScrollView>
-    </BottomSheetModalProvider>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

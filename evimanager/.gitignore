@@ -35,7 +35,7 @@ local.properties
 
 # node.js
 #
-node_modules/
+/node_modules/
 npm-debug.log
 yarn-error.log
 
@@ -60,3 +60,6 @@ yarn-error.log
 
 # Temporary files created by Metro to check the health of the file watcher
 .metro-health-check*
+
+# testing
+/coverage

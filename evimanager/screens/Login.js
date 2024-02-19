@@ -11,12 +11,10 @@ import {useNavigation} from '@react-navigation/native';
 
 import {THEME, FONTS, assets} from '../constants';
 import * as Keychain from 'react-native-keychain';
-//import {getPermission} from '../components'
 
 const windowWidth = Dimensions.get('window').width;
 
 async function handelLogin(navigation, username, password) {
-  //getPermission()
   console.log('Navigation to LOADING!');
   await Keychain.setGenericPassword(username, password).then(
     navigation.navigate('Loading'),
@@ -63,7 +61,7 @@ const Login = () => {
         onChangeText={newText => setName(newText)}
         style={{
           marginTop: 30,
-          backgroundColor: THEME.secondary,
+          backgroundColor: THEME.gray6,
           borderRadius: 11,
           height: 50,
           padding: 10,
@@ -80,7 +78,7 @@ const Login = () => {
         style={{
           marginTop: 35,
           marginBottom: 5,
-          backgroundColor: THEME.secondary,
+          backgroundColor: THEME.gray6,
           borderRadius: 11,
           height: 50,
           padding: 10,
