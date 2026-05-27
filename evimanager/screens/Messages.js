@@ -20,7 +20,7 @@ import {
 import {assets, FONTS, THEME} from '../constants';
 import Keychain from 'react-native-keychain';
 import axios from 'axios';
-import * as cheerio from 'cheerio';
+import * as cheerio from 'cheerio/slim';
 import Dropdown from 'react-native-input-select';
 import {heightPixel} from '../components/lessoncard';
 import Icon from 'react-native-vector-icons/Ionicons';

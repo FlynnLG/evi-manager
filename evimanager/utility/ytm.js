@@ -1,5 +1,5 @@
 import * as axios from 'axios';
-import * as cheerio from 'cheerio';
+import * as cheerio from 'cheerio/slim';
 import moment from 'moment';
 import * as Keychain from 'react-native-keychain';
 import appStorage from '../components/appStorage';
