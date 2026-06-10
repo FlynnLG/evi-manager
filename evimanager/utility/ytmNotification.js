@@ -2,7 +2,7 @@ import * as axios from 'axios';
 import * as cheerio from 'cheerio';
 import * as Keychain from 'react-native-keychain';
 import appStorage from '../components/appStorage';
-import PushNotification from 'react-native-push-notification';
+//import PushNotification from 'react-native-push-notification'; TODO - change repo because it causes a build error under android - same in index.js - "A problem occurred evaluating project ':react-native-push-notification'." -> "> Could not find method jcenter() for arguments [] on repository container of type org.gradle.api.internal.artifacts.dsl.DefaultRepositoryHandler."
 
 const ytm = async nav => {
   try {
@@ -74,12 +74,14 @@ const ytm = async nav => {
                       } erhalten. Die letzte Nachricht wurde von ${newMessageSender} gesendet.`;
 
                       console.log(messageText);
+                      /* TODO - see line 5 for info
                       PushNotification.localNotification({
                         channelId: 'evimanager',
                         bigText: messageText,
                         title: newMessageSender,
                         message: messageText,
                       });
+                       */
                     }
                   }
                 } else {

@@ -20,7 +20,7 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{headerShown: false}}
-        initialRouteName="AppStart">
+        initialRouteName="AppStart" id={"AppStart"}>
         <Stack.Screen name="AppStart" component={AppStart} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Loading" component={Loading} />

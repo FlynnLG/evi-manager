@@ -31,7 +31,7 @@ export async function ytm(nav) {
             // Check if login was successful
             if (
               $(
-                'body > div:nth-child(1) > div:nth-child(3) > table > tbody > tr > td > a > b',
+                'body > div:nth-child(1) > div:nth-child(3) > table > tr > td > a > b',
               ).length
             ) {
               console.log('DEBUG | Login successful');

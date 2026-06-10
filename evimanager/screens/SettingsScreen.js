@@ -288,7 +288,7 @@ const SettingScreenClassColors = ({}) => {
               marginTop: 30,
             }}>
             <Text style={[styles.rowLabel, {marginRight: 8, fontSize: 16, marginLeft: 10}]}>
-              Farbe ändern 
+              Farbe ändern
             </Text>
             <Icon
               color= {THEME.fontColor}
@@ -412,7 +412,7 @@ const SettingScreen = ({}) => {
                         } else if (id === 'classColors') {
                           nav.navigate('SettingNavClassColors');
                         } else if (id === 'bug') {
-                          
+
                               Linking.openURL(
                                 'https://github.com/FlynnLG/evi-manager/issues/new',
                               );

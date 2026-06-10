@@ -8,10 +8,11 @@ import {name as appName} from './app.json';
 import 'react-native-gesture-handler';
 
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import PushNotification, {Importance} from 'react-native-push-notification';
+//import PushNotification, {Importance} from 'react-native-push-notification'; TODO - change repo because it causes a build error under android - same in ytmNotification.js - "A problem occurred evaluating project ':react-native-push-notification'." -> "> Could not find method jcenter() for arguments [] on repository container of type org.gradle.api.internal.artifacts.dsl.DefaultRepositoryHandler."
 
 AppRegistry.registerComponent('evimanager', () => App);
 
+/* TODO - see line 11 for more info
 // Must be outside of any component LifeCycle (such as `componentDidMount`).
 PushNotification.configure({
   // (optional) Called when Token is generated (iOS and Android)
@@ -76,3 +77,4 @@ PushNotification.channelExists('evimanager', function (exists) {
 
 //everytime the app is opend all sended Notifications are removed, for good
 PushNotification.removeAllDeliveredNotifications();
+ */
