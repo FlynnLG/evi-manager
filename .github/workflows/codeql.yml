@@ -18,7 +18,7 @@ on:
     # The branches below must be a subset of the branches above
     branches: [ "main" ]
   schedule:
-    - cron: '27 7 * * 3'
+    - cron: '0 12 * * 3'
 
 jobs:
   analyze:
@@ -73,7 +73,7 @@ jobs:
 
     - run: |
         echo "Run, Build Application using script"
-        npm install node watchman
+        npm install node watchman patch-package
         npm install
         npx react-native build-android
       working-directory: evimanager
